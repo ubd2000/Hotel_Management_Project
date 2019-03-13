@@ -13,7 +13,7 @@ public class MediumHotel extends Hotel {
 	 * 스위트 룸 100만원
 	 */
 	@Override
-	public void setRoomPrices() {
+	public void setHotelRoomPrices() {
 		setRoomPrices(Number.MEDIUM_ROOM_PRICE);
 	}
 

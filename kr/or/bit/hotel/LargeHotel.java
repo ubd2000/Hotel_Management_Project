@@ -12,7 +12,7 @@ public class LargeHotel extends Hotel {
 	 * 스위트 룸 100만원
 	 */
 	@Override
-	public void setRoomPrices() {
+	public void setHotelRoomPrices() {
 		setRoomPrices(Number.LARGE_ROOM_PRICE);
 	}
 

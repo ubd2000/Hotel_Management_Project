@@ -13,7 +13,7 @@ public class SmallHotel extends Hotel {
 	 * 스위트 룸 50만원
 	 */
 	@Override
-	public void setRoomPrices() {
+	public void setHotelRoomPrices() {
 		setRoomPrices(Number.SMALL_ROOM_PRICE);
 	}
 

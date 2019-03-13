@@ -13,8 +13,6 @@ public abstract class HotelDate {
 		checkTime.set(year, month - 1, day, hourOfDay, minute);	
 	}
 	
-	
-
 	public Calendar getDate() {
 		return date;
 	}

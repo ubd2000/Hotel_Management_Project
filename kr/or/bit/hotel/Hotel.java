@@ -21,11 +21,11 @@ public abstract class Hotel {
 		members = new HashMap<String, Member>();
 		services = new ArrayList<Service>();
 		today = Calendar.getInstance();
-		setRoomPrices();
+		setHotelRoomPrices();
 		setHotelRooms();
 	}
 
-	public abstract void setRoomPrices();
+	public abstract void setHotelRoomPrices();
 
 	public abstract void setHotelRooms();
 
@@ -39,6 +39,50 @@ public abstract class Hotel {
 
 	public int[] getRoomPrices() {
 		return roomPrices;
+	}
+
+	public Room[] getRoomInfos() {
+		return roomInfos;
+	}
+
+	public void setRoomInfos(Room[] roomInfos) {
+		this.roomInfos = roomInfos;
+	}
+
+	public int getSales() {
+		return sales;
+	}
+
+	public void setSales(int sales) {
+		this.sales = sales;
+	}
+
+	public Map<String, Member> getMembers() {
+		return members;
+	}
+
+	public void setMembers(Map<String, Member> members) {
+		this.members = members;
+	}
+
+	public List<Service> getServices() {
+		return services;
+	}
+
+	public void setServices(List<Service> services) {
+		this.services = services;
+	}
+
+	public Calendar getToday() {
+		return today;
+	}
+
+	public void setToday(Calendar today) {
+		this.today = today;
+	}
+
+	public List<List<Room>> getRooms() {
+		return rooms;
 	}
 }
 
