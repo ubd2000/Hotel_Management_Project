@@ -20,20 +20,21 @@ public class SmallHotel extends Hotel {
 	/*
 	 * 소형 호텔 3층 (1층은 로비)
 	 * 
-	 * 2층 디럭스 룸 4개 3층 이그제큐티브 1개 스위트 1개
+	 * 2층 디럭스 룸 4개 
+	 * 3층 이그제큐티브 1개 
+	 * 스위트 1개
 	 */
 	@Override
 	public void setHotelRooms() {
-		int[] roomPrices = this.getRoomPrices();
 		List<Room> floor2 = new ArrayList<Room>();
 		List<Room> floor3 = new ArrayList<Room>();
 
 		for (int i = 0; i < 4; i++) {
-			floor2.add(new DeluxeRoom(roomPrices[0]));
+			floor2.add(new DeluxeRoom());
 		}
 
-		floor3.add(new ExecutiveRoom(roomPrices[1]));
-		floor3.add(new SuiteRoom(roomPrices[2]));
+		floor3.add(new ExecutiveRoom());
+		floor3.add(new SuiteRoom());
 		
 		List<List<Room>> rooms = new ArrayList<List<Room>>();
 		rooms.add(floor2);

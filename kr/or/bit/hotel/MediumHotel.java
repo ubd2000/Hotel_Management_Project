@@ -28,7 +28,6 @@ public class MediumHotel extends Hotel {
 	 */
 	@Override
 	public void setHotelRooms() {
-		int[] roomPrices = this.getRoomPrices();
 		List<List<Room>> rooms = new ArrayList<List<Room>>();
 		for (int i = 0; i < 4; i++) {
 			rooms.add(new ArrayList<Room>());
@@ -41,16 +40,16 @@ public class MediumHotel extends Hotel {
 		
 
 		for (int i = 0; i < 6; i++) {
-			floor2.add(new DeluxeRoom(roomPrices[0]));
-			floor3.add(new DeluxeRoom(roomPrices[0]));
+			floor2.add(new DeluxeRoom());
+			floor3.add(new DeluxeRoom());
 		}
 		
 		for (int i = 0; i < 3; i++) {
-			floor4.add(new ExecutiveRoom(roomPrices[1]));
+			floor4.add(new ExecutiveRoom());
 		}
 
 		for (int i = 0; i < 2; i++) {
-			floor5.add(new SuiteRoom(roomPrices[2]));
+			floor5.add(new SuiteRoom());
 		}
 		this.setRooms(rooms);
 	}
