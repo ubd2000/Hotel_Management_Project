@@ -13,7 +13,7 @@ public class LargeHotel extends Hotel {
 	 */
 	@Override
 	public void setRoomPrices() {
-		setRoomPrices(new int[] { 300000, 600000, 1000000 });
+		setRoomPrices(Number.LARGE_ROOM_PRICE);
 	}
 
 	/*

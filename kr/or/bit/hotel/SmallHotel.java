@@ -14,7 +14,7 @@ public class SmallHotel extends Hotel {
 	 */
 	@Override
 	public void setRoomPrices() {
-		setRoomPrices(new int[] { 100000, 200000, 500000 });
+		setRoomPrices(Number.SMALL_ROOM_PRICE);
 	}
 
 	/*

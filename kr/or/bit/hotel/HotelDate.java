@@ -9,9 +9,11 @@ public abstract class HotelDate {
 	public HotelDate(int year, int month, int day, int hourOfDay, int minute) {
 		date = Calendar.getInstance();
 		checkTime = Calendar.getInstance();
-		date.set(year, month, day);
-		checkTime.set(year, month, day, hourOfDay, minute);	
+		date.set(year, month - 1, day);
+		checkTime.set(year, month - 1, day, hourOfDay, minute);	
 	}
+	
+	
 
 	public Calendar getDate() {
 		return date;

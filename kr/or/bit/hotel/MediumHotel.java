@@ -14,8 +14,7 @@ public class MediumHotel extends Hotel {
 	 */
 	@Override
 	public void setRoomPrices() {
-		setRoomPrices(new int[] { 300000, 500000, 1000000 });
-
+		setRoomPrices(Number.MEDIUM_ROOM_PRICE);
 	}
 
 	/*
