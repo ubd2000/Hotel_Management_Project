@@ -8,6 +8,7 @@ import java.util.Map;
 
 public abstract class Hotel {
 	private List<List<Room>> rooms;
+	private Room[] roomInfos;
 	private int sales;
 	private Map<String, Member> members;
 	private List<Service> services;
@@ -16,6 +17,7 @@ public abstract class Hotel {
 
 	public Hotel() {
 		this.sales = 0;
+		roomInfos = new Room[] { new DeluxeRoom(), new ExecutiveRoom(), new SuiteRoom() };
 		members = new HashMap<String, Member>();
 		services = new ArrayList<Service>();
 		today = Calendar.getInstance();
@@ -39,3 +41,4 @@ public abstract class Hotel {
 		return roomPrices;
 	}
 }
+
