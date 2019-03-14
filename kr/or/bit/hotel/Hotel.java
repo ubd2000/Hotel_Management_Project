@@ -1,6 +1,7 @@
 package kr.or.bit.hotel;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -15,19 +16,19 @@ public abstract class Hotel implements Serializable {
 	private int[] roomPrices;
 	private int breakfast;
 	private int therapy;
-	private Calendar today;
+	private LocalDate today;
 
 	public Hotel() {
 		this.sales = 0;
 		roomInfos = new Room[] { new DeluxeRoom(), new ExecutiveRoom(), new SuiteRoom() };
 		members = new HashMap<String, Member>();
-		today = Calendar.getInstance();
+		today = LocalDate.now();
 		breakfast = Number.breakfast;
 		therapy = Number.therapy;
 		setHotelRoomPrices();
 		setHotelRooms();
 	}
-	
+
 	public abstract void setHotelRoomPrices();
 
 	public abstract void setHotelRooms();
@@ -47,8 +48,6 @@ public abstract class Hotel implements Serializable {
 	public void setTherapy(int therapy) {
 		this.therapy = therapy;
 	}
-
-
 
 	public void setRooms(List<List<Room>> rooms) {
 		this.rooms = rooms;
@@ -86,11 +85,11 @@ public abstract class Hotel implements Serializable {
 		this.members = members;
 	}
 
-	public Calendar getToday() {
+	public LocalDate getToday() {
 		return today;
 	}
 
-	public void setToday(Calendar today) {
+	public void setToday(LocalDate today) {
 		this.today = today;
 	}
 
