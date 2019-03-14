@@ -1,6 +1,9 @@
 package kr.or.bit.hotel;
 
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 public class HotelManager {
 
@@ -27,7 +30,7 @@ public class HotelManager {
 	private Hotel myHotel;
 	private Scanner sc;
 
-	// 생성자
+	// 생성자!
 	public HotelManager() {
 		this.sc = new Scanner(System.in);
 	}
@@ -101,15 +104,17 @@ public class HotelManager {
 		String endRoom = wantRoom.substring(wantRoom.length() - 1, wantRoom.length());
 		// System.out.println(endRoom);
 
-		Member roomInfo = myHotel.getRooms().get(Integer.parseInt(frontRoom) - 2).get(Integer.parseInt(endRoom) - 1)
-				.getGuest();
+		Member roomInfo = (Member) myHotel.getRooms().get(Integer.parseInt(frontRoom) - 2).get(Integer.parseInt(endRoom) - 1)
+				.getGuests();
 
 		// 3. 그 투숙객의 정보를 출력한다. (이름, 인원수, 부가서비스, 총 요금, 체크인, 체크아웃 날짜)
 		System.out.println(wantRoom + "의 투숙객 정보입니다.");
-		System.out.println("이름: " + roomInfo.getName() + "인원 수: " + roomInfo.getReservation() + "부가서비스: "
-				+ roomInfo.getReservation().getService() + "총 요금: " + roomInfo.getReservation().getAmountPaid()
-				+ "체크인: " + roomInfo.getReservation().getDateCheckIn() + "체크아웃: "
-				+ roomInfo.getReservation().getDateCheckOut());
+		System.out.println("이름: " + roomInfo.getName() 
+		+ "인원 수: " + roomInfo.getReservation() 
+		+ "부가서비스: " + roomInfo.getReservation()
+		+ "총 요금: " + roomInfo.getReservation().getAmountPaid()
+				+ "체크인: " + roomInfo.getReservation().getDateCheckIn() 
+				+ "체크아웃: " + roomInfo.getReservation().getDateCheckOut());
 	}
 
 	// 세림
@@ -240,7 +245,21 @@ public class HotelManager {
 
 	// 회원 정보 보기
 	private void getMemberInfo() {
-		System.out.println("회원 정보보기 메서드");
+		Map<String, Member> memberId = myHotel.getMembers();
+		Set<String> set = memberId.keySet();
+		Iterator<String> it = set.iterator();
+		
+		while(it.hasNext()) {
+			System.out.println(it.next());
+		}
+		
+		//아이디를 가지는 사람들
+		//전체 회원정보를 가져온다
+//		System.out.println("이름: "+ member.getName()
+//							+ "생년월일: "+ member.getBirthday()
+//							+ "전화번호: "+ member.getPhoneNumber()
+//							+ "VIP유무: "+ member
+//							+ "총누적금액: "+ member.getRecords());
 	}
 
 	// 투숙 기록 보기
