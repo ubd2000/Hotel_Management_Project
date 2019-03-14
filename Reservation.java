@@ -65,5 +65,11 @@ public class Reservation {
 	public void setAmountPaid(long l) {
 		this.amountPaid = l;
 	}
+	@Override
+	public String toString() {
+		return "＊예약확인＊ // 방 정보=[" + room + "], 예약 인원=[" + numberPeople + "], 체크인 날짜=[" + dateCheckIn
+				+ "], 체크아웃 날짜=[" + dateCheckOut + "], 조식=[" + breakfast + "], 테라피=[" + therapy
+				+ "], 총 요금=[" + amountPaid + "]";
+	}
 
 }
