@@ -28,17 +28,16 @@ public class HotelBooking {
 	}
 
 	public void reserveRoom() { // 객실예약
-		memberLoggedIn = new Member();
+		 memberLoggedIn = new Member();
 		if (memberLoggedIn.getReservation() != null) {
 			System.out.println("이미 예약함");
 			return;
 		}
-		memberLoggedIn = new Member();
 		Reservation r = new Reservation();
 		setDate(r);
-//		setRoom(r);
-//		setNumberPeople(r);
-//		setService(r);
+		setRoom(r);
+		setNumberPeople(r);
+		setService(r);
 		memberLoggedIn.setReservation(r);
 	}
 
@@ -47,10 +46,11 @@ public class HotelBooking {
 		System.out.println(today);
 		HotelDate checkInDate, checkOutDate;
 		while (true) {
+			// TODO : 정규표현식으로 포맷 제한
 			System.out.println("체크인 날짜를 입력해주세요. (20190314와 같이 입력해주세요.)");
 			String checkIn = sc.nextLine();
 			checkInDate = new HotelDate(checkIn);
-			if (today.isAfter(checkInDate.getCheckDate())) {
+			if (checkInDate.getCheckDate().isBefore(today)) {
 				System.out.println("선택 불가능한 날짜입니다. 다시 입력해주세요.");
 			} else {
 				break;
@@ -58,12 +58,13 @@ public class HotelBooking {
 		}
 
 		while (true) {
+			// TODO : 정규표현식으로 포맷 제한
 			System.out.println("체크아웃 날짜를 입력해주세요. (20190314와 같이 입력해주세요.)");
 			String checkOut = sc.nextLine();
 			checkOutDate = new HotelDate(checkOut);
-			if (today.isBefore(checkOutDate.getCheckDate())
-					|| checkInDate.getCheckDate().isAfter(checkOutDate.getCheckDate())
-					|| checkInDate.getCheckDate().isEqual(checkOutDate.getCheckDate())) {
+			if (checkOutDate.getCheckDate().isBefore(today)
+					|| checkOutDate.getCheckDate().isBefore(checkInDate.getCheckDate())
+					|| checkOutDate.getCheckDate().isEqual(checkInDate.getCheckDate())) {
 				System.out.println("선택 불가능한 날짜입니다. 다시 입력해주세요.");
 			} else {
 				break;
