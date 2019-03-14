@@ -1,6 +1,6 @@
 package kr.or.bit.hotel;
 
-public class Member {
+public class Member implements Serializable {
 	private Reservation reservation;
 	private Record[] records;
 	private String id;

@@ -1,6 +1,8 @@
 package kr.or.bit.hotel;
 
-public class Reservation {
+import java.io.Serializable;
+
+public class Reservation implements Serializable {
 	private Room room;
 	private int numberPeople;
 

@@ -1,9 +1,10 @@
 package kr.or.bit.hotel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Room {
+public class Room implements Serializable {
 	private String roomName;
 	private int defaultNumberPeople;
 	private int maxNumberPeople;

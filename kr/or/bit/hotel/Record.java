@@ -1,5 +1,7 @@
 package kr.or.bit.hotel;
 
-public class Record {
+import java.io.Serializable;
+
+public class Record implements Serializable {
 
 }

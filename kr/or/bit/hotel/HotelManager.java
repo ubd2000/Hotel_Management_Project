@@ -16,27 +16,6 @@ import java.util.Set;
 import com.sun.org.apache.xml.internal.dtm.ref.CustomStringPool;
 
 public class HotelManager {
-
-	public static void main(String[] args) {
-
-		HotelManager hotelManager = new HotelManager();
-
-		// 호텔 사이즈 설정 테스트
-//		hotelManager.setHotel();
-//		System.out.println(hotelManager.myHotel.toString());
-
-		// Room
-		Room room = new Room(null, 0, 0, 0, 0, false);
-
-		// 객실관리 테스트
-//		hotelManager.roomManage();
-		// 기본가격 테스트
-//		hotelManager.setPrice();
-		// 정보보기 테스트
-		hotelManager.getInfo();
-
-	}
-
 	private Hotel myHotel;
 	private Scanner sc;
 	private File file;
@@ -49,10 +28,16 @@ public class HotelManager {
 	public HotelManager() {
 		this.sc = new Scanner(System.in);
 	}
+	
+	public void run() {
+		loadHotel();
+		setPrice();
+		saveHotel();
+	}
 
 	// 지훈, 세림
 	// 호텔 사이즈 설정
-	private Hotel setHotel() {
+	private void setHotel() {
 		while (true) {
 			System.out.println("호텔사이즈 입력[소형, 중형, 대형]: ");
 			String hotelSize = sc.nextLine();
@@ -60,13 +45,19 @@ public class HotelManager {
 			switch (hotelSize) {
 			case "소형":
 				System.out.println("소형 호텔이 생성되었다.");
-				return this.myHotel = new SmallHotel();
+				this.myHotel = new SmallHotel();
+				saveHotel();
+				return;
 			case "중형":
 				System.out.println("중형 호텔이 생성되었다.");
-				return this.myHotel = new MediumHotel();
+				this.myHotel = new MediumHotel();
+				saveHotel();
+				return;
 			case "대형":
 				System.out.println("대형 호텔이 생성되었다.");
-				return this.myHotel = new LargeHotel();
+				this.myHotel = new LargeHotel();
+				saveHotel();
+				return;
 			default:
 				System.out.println("소형, 중형, 대형 중에 선택하세요.");
 				break;
@@ -215,6 +206,7 @@ public class HotelManager {
 	// 지훈
 	// 기본가격 설정 : 방 가격 설정, 부가서비스 메뉴를 보여준다.
 	private void setPrice() {
+		loadHotel();
 		String menu = "";
 
 		while (true) {
@@ -227,9 +219,11 @@ public class HotelManager {
 			switch (menu) {
 			case "1":
 				setRoomPrice();
+				saveHotel();
 				return;
 			case "2":
 				setServicePrice();
+				saveHotel();
 				return;
 			default:
 				System.out.println("기본가격 설정: 1,2 중에 선택해주세요");

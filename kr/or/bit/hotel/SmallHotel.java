@@ -1,9 +1,10 @@
 package kr.or.bit.hotel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SmallHotel extends Hotel {
+public class SmallHotel extends Hotel implements Serializable {
 
 	/*
 	 * 소형 호텔
