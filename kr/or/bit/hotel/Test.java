@@ -23,6 +23,6 @@ public class Test {
 //		System.out.println(sc3.matches(
 //				"^(19[0-9]|200)[0-9](((0(1|3|5|7|8)|1(0|2))(0[1-9]|[1-2][0-9]|3[0-1]))|((0(4|6|9)|11)(0[1-9]|[1-2][0-9]|30))|(02(0[1-9]|(1|2)[0-9]$)))"));
 		HotelBooking hb = new HotelBooking();
-		hb.reserveRoom();
+		hb.setNumberPeople(new Reservation());
 	}
 }
