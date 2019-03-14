@@ -3,11 +3,28 @@ package kr.or.bit.hotel;
 public class Member {
 	private Reservation reservation;
 	private Record[] records;
-	private String password;
+	private String id;
 	private String name;
-	private String birthday;
+	private String password;
 	private String phoneNumber;
+	private String birthday;
 	
+	public Member(String id, String name, String password, String phoneNumber, String birthday) {
+		this.id = id;
+		this.password = password;
+		this.name = name;
+		this.birthday = birthday;
+		this.phoneNumber = phoneNumber;
+	}
+	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
 	public Reservation getReservation() {
 		return reservation;
 	}
