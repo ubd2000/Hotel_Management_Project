@@ -1,5 +1,6 @@
 package kr.or.bit.hotel;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
@@ -27,40 +28,70 @@ public class HotelBooking {
 	}
 
 	public void reserveRoom() { // 객실예약
+		memberLoggedIn = new Member();
 		if (memberLoggedIn.getReservation() != null) {
 			System.out.println("이미 예약함");
 			return;
 		}
+		memberLoggedIn = new Member();
 		Reservation r = new Reservation();
 		setDate(r);
-		setRoom(r);
-		setNumberPeople(r);
-		setService(r);
+//		setRoom(r);
+//		setNumberPeople(r);
+//		setService(r);
 		memberLoggedIn.setReservation(r);
 	}
 
 	private void setDate(Reservation r) { // 날짜 선택
-		System.out.println("체크인 날짜를 입력해주세요.");
-		String checkIn = sc.nextLine();
-		System.out.println("체크아웃 날짜를 입력해주세요.");
-		String checkOut = sc.nextLine();
-		HotelDate checkInDate = new CheckInDate(2019, 12, 21); // String에서 parse
-		HotelDate checkOutDate = new CheckOutDate(2019, 12, 23);
+		LocalDate today = LocalDate.now();
+		System.out.println(today);
+		HotelDate checkInDate, checkOutDate;
+		while (true) {
+			System.out.println("체크인 날짜를 입력해주세요. (20190314와 같이 입력해주세요.)");
+			String checkIn = sc.nextLine();
+			checkInDate = new HotelDate(checkIn);
+			if (today.isAfter(checkInDate.getCheckDate())) {
+				System.out.println("선택 불가능한 날짜입니다. 다시 입력해주세요.");
+			} else {
+				break;
+			}
+		}
+
+		while (true) {
+			System.out.println("체크아웃 날짜를 입력해주세요. (20190314와 같이 입력해주세요.)");
+			String checkOut = sc.nextLine();
+			checkOutDate = new HotelDate(checkOut);
+			if (today.isBefore(checkOutDate.getCheckDate())
+					|| checkInDate.getCheckDate().isAfter(checkOutDate.getCheckDate())
+					|| checkInDate.getCheckDate().isEqual(checkOutDate.getCheckDate())) {
+				System.out.println("선택 불가능한 날짜입니다. 다시 입력해주세요.");
+			} else {
+				break;
+			}
+		}
+		
+		System.out.println("체크인 날짜 : " + checkInDate.getCheckDate());
+		System.out.println("체크아웃 날짜 : " + checkOutDate.getCheckDate());
+
 		r.setDateCheckIn(checkInDate);
 		r.setDateCheckOut(checkOutDate);
 	}
 
 	private void setRoom(Reservation r) { // 객실 선택
-		for (List<Room> floor : hotel.getRooms()) {
-			for (Room room : floor) {
-				if (!(체크인 날짜가 끼어있는 경우 || 체크아웃 날짜가 끼어있는 경우 || 사이에 끼어있는 경우 || 더 범위가 넓은 경우)) {
-					방 번호와 정보를 보여준다
-				}
-			}
-		}
-		
+//		for (List<Room> floor : hotel.getRooms()) {
+//			for (Room room : floor) {
+//				if (!(체크인 날짜가 끼어있는 경우 || 체크아웃 날짜가 끼어있는 경우 || 사이에 끼어있는 경우 || 더 범위가 넓은 경우)) {
+//					방 번호와 정보를 보여준다
+//				}
+//			}
+//		}
+
 		System.out.println("예약할 방 번호를 입력해주세요");
 		String roomNumber = sc.nextLine(); // 202호
+		// roomNumber로 room을 가져옴
+		Room room = null;
+		room.getGuests().add(memberLoggedIn);
+		r.setAmountPaid(r.getAmountPaid() + hotel.getRoomPrices()[0]);
 		r.setRoom(room);
 	}
 
@@ -69,7 +100,7 @@ public class HotelBooking {
 		System.out.println("선택하신 방의 기본 인원은 {0}명, 최대 인원은 {1}명입니다.");
 		System.out.println("인원 추가 시 X원이 추가됩니다.");
 		String numberPeople = sc.nextLine();
-		r.setNumberPeople(numberPeople);
+		r.setNumberPeople(Integer.parseInt(numberPeople));
 	}
 
 	private void setService(Reservation r) { // 부가서비스 선택
@@ -86,15 +117,13 @@ public class HotelBooking {
 
 	public void cancelReservation() { // 예약 취소
 		/*
-		 * Member - reservation 삭제
-		 * 예약됐던 룸 예약 정보 삭제
+		 * Member - reservation 삭제 예약됐던 룸 예약 정보 삭제
 		 */
 	}
 
 	public void changeReservation() { // 예약 변경
 		/*
-		 * reserveRoom();
-		 * cancelReservation();
+		 * reserveRoom(); cancelReservation();
 		 */
 
 	}

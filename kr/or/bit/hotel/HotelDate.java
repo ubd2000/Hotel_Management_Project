@@ -1,31 +1,21 @@
 package kr.or.bit.hotel;
 
-import java.util.Calendar;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;;
 
-public abstract class HotelDate {
-	private Calendar date;
-	private Calendar checkTime;
+public class HotelDate {
+	private LocalDate checkDate;
 	
-	public HotelDate(int year, int month, int day, int hourOfDay, int minute) {
-		date = Calendar.getInstance();
-		checkTime = Calendar.getInstance();
-		date.set(year, month - 1, day);
-		checkTime.set(year, month - 1, day, hourOfDay, minute);	
-	}
-	
-	public Calendar getDate() {
-		return date;
+	public HotelDate(String date) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+		checkDate = LocalDate.parse(date, formatter);
 	}
 
-	public void setDate(Calendar date) {
-		this.date = date;
+	public LocalDate getCheckDate() {
+		return checkDate;
 	}
 
-	public Calendar getCheckTime() {
-		return checkTime;
-	}
-
-	public void setCheckTime(Calendar checkTime) {
-		this.checkTime = checkTime;
+	public void setCheckDate(LocalDate checkDate) {
+		this.checkDate = checkDate;
 	}
 }

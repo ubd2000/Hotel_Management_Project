@@ -1,5 +1,8 @@
 package kr.or.bit.hotel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Room {
 	private String roomName;
 	private int defaultNumberPeople;
@@ -7,7 +10,7 @@ public class Room {
 	private int numberBed;
 	private int numberBathroom;
 	private boolean kitchen;
-	private Member guest;
+	private List<Member> guests;
 	private boolean isBooked;
 	
 	public Room(String roomName, int defaultNumberPeople, int maxNumberPeople, int numberBed,
@@ -17,6 +20,7 @@ public class Room {
 		this.maxNumberPeople = maxNumberPeople;
 		this.numberBed = numberBed;
 		this.numberBathroom = numberBathroom;
+		this.guests = new ArrayList<Member>();
 		this.kitchen = kitchen;
 	}
 
@@ -68,12 +72,12 @@ public class Room {
 		this.kitchen = kitchen;
 	}
 
-	public Member getGuest() {
-		return guest;
+	public List<Member> getGuests() {
+		return guests;
 	}
 
-	public void setGuest(Member guest) {
-		this.guest = guest;
+	public void setGuests(List<Member> guests) {
+		this.guests = guests;
 	}
 
 	public boolean isBooked() {
