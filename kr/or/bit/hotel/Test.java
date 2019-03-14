@@ -2,6 +2,9 @@ package kr.or.bit.hotel;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class Test {
@@ -25,8 +28,15 @@ public class Test {
 //				"^(19[0-9]|200)[0-9](((0(1|3|5|7|8)|1(0|2))(0[1-9]|[1-2][0-9]|3[0-1]))|((0(4|6|9)|11)(0[1-9]|[1-2][0-9]|30))|(02(0[1-9]|(1|2)[0-9]$)))"));
 		LocalDate d1 = LocalDate.of(2019, 3, 16);
 		LocalDate d2 = LocalDate.of(2019, 3, 14);
-		System.out.println(d1.toEpochDay() - d2.toEpochDay());
+		Period diff = Period.between(d2, d1);
+		System.out.println(diff.getDays());
 		HotelBooking hb = new HotelBooking();
-		hb.setService(new Reservation());
+//		hb.setRoom(new Reservation());
+		LocalDate t = LocalDate.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일");
+		System.out.println(t.plusDays(3));
+		Period p = Period.between(d1, d2);
+		System.out.println(p.getDays());
+		hb.getRoomInfo();
 	}
 }

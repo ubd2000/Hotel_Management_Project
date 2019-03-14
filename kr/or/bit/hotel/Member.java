@@ -8,6 +8,7 @@ public class Member {
 	private String password;
 	private String phoneNumber;
 	private String birthday;
+	private boolean VIP;
 	
 	public Member(String id, String name, String password, String phoneNumber, String birthday) {
 		this.id = id;
@@ -15,8 +16,17 @@ public class Member {
 		this.name = name;
 		this.birthday = birthday;
 		this.phoneNumber = phoneNumber;
+		this.VIP = false;
 	}
 	
+	public boolean isVIP() {
+		return VIP;
+	}
+
+	public void setVIP(boolean vIP) {
+		VIP = vIP;
+	}
+
 	public String getId() {
 		return id;
 	}
