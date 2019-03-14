@@ -5,6 +5,18 @@ import java.io.Serializable;
 public class Reservation implements Serializable {
 	private Room room;
 	private int numberPeople;
+	private HotelDate dateCheckIn;
+	private HotelDate dateCheckOut;
+	private boolean breakfast;
+	private boolean therapy;
+	private long amountPaid;
+
+	@Override
+	public String toString() {
+		return "Reservation [room=" + room + ", numberPeople=" + numberPeople + ", dateCheckIn=" + dateCheckIn
+				+ ", dateCheckOut=" + dateCheckOut + ", breakfast=" + breakfast + ", therapy=" + therapy
+				+ ", amountPaid=" + amountPaid + "]";
+	}
 
 	public int getNumberPeople() {
 		return numberPeople;
@@ -13,12 +25,6 @@ public class Reservation implements Serializable {
 	public void setNumberPeople(int numberPeople) {
 		this.numberPeople = numberPeople;
 	}
-
-	private HotelDate dateCheckIn;
-	private HotelDate dateCheckOut;
-	private boolean breakfast;
-	private boolean therapy;
-	private long amountPaid;
 
 	public Room getRoom() {
 		return room;

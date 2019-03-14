@@ -19,6 +19,7 @@ public class Member implements Serializable {
 		this.birthday = birthday;
 		this.phoneNumber = phoneNumber;
 		this.VIP = false;
+		this.reservation = null;
 	}
 	
 	public boolean isVIP() {

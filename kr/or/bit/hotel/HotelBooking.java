@@ -9,6 +9,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import javax.swing.JOptionPane;
@@ -23,16 +25,15 @@ public class HotelBooking {
 	private ObjectInputStream in;
 	private FileOutputStream fos;
 	private ObjectOutputStream out;
-	
+
 	public void run() {
 		loginCheck = false;
 		memberLoggedIn = null;
 		sc = new Scanner(System.in);
 		loadHotel();
 		printMenu();
-		saveHotel();
 	}
-	
+
 	/*
 	 * 호텔 정보 불러오기
 	 * 
@@ -68,7 +69,7 @@ public class HotelBooking {
 			}
 		}
 	}
-	
+
 	/*
 	 * 호텔 정보 저장하기
 	 * 
@@ -87,7 +88,16 @@ public class HotelBooking {
 		try {
 			fos = new FileOutputStream(file);
 			out = new ObjectOutputStream(fos);
+
 			out.writeObject(hotel);
+			out.writeObject(hotel.getRooms());
+			out.writeObject(hotel.getMembers());
+
+			for (String id : hotel.getMembers().keySet()) {
+				Reservation r = hotel.getMembers().get(id).getReservation();
+				out.writeObject(r);
+			}
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -122,7 +132,6 @@ public class HotelBooking {
 
 	public void reserveRoom() { // 객실예약
 		loadHotel();
-		// memberLoggedIn = new Member();
 		if (memberLoggedIn.getReservation() != null) {
 			System.out.println("이미 예약함");
 			return;
@@ -132,13 +141,14 @@ public class HotelBooking {
 		setRoom(r);
 		setNumberPeople(r);
 		setService(r);
+		System.out.println("총 금액 : " + r.getAmountPaid());
 		memberLoggedIn.setReservation(r);
+		hotel.getMembers().get(memberLoggedIn.getId()).setReservation(r);
 		saveHotel();
 	}
 
 	public void setDate(Reservation r) { // 날짜 선택
 		LocalDate today = LocalDate.now();
-		System.out.println(today);
 		HotelDate dateCheckIn, dateCheckOut;
 		while (true) {
 			// TODO : 정규표현식으로 포맷 제한
@@ -178,12 +188,15 @@ public class HotelBooking {
 		for (int i = 0; i < hotel.getRooms().size(); i++) {
 			for (int j = 0; j < hotel.getRooms().get(i).size(); j++) {
 				boolean canReserve = true;
-				for (Member guest : hotel.getRooms().get(i).get(j).getGuests()) {
+				for (String guestId : hotel.getRooms().get(i).get(j).getGuests()) {
 					if (hotel.getRooms().get(i).get(j).getGuests().size() == 0) {
 						break;
 					}
-					LocalDate checkIn = guest.getReservation().getDateCheckIn().getCheckDate();
-					LocalDate checkOut = guest.getReservation().getDateCheckOut().getCheckDate();
+					LocalDate checkIn = hotel.getMembers().get(guestId).getReservation().getDateCheckIn()
+							.getCheckDate();
+					LocalDate checkOut = hotel.getMembers().get(guestId).getReservation().getDateCheckOut()
+							.getCheckDate();
+					// TODO : 같은 날짜여도 못하게 조건 부여
 					if (checkIn.isBefore(r.getDateCheckIn().getCheckDate())
 							&& checkOut.isAfter(r.getDateCheckIn().getCheckDate())) {
 						canReserve = false;
@@ -212,9 +225,11 @@ public class HotelBooking {
 		// roomNumber로 room을 가져옴
 		char floor = roomNumber.charAt(0);
 		char number = roomNumber.charAt(roomNumber.length() - 1);
-		Room room = hotel.getRooms().get(floor - 49).get(number - 49); // char '1' = 49
-		room.getGuests().add(memberLoggedIn);
+		Room room = hotel.getRooms().get(floor - 50).get(number - 49); // char '1' = 49
+		room.getGuests().add(memberLoggedIn.getId());
+		// TODO : 방 등급에 맞는 금액 집어넣기, 숙박 일수만큼 가격 곱하기
 		r.setAmountPaid(r.getAmountPaid() + hotel.getRoomPrices()[0]);
+
 		r.setRoom(room);
 	}
 
@@ -233,7 +248,8 @@ public class HotelBooking {
 				System.out.println("최대 인원을 초과했습니다.");
 				System.out.println("다시 입력해주세요.");
 			} else if (numberPeople > defaultNumberPeople) {
-				System.out.println("추가 요금은 " + CustomString.putComma((numberPeople - defaultNumberPeople) * 50000) + "원입니다.");
+				System.out.println(
+						"추가 요금은 " + CustomString.putComma((numberPeople - defaultNumberPeople) * 50000) + "원입니다.");
 				break;
 			} else {
 				break;
@@ -284,23 +300,23 @@ public class HotelBooking {
 	public void getReservation() { // 예약 확인
 		System.out.println(memberLoggedIn.getReservation());
 	}
-	
-	/* 
+
+	/*
 	 * 예약 취소 함수
 	 * 
-	 * 회원이 예약한 방이 가지고 있는 예약한 회원 정보에서 회원 삭제
-	 * 회원의 예약 상태 null로 전환
+	 * 회원이 예약한 방이 가지고 있는 예약한 회원 정보에서 회원 삭제 회원의 예약 상태 null로 전환
 	 * 
-	 * 작성자 : 윤종석 
+	 * 작성자 : 윤종석
 	 */
 	public void cancelReservation() { // 예약 취소
 		loadHotel();
-		memberLoggedIn.getReservation().getRoom().getGuests().remove(memberLoggedIn);
+		memberLoggedIn.getReservation().getRoom().getGuests().remove(memberLoggedIn.getId());
 		memberLoggedIn.setReservation(null);
+		hotel.getMembers().get(memberLoggedIn.getId()).setReservation(null);
 		System.out.println("기존 예약이 취소되었습니다.");
 		saveHotel();
 	}
-	
+
 	/*
 	 * 예약 변경 함수
 	 * 
@@ -317,7 +333,7 @@ public class HotelBooking {
 
 	public void signUp() { // 회원 가입
 		loadHotel();
-		
+
 		String id, password, phoneNumber, birthday;
 
 		System.out.println("회원가입 절차");
@@ -379,42 +395,47 @@ public class HotelBooking {
 		}
 		System.out.println("성공적으로 회원가입을 하셨습니다.!!");
 		System.out.println(name + "님 환영합니다^^~");
+		loginCheck = true;
 		memberLoggedIn = new Member(id, name, password, phoneNumber, birthday);
-		hotel.getMembers().put(id, memberLoggedIn);
+		hotel.getMembers().put(id, memberLoggedIn);		
 		saveHotel();
 	}
 
 	public void login() { // 로그인
-		loadHotel();
 		System.out.println("로그인");
-		while (true) {
-			System.out.println("ID입력");
-			String id = sc.nextLine();
-			System.out.println("비밀번호 입력");
-			String pwd = sc.nextLine();
-			if (!hotel.getMembers().containsKey(id)) {
-				System.out.println("ID를 확인해주세요.");
+		System.out.println("ID입력");
+		String id = sc.nextLine();
+		System.out.println("비밀번호 입력");
+		String pwd = sc.nextLine();
+		if (!hotel.getMembers().containsKey(id)) {
+			System.out.println("ID를 확인해주세요.");
+		} else {
+			if (!hotel.getMembers().get(id).getPassword().equals(pwd)) {
+				System.out.println("비밀번호를 확인해주세요.");
 			} else {
-				if (!hotel.getMembers().get(id).getPassword().equals(pwd)) {
-					System.out.println("비밀번호를 확인해주세요.");
-				} else {
-					break;
-				}
+				loginCheck = true;
+				memberLoggedIn = hotel.getMembers().get(id);
+				System.out.println("로그인 성공!");
 			}
 		}
-		loginCheck = true;
-		System.out.println("로그인 성공!");
 	}
 
 	public void changeInfo() { // 회원 정보 수정
+		loadHotel();
 		String password = null;
 		String password2 = null;
 		String phone = null;
 		exit: while (true) {
 			System.out.println("회원 정보 수정입니다.");
-			System.out.println("1. 비밀번호 재설정");
-			System.out.println("2. 전화번호 재설정");
-			System.out.println("3. 이전 화면 돌아가기");
+			System.out.println("┎                                  ┒");
+			System.out.println("         1. 비밀번호 재설정");
+			System.out.println();
+			System.out.println("         2. 전화번호 재설정");
+			System.out.println();
+			System.out.println("         3. 회원 탈퇴");
+			System.out.println();
+			System.out.println("         4. 돌아가기");
+			System.out.println("┖                                  ┚");
 			String number = sc.nextLine();
 
 			switch (number) {
@@ -425,7 +446,7 @@ public class HotelBooking {
 				System.out.println("다시 한번 입력해주세요.");
 				password2 = sc.nextLine();
 				if (password.equals(password2)) {
-					memberLoggedIn.setPassword(password2);
+					hotel.getMembers().get(memberLoggedIn.getId()).setPassword(password2);
 					System.out.println("비밀번호가 바뀌었습니다.");
 				} else if (password.length() > 10 || password.length() < 6) {
 					JOptionPane.showMessageDialog(null, "비밀번호의 길이를 확인해주세요.");
@@ -436,44 +457,50 @@ public class HotelBooking {
 				} else {
 					System.out.println("비밀번호가 일치하지 않습니다.");
 					System.out.println("다시 시도 해 주세요.");
-					break;
 				}
+				saveHotel();
+				break;
 
 			case "2":
 				System.out.println("전화번호 재 설정입니다.");
 				System.out.println("바꾸실 전화번호를 입력해주세요.");
 				phone = sc.nextLine();
 				if (phone.matches("^010[0-9]{8}")) {
-					memberLoggedIn.setPhoneNumber(phone);
+					hotel.getMembers().get(memberLoggedIn.getId()).setPhoneNumber(phone);
 					System.out.println("바꾸신 핸드폰 번호입니다.");
 					System.out.println("바뀐 전화번호 : " + phone);
 				} else {
 					System.out.println("잘못된 핸드폰번호입니다.");
 					System.out.println("Ex)01012341234 ( - 제외 )");
-					break;
 				}
+				saveHotel();
+				break;
 			case "3":
+				quit();
+				break exit;
+			case "4":
 				break exit;
 			default:
 				System.out.println("잘못된 메뉴 번호입니다. 다시 입력해주세요.");
 				break;
 			}
 		}
-		saveHotel();
 	}
 
 	public void quit() { // 회원 탈퇴
-		loadHotel();
 		System.out.println("회원 탈퇴를 하시겠습니까?");
-		System.out.println("1. 예");
-		System.out.println("2. 아니오");
+		System.out.println("┎                                  ┒");
+		System.out.println("         1.   예");
+		System.out.println();
+		System.out.println("         2.   아니오");
+		System.out.println("┖                                  ┚");
 		String select = sc.nextLine();
 		switch (select) {
 		case "1":
-			System.out.println("회원 탈퇴 하였습니다.");
-			hotel.getMembers().remove(memberLoggedIn.getId(), memberLoggedIn);
-			memberLoggedIn = null;
+			System.out.println("1. 회원 탈퇴 하였습니다.");
+			hotel.getMembers().remove(memberLoggedIn.getId());
 			loginCheck = false;
+			saveHotel();
 			break;
 		case "2":
 			System.out.println("취소 하였습니다.");
@@ -483,31 +510,76 @@ public class HotelBooking {
 			quit();
 			break;
 		}
-		saveHotel();
+
 	}
 
-	public void printMenu() { // 메뉴 출력
-		System.out.println("2조 호텔에 오신걸 환영합니다.");
-		System.out.println("┎                               ┒");
-		System.out.println("         1.   객실 보기");
-		System.out.println();
-		if (!loginCheck) {
-			System.out.println("         2.   로그인");
+	public void printMenu() {
+		while (true) {
+			System.out.println("2조 호텔에 오신걸 환영합니다.");
+			System.out.println("┎                                  ┒");
+			System.out.println("         1.   객실 보기");
 			System.out.println();
-			System.out.println("         3.   회원 가입");
-			System.out.println();
-			System.out.println("         4.   종료하기");
-		} else {
-			System.out.println("         2.   객실 예약하기");
-			System.out.println();
-			System.out.println("         3.   예약 확인하기");
-			System.out.println();
-			System.out.println("         4.   회원 정보 수정");
-			System.out.println();
-			System.out.println("         5.   종료하기");
-			System.out.println();
-			System.out.println(memberLoggedIn.getName() + "님 방문을 환영합니다.");
+			if (!loginCheck) {
+				System.out.println("         2.   로그인");
+				System.out.println();
+				System.out.println("         3.   회원 가입");
+				System.out.println();
+				System.out.println("         4.   종료 하기");
+				System.out.println("┖                                  ┚");
+			} else {
+				System.out.println("         2. 객실 예약하기");
+				System.out.println();
+				System.out.println("         3. 예약 확인하기");
+				System.out.println();
+				System.out.println("         4. 회원 정보 수정");
+				System.out.println();
+				System.out.println("         5.   종료 하기");
+				System.out.println("┖                                  ┚");
+				System.out.println(memberLoggedIn.getName() + "님 방문을 환영합니다.");
+			}
+
+			String select = sc.nextLine();
+			switch (select) {
+			case "1":
+				System.out.println("현재 객실 정보현황 입니다.");
+				getRoomInfo();
+				break;
+			case "2":
+				if (!loginCheck) {
+					login();
+				} else {
+					System.out.println("객실 예약입니다.");
+					reserveRoom();
+				}
+				break;
+			case "3":
+				if (!loginCheck) {
+					signUp();
+				} else {
+					getReservation();
+				}
+				break;
+			case "4":
+				if (!loginCheck) {
+					saveHotel();
+					System.exit(0);
+				} else {
+					changeInfo();
+				}
+				break;
+			case "5":
+				if (!loginCheck) {
+					System.out.println("번호를 잘못 입력했습니다.");
+				} else {
+					saveHotel();
+					System.exit(0);
+				}
+				break;
+			default:
+				System.out.println("번호를 잘못 입력했습니다.");
+				break;
+
+			}
 		}
-		System.out.println("┖                               ┚");
 	}
 }

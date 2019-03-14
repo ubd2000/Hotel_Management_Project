@@ -7,7 +7,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
@@ -28,6 +31,7 @@ public class HotelManager {
 	
 	public void run() {
 		loadHotel();
+		myHotel.setToday(LocalDate.now());
 		setPrice();
 		saveHotel();
 	}
@@ -107,7 +111,11 @@ public class HotelManager {
 		try {
 			fos = new FileOutputStream(file);
 			out = new ObjectOutputStream(fos);
+			
 			out.writeObject(myHotel);
+			out.writeObject(myHotel.getRooms());
+			out.writeObject(myHotel.getMembers());
+			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -203,7 +211,6 @@ public class HotelManager {
 	// 지훈
 	// 기본가격 설정 : 방 가격 설정, 부가서비스 메뉴를 보여준다.
 	private void setPrice() {
-		loadHotel();
 		String menu = "";
 
 		while (true) {

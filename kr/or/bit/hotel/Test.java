@@ -34,6 +34,6 @@ public class Test {
 		HotelManager hm = new HotelManager();
 		hm.run();
 		HotelBooking hb = new HotelBooking();
-		hb.getRoomInfo();
+		hb.run();
 	}
 }

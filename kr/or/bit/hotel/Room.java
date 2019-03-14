@@ -11,7 +11,7 @@ public class Room implements Serializable {
 	private int numberBed;
 	private int numberBathroom;
 	private boolean kitchen;
-	private List<Member> guests;
+	private List<String> guests;
 	private boolean isBooked;
 	
 	public Room(String roomName, int defaultNumberPeople, int maxNumberPeople, int numberBed,
@@ -21,7 +21,7 @@ public class Room implements Serializable {
 		this.maxNumberPeople = maxNumberPeople;
 		this.numberBed = numberBed;
 		this.numberBathroom = numberBathroom;
-		this.guests = new ArrayList<Member>();
+		this.guests = new ArrayList<String>();
 		this.kitchen = kitchen;
 	}
 
@@ -73,11 +73,11 @@ public class Room implements Serializable {
 		this.kitchen = kitchen;
 	}
 
-	public List<Member> getGuests() {
+	public List<String> getGuests() {
 		return guests;
 	}
 
-	public void setGuests(List<Member> guests) {
+	public void setGuests(List<String> guests) {
 		this.guests = guests;
 	}
 
