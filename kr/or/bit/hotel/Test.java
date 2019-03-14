@@ -1,12 +1,5 @@
 package kr.or.bit.hotel;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
-import java.util.Scanner;
-
 public class Test {
 	public static void main(String[] args) {
 		String regex = "\\p{Alnum}+";
