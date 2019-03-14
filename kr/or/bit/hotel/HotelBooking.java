@@ -109,11 +109,11 @@ public class HotelBooking {
 	}
 
 	public void setNumberPeople(Reservation r) { // 인원 설정
-		r.setRoom(new SuiteRoom());
+		// r.setRoom(new SuiteRoom());
 		int numberPeople;
 		int defaultNumberPeople = r.getRoom().getDefaultNumberPeople();
 		int maxNumberPeople = r.getRoom().getMaxNumberPeople();
-		
+
 		while (true) {
 			System.out.println("숙박할 인원을 입력해주세요.");
 			System.out.printf("선택하신 방의 기본 인원은 %d명, 최대 인원은 %d명입니다.\r\n", defaultNumberPeople, maxNumberPeople);
@@ -122,26 +122,54 @@ public class HotelBooking {
 			if (numberPeople > maxNumberPeople) {
 				System.out.println("최대 인원을 초과했습니다.");
 				System.out.println("다시 입력해주세요.");
-			} else if (numberPeople > defaultNumberPeople){
+			} else if (numberPeople > defaultNumberPeople) {
 				System.out.println("추가 요금은 " + (numberPeople - defaultNumberPeople) * 50000 + "원입니다.");
 				break;
 			} else {
 				break;
 			}
 		}
-		
+
 		r.setNumberPeople(numberPeople);
 		if (numberPeople > defaultNumberPeople) {
 			r.setAmountPaid(r.getAmountPaid() + (numberPeople - defaultNumberPeople) * 50000);
-		}		
+		}
 	}
 
-	private void setService(Reservation r) { // 부가서비스 선택
+	public void setService(Reservation r) { // 부가서비스 선택
 		System.out.println("부가 서비스를 선택해주세요.");
-		System.out.println("서비스에는 {0}, {1}이 있습니다.");
-		System.out.println("{0}은 X원, {1}은 Y원입니다.");
-		String service = sc.nextLine();
-		r.setService(service);
+		System.out.println("조식은 일 50,000원, 전신 테라피는 300,000원입니다.");
+		while (true) {
+			System.out.println("1. 조식 2. 전신 테라피 3. 둘 다 4. 선택 안 함");
+			String service = sc.nextLine();
+			switch (service) {
+			case "1":
+				System.out.println("조식을 선택하셨습니다.");
+				r.setBreakfast(true);
+				long breakfast = (r.getDateCheckOut().getCheckDate().toEpochDay() - r.getDateCheckIn().getCheckDate().toEpochDay()) * Number.breakfast;
+				System.out.println(breakfast);
+				r.setAmountPaid(r.getAmountPaid() + breakfast);
+				return;
+			case "2":
+				System.out.println("전신 테라피를 선택하셨습니다.");
+				r.setTherapy(true);
+				r.setAmountPaid(r.getAmountPaid() + Number.therapy);
+				return;
+			case "3":
+				System.out.println("조식과 전신 테라피를 선택하셨습니다.");
+				r.setBreakfast(true);
+				r.setTherapy(true);
+				breakfast = (r.getDateCheckOut().getCheckDate().toEpochDay() - r.getDateCheckIn().getCheckDate().toEpochDay()) * Number.breakfast;
+				r.setAmountPaid(r.getAmountPaid() + breakfast);
+				r.setAmountPaid(r.getAmountPaid() + Number.therapy);
+				return;
+			case "4":
+				System.out.println("서비스를 선택하지 않으셨습니다.");
+				return;
+			default:
+				System.out.println("잘못 입력하셨습니다.");
+			}
+		}
 	}
 
 	public void getReservation() { // 예약 확인

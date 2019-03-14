@@ -1,6 +1,7 @@
 package kr.or.bit.hotel;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class Test {
@@ -22,7 +23,10 @@ public class Test {
 //		String sc3 = new Scanner(System.in).nextLine();
 //		System.out.println(sc3.matches(
 //				"^(19[0-9]|200)[0-9](((0(1|3|5|7|8)|1(0|2))(0[1-9]|[1-2][0-9]|3[0-1]))|((0(4|6|9)|11)(0[1-9]|[1-2][0-9]|30))|(02(0[1-9]|(1|2)[0-9]$)))"));
+		LocalDate d1 = LocalDate.of(2019, 3, 16);
+		LocalDate d2 = LocalDate.of(2019, 3, 14);
+		System.out.println(d1.toEpochDay() - d2.toEpochDay());
 		HotelBooking hb = new HotelBooking();
-		hb.setNumberPeople(new Reservation());
+		hb.setService(new Reservation());
 	}
 }

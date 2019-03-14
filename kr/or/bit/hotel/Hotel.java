@@ -11,7 +11,6 @@ public abstract class Hotel {
 	private Room[] roomInfos;
 	private int sales;
 	private Map<String, Member> members;
-	private List<Service> services;
 	private int[] roomPrices;
 	private Calendar today;
 
@@ -19,7 +18,6 @@ public abstract class Hotel {
 		this.sales = 0;
 		roomInfos = new Room[] { new DeluxeRoom(), new ExecutiveRoom(), new SuiteRoom() };
 		members = new HashMap<String, Member>();
-		services = new ArrayList<Service>();
 		today = Calendar.getInstance();
 		setHotelRoomPrices();
 		setHotelRooms();
