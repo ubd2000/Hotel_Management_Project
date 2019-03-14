@@ -18,11 +18,12 @@ public class Member {
 		Record = new ArrayList<Record[]>();
 		Reservation = new Reservation();
 	}
-	public Member(String name, String password , String phoneNumber , String birthday) {
+	public Member(String Id , String name, String password , String phoneNumber , String birthday) {
 		this.name = name;
 		this.password = password;
 		this.phoneNumber = phoneNumber;
 		this.birthday = birthday;
+		this.id = Id;
 
 	}
 	public String getId() {
@@ -54,6 +55,18 @@ public class Member {
 	}
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
+	}
+	public Reservation getReservation() {
+		return Reservation;
+	}
+	public void setReservation(Reservation reservation) {
+		Reservation = reservation;
+	}
+	public ArrayList<Record[]> getRecord() {
+		return Record;
+	}
+	public void setRecord(ArrayList<Record[]> record) {
+		Record = record;
 	}
 	
 	
