@@ -12,8 +12,8 @@ public class LargeHotel extends Hotel {
 	 * 스위트 룸 100만원
 	 */
 	@Override
-	public void setRoomPrices() {
-		setRoomPrices(new int[] { 300000, 600000, 1000000 });
+	public void setHotelRoomPrices() {
+		setRoomPrices(Number.LARGE_ROOM_PRICE);
 	}
 
 	/*
@@ -29,7 +29,6 @@ public class LargeHotel extends Hotel {
 	 */
 	@Override
 	public void setHotelRooms() {
-		int[] roomPrices = this.getRoomPrices();
 		List<List<Room>> rooms = new ArrayList<List<Room>>();
 		for (int i = 0; i < 6; i++) {
 			rooms.add(new ArrayList<Room>());
@@ -44,26 +43,26 @@ public class LargeHotel extends Hotel {
 		
 
 		for (int i = 0; i < 8; i++) {
-			floor2.add(new DeluxeRoom(roomPrices[0]));
-			floor3.add(new DeluxeRoom(roomPrices[0]));
-			floor4.add(new DeluxeRoom(roomPrices[0]));
+			floor2.add(new DeluxeRoom());
+			floor3.add(new DeluxeRoom());
+			floor4.add(new DeluxeRoom());
 		}
 		
 		for (int i = 0; i < 6; i++) {
 			if (i < 4) {
-				floor5.add(new DeluxeRoom(roomPrices[0]));
+				floor5.add(new DeluxeRoom());
 			} else {
-				floor5.add(new ExecutiveRoom(roomPrices[1]));
+				floor5.add(new ExecutiveRoom());
 			}
 			
 		}
 
 		for (int i = 0; i < 4; i++) {
-			floor6.add(new ExecutiveRoom(roomPrices[1]));
+			floor6.add(new ExecutiveRoom());
 		}
 		
 		for (int i = 0; i < 3; i++) {
-			floor7.add(new SuiteRoom(roomPrices[2]));
+			floor7.add(new SuiteRoom());
 		}
 		
 		this.setRooms(rooms);
