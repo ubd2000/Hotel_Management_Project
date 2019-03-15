@@ -608,6 +608,8 @@ public class HotelBooking {
 		switch (select) {
 		case "1":
 			System.out.println("1. 회원 탈퇴 하였습니다.");
+			memberLoggedIn.getReservation().getRoom().getGuests().remove(memberLoggedIn.getId());
+			memberLoggedIn.setReservation(null);
 			hotel.getMembers().remove(memberLoggedIn.getId(), memberLoggedIn);
 			loginCheck = false;
 			break;
