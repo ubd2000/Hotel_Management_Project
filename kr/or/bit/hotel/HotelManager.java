@@ -33,8 +33,10 @@ public class HotelManager {
 
 	public void run() {
 		loadHotel();
-		autoCheckOut();
-		printMenu();
+		myHotel.setToday(LocalDate.now());
+		// 여기다 자동 처리하는 함수
+		setPrice();
+		saveHotel();
 	}
 
 	// 지훈, 세림
@@ -47,15 +49,15 @@ public class HotelManager {
 			switch (hotelSize) {
 			case "소형":
 				System.out.println("소형 호텔이 생성되었다.");
-				saveHotel();
+				// saveHotel();
 				return this.myHotel = new SmallHotel();
 			case "중형":
 				System.out.println("중형 호텔이 생성되었다.");
-				saveHotel();
+				// saveHotel();
 				return this.myHotel = new MediumHotel();
 			case "대형":
 				System.out.println("대형 호텔이 생성되었다.");
-				saveHotel();
+				// saveHotel();
 				return this.myHotel = new LargeHotel();
 			default:
 				System.out.println("소형, 중형, 대형 중에 선택하세요.");
@@ -124,41 +126,9 @@ public class HotelManager {
 		}
 	}
 
-	public void printMenu() {
-		while (true) {
-			System.out.println("2조 호텔 관리 프로그램");
-			System.out.println("┎                                  ┒");
-			System.out.println("         1. 객실 관리");
-			System.out.println();
-			System.out.println("         2. 요금 변경");
-			System.out.println();
-			System.out.println("         3. 호텔 정보 확인");
-			System.out.println();
-			System.out.println("         4. 종료하기");
-			System.out.println("┖                                  ┚");
-
-			String select = sc.nextLine();
-			switch (select) {
-			case "1":
-				roomManage();
-				break;
-			case "2":
-				setPrice();
-				break;
-			case "3":
-				getInfo();
-				break;
-			case "4":
-				saveHotel();
-				return;
-			default:
-				System.out.println("번호를 잘못 입력했습니다.");
-			}
-		}
-	}
-
 	// 객실관리 : 투숙객, 부가서비스, 체크인아웃을 관리하는 메뉴를 보여준다.
 	private void roomManage() {
+		loadHotel();
 		String menu = "";
 
 		while (true) {
@@ -175,9 +145,11 @@ public class HotelManager {
 				return;
 			case "2":
 				setService();
+				saveHotel();
 				return;
 			case "3":
 				setCheckInOut();
+				saveHotel();
 				return;
 			default:
 				System.out.println("객실관리: 1,2,3 중에 선택해주세요");
@@ -188,74 +160,59 @@ public class HotelManager {
 
 	// 투숙객 정보
 	/*
-	 * 1. ID를 가져와서 
-	 * 2. ID를 통해서 회원정보로 간다음에 
-	 * 3. 회원 정보에서 예약정보를 가져오고 
-	 * 4. 체크인 날짜 <= 오늘 날짜 <= 체크아웃 날짜 이런 사람을 찾아서 
-	 * 5. 이사람 정보만 보여주게 
-	 * 6. 없으면 투숙객 없음
+	 * 1. ID를 가져와서 2. ID를 통해서 회원정보로 간다음에 3. 회원 정보에서 예약정보를 가져오고 4. 체크인 날짜 <= 오늘 날짜 <=
+	 * 체크아웃 날짜 이런 사람을 찾아서 5. 이사람 정보만 보여주게 6. 없으면 투숙객 없음
 	 */
 	public void getGuest() {
-		System.out.println("투숙객 정보를 확인합니다.");
-		// ex 수정
-		System.out.println("원하는 객실을 입력하세요. [ex: 201~206, 301~306, 401~403, 501~502]: ");
-		String roomNumber = sc.nextLine();
+		Member guest = null;
+		LocalDate checkIn = null;
+		LocalDate checkOut = null;
+		
+        System.out.println("투숙객 정보를 확인합니다.");
+        System.out.println("원하는 객실을 입력하세요. [ex: 201~206, 301~306, 401~403, 501~502]: ");
+        String roomNumber = sc.nextLine();
+        char floor = roomNumber.charAt(0);
+        char number = roomNumber.charAt(roomNumber.length() - 1);
+        Room room = myHotel.getRooms().get(floor - 50).get(number - 49); // char '1' = 49
+        
+        for (String id : room.getGuests()) {
+            checkIn = myHotel.getMembers().get(id).getReservation().getDateCheckIn().getCheckDate();
+            checkOut = myHotel.getMembers().get(id).getReservation().getDateCheckOut().getCheckDate();
+            if ((myHotel.getToday().isAfter(checkIn) || myHotel.getToday().isEqual(checkIn))
+                    && myHotel.getToday().isBefore(checkOut)) {
+                guest = myHotel.getMembers().get(id);
+                break;
+            }
+        }
+        
+        if (guest == null) {
+            System.out.println("투숙 중인 고객이 없습니다");
+            return;
+        }
+        
+        
+        //부가서비스 확인
+        String breakfast = "";
+        String therapy = "";
+        breakfast = guest.getReservation().isBreakfast() == true  ? "조식O" : "조식X";
+        therapy = guest.getReservation().isBreakfast() == true  ? "전신테라피O" : "전신테라피X";
+    
+        System.out.println(
+                  "이름 : " + guest.getName() 
+                + "\n인원수 : " + guest.getReservation().getNumberPeople()
+                + "\n부가서비스 : " +  breakfast + "/" + therapy 
+                + "\n총 요금 : " + guest.getReservation().getAmountPaid() + "원"
+                + "\n체크인 : " + checkIn 
+                + "\n체크아웃 : " + checkOut);
+    }
 
-		char floor = roomNumber.charAt(0);
-		char number = roomNumber.charAt(roomNumber.length() - 1);
-		Room room = myHotel.getRooms().get(floor - 50).get(number - 49); // char '1' = 49
-
-		if (room.getGuests().size() == 0) {
-			System.out.println("투숙 중인 고객이 없습니다.");
-			return;
-		}
-
-		List<String> temp = new ArrayList<String>();
-
-		for (int i = 0; i < room.getGuests().size(); i++) {
-			temp.add(room.getGuests().get(i));
-		}
-
-		Member temp1 = new Member(null, null, null, null, null);
-
-		Iterator<String> it = myHotel.getMembers().keySet().iterator();
-		int i = 0;
-		while (it.hasNext()) {
-			String key = it.next();
-			if (temp.get(i).equals(myHotel.getMembers().get(key).getId())) {
-				temp1 = myHotel.getMembers().get(key);
-			}
-			i++;
-
-			//			System.out.println("temp: "+ temp);
-			//			System.out.println("myHotel.getMembers().get(key).getId(): "+myHotel.getMembers().get(key).getId());
-
-		}
-
-		System.out.println("이름 : " + temp1.getName() + "\n인원수 : " + temp1.getReservation().getNumberPeople()
-
-				+ "\n부가서비스 : " + (temp1.getReservation().isBreakfast() ? "조식" : "전신테라피")
-
-				+ "\n총 요금 : " + CustomString.putComma(temp1.getReservation().getAmountPaid()) + "원" + "\n체크인 : "
-				+ temp1.getReservation().getDateCheckIn().getCheckDate() + "\n체크아웃 : "
-				+ temp1.getReservation().getDateCheckOut().getCheckDate());
-
-	}
-
-	/*
-	 * 부가서비스 변경
-	 * 1. ID를 가져와서 
-	 * 2. ID를 통해서 회원정보로 간다음에 
-	 * 3. 회원 정보에서 예약정보를 가져오고 
-	 * 4. 체크인 날짜 <= 오늘 날짜 <= 체크아웃 날짜 이런 사람을 찾아서 
-	 * 5. 이사람의 서비스 변경 
-	 * 6. 조식이 1박당 1번 = 오늘부터 체크아웃 날짜까지 * 조식 가격 >> amountPaid에 
-	 * 6-1. 오늘 체크아웃이면 서비스 변경 안되게 6-2. 전신 테라피는 취소하면 amountPaid 감소 
-	 * 7. 없으면 투숙객 없음
-	 * 
-	 * 작성자 : 장지훈
-	 * 수정 : 윤종석
-	 */
+//	// 부가서비스 변경
+//	/*
+//	 * 1. ID를 가져와서 2. ID를 통해서 회원정보로 간다음에 3. 회원 정보에서 예약정보를 가져오고 4. 체크인 날짜 <= 오늘 날짜 <=
+//	 * 체크아웃 날짜 이런 사람을 찾아서 5. 이사람의 서비스 변경 6. 조식이 1박당 1번 = 오늘부터 체크아웃 날짜까지 * 조식 가격 >>
+//	 * amountPaid에 6-1. 오늘 체크아웃이면 서비스 변경 안되게 6-2. 전신 테라피는 취소하면 amountPaid 감소 7. 없으면
+//	 * 투숙객 없음
+//	 */
 	private void setService() {
 		System.out.println("부가서비스를 변경합니다.");
 		System.out.println("원하는 객실을 입력하세요. [ex: 201~206, 301~306, 401~403, 501~502]: ");
@@ -273,7 +230,7 @@ public class HotelManager {
 			checkIn = myHotel.getMembers().get(id).getReservation().getDateCheckIn().getCheckDate();
 			checkOut = myHotel.getMembers().get(id).getReservation().getDateCheckOut().getCheckDate();
 			if ((myHotel.getToday().isAfter(checkIn) || myHotel.getToday().isEqual(checkIn))
-					&& myHotel.getToday().isBefore(checkOut)) { // (체크인 <= 오늘 < 체크아웃)
+					&& myHotel.getToday().isBefore(checkOut)) {
 				guest = myHotel.getMembers().get(id);
 				break;
 			}
@@ -497,7 +454,8 @@ public class HotelManager {
 	public void getRecord() {
 
 		/*
-		 * 확인할 날짜 입력 ex)20190315 FileInputStream fis = new FileInputStream(CustomString.PATH_DIRECTORY + 20190315 + ".info");
+		 * 확인할 날짜 입력 ex)20190315 FileInputStream fis = new
+		 * FileInputStream(CustomString.PATH_DIRECTORY + 20190315 + ".info");
 		 * ObjectInputStream in = new ObjectInputStream(fis);
 		 */
 
@@ -506,69 +464,40 @@ public class HotelManager {
 		while (it.hasNext()) {
 			String key = it.next();
 
-			//			//체크아웃 확인
-			//			if(myHotel.getMembers().get(key).getRecords().getDateCheckOut() > new Date()) {
-			//				
-			//			}
+//			//체크아웃 확인
+//			if(myHotel.getMembers().get(key).getRecords().getDateCheckOut() > new Date()) {
+//				
+//			}
 
-			System.out.println("체크인: " + myHotel.getMembers().get(key).getRecords().getDateCheckin() + "체크아웃: "
-					+ myHotel.getMembers().get(key).getRecords().getDateCheckOut());
+			System.out.println("체크인: " + myHotel.getMembers().get(key).getReservation().getDateCheckIn().getCheckDate()
+					+ "체크아웃: " + myHotel.getMembers().get(key).getReservation().getDateCheckOut().getCheckDate());
 		}
 	}
 
-	/*
-	 * 호텔 매니저를 실행하면 호텔 매니저가 오늘 날짜를 가져온다 
-	 * 모든 방을 체크해서 오늘 체크아웃인 사람을 다 가져온다 
-	 * Room에서 Guests에서 이 사람들을 삭제한다 
-	 * 삭제하면서 이 사람들의 amountPaid만큼 sales을 더해준다 
-	 * 이 사람들의 reservation 정보를 record에 담아주고 reservation은 null로 만들고 
-	 * 오늘 체크인하는 사람과 오늘 체크아웃 하는 사람의 정보를 파일로
-	 * 저장
-	 */
-	public void autoCheckOut() {
-		myHotel.setToday(LocalDate.now());
-		List<String> ids = null;
+	public void HotelManagerSave() {
 
-		file = new File(CustomString.PATH_RECORD_DIRECTORY(myHotel.getToday()));
-		if (!file.exists()) {
-			file.mkdirs();
-		}
-		
-		file = new File(CustomString.PATH_RECORD(myHotel.getToday(), "out"));
-		
-		try {
-			fos = new FileOutputStream(file);
-			out = new ObjectOutputStream(fos);
-			
-			for (int i = 0; i < myHotel.getRooms().size(); i++) {
-				for (int j = 0; j < myHotel.getRooms().get(i).size(); j++) {
-					ids = myHotel.getRooms().get(i).get(j).getGuests();
-				}
-			}
+		List<Member> temp = new ArrayList<Member>();
+		List<String> temp1 = new ArrayList<String>();
+		Record record = null;
 
-			for (String id : ids) {
-				Reservation reservationCheckOut = myHotel.getMembers().get(id).getReservation();
-				if (reservationCheckOut.getDateCheckOut().getCheckDate().isEqual(myHotel.getToday())) {
-					myHotel.setSales(myHotel.getSales() + reservationCheckOut.getAmountPaid()); // sales에 더하기
-					myHotel.getMembers().get(id).getRecords().addReservation(reservationCheckOut); // Record에 reservation 기록
-					myHotel.getMembers().get(id).getReservation().getRoom().getGuests().remove(id); // 방에서 ID 삭제
-					out.writeObject(reservationCheckOut); // 체크아웃 정보 저장
-					myHotel.getMembers().get(id).setReservation(null); // 예약 정보 삭제
-				}
-			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			try {
-				out.close();
-				fos.close();
-			} catch (IOException e) {
-				e.printStackTrace();
+		for (int i = 0; i < myHotel.getRooms().size(); i++) {
+			for (int j = 0; j < myHotel.getRooms().get(i).size(); j++) {
+				temp1 = myHotel.getRooms().get(i).get(j).getGuests();
 			}
 		}
+
+		LocalDate date = LocalDate.now();
+		for (int i = 0; i < temp1.size(); i++) {
+			Member member = myHotel.getMembers().get(temp1.get(i));
+			if(member.getReservation().getDateCheckOut().getCheckDate().isEqual(myHotel.getToday())) {
+				member.setReservation(null);
+				myHotel.setSales(member.getReservation().getAmountPaid());
+				Reservation reservations = member.getReservation();
+				record.addReservation(member.getReservation());
+				member.getReservation().getRoom().getGuests().remove(member.getId());
+			}
+		}
+		
+		
 	}
 }
