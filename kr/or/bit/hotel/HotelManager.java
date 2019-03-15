@@ -121,13 +121,46 @@ public class HotelManager {
 			}
 		}
 	}
+	
+	public void printMenu() {
+		while (true) {
+			System.out.println("2조 호텔 관리 프로그램");
+			System.out.println("┎                                  ┒");
+			System.out.println("         1. 객실 관리");
+			System.out.println();
+			System.out.println("         2. 요금 변경");
+			System.out.println();
+			System.out.println("         3. 호텔 정보 확인");
+			System.out.println();
+			System.out.println("         4. 종료하기");
+			System.out.println("┖                                  ┚");
+
+			String select = sc.nextLine();
+			switch (select) {
+			case "1":
+				roomManage();
+				break;
+			case "2":
+				setPrice();
+				break;
+			case "3":
+				getInfo();
+				break;
+			case "4":
+				saveHotel();
+				return;
+			default:
+				System.out.println("번호를 잘못 입력했습니다.");
+			}
+		}
+	}
 
 	// 객실관리 : 투숙객, 부가서비스, 체크인아웃을 관리하는 메뉴를 보여준다.
 	private void roomManage() {
 		String menu = "";
 
 		while (true) {
-			System.out.println("객실관리: 원하는 번호를 입력하세요.");
+			System.out.println("객실 관리: 원하는 번호를 입력하세요.");
 			System.out.println("1. 투숙객 정보 확인");
 			System.out.println("2. 부가서비스 변경");
 			System.out.println("3. 체크인, 체크아웃 관리");
@@ -145,16 +178,19 @@ public class HotelManager {
 				setCheckInOut();
 				return;
 			default:
-				System.out.println("객실관리: 1,2,3 중에 선택해주세요");
+				System.out.println("객실 관리: 1,2,3 중에 선택해주세요");
 				break;
 			}
 		}
 	}
 
-	// 투숙객 정보
 	/*
-	 * 1. ID를 가져와서 2. ID를 통해서 회원정보로 간다음에 3. 회원 정보에서 예약정보를 가져오고 4. 체크인 날짜 <= 오늘 날짜 <=
-	 * 체크아웃 날짜 이런 사람을 찾아서 5. 이사람 정보만 보여주게 6. 없으면 투숙객 없음
+	 * 1. ID를 가져와서 
+	 * 2. ID를 통해서 회원정보로 간다음에 
+	 * 3. 회원 정보에서 예약정보를 가져오고 
+	 * 4. 체크인 날짜 <= 오늘 날짜 <= 체크아웃 날짜 이런 사람을 찾아서 
+	 * 5. 이사람 정보만 보여주게 
+	 * 6. 없으면 투숙객 없음
 	 */
 	public void getGuest() {
 		Member guest = null;
@@ -194,13 +230,20 @@ public class HotelManager {
 				+ "\n체크인 : " + checkIn + "\n체크아웃 : " + checkOut);
 	}
 
-	//	// 부가서비스 변경
-	//	/*
-	//	 * 1. ID를 가져와서 2. ID를 통해서 회원정보로 간다음에 3. 회원 정보에서 예약정보를 가져오고 4. 체크인 날짜 <= 오늘 날짜 <=
-	//	 * 체크아웃 날짜 이런 사람을 찾아서 5. 이사람의 서비스 변경 6. 조식이 1박당 1번 = 오늘부터 체크아웃 날짜까지 * 조식 가격 >>
-	//	 * amountPaid에 6-1. 오늘 체크아웃이면 서비스 변경 안되게 6-2. 전신 테라피는 취소하면 amountPaid 감소 7. 없으면
-	//	 * 투숙객 없음
-	//	 */
+	/*
+	 * 부가서비스 변경
+	 * 1. ID를 가져와서 
+	 * 2. ID를 통해서 회원정보로 간다음에 
+	 * 3. 회원 정보에서 예약정보를 가져오고 
+	 * 4. 체크인 날짜 <= 오늘 날짜 <= 체크아웃 날짜 이런 사람을 찾아서 
+	 * 5. 이사람의 서비스 변경 
+	 * 6. 조식이 1박당 1번 = 오늘부터 체크아웃 날짜까지 * 조식 가격 >> amountPaid에 
+	 * 6-1. 오늘 체크아웃이면 서비스 변경 안되게 6-2. 전신 테라피는 취소하면 amountPaid 감소 
+	 * 7. 없으면 투숙객 없음
+	 * 
+	 * 작성자 : 장지훈
+	 * 수정 : 윤종석
+	 */
 	private void setService() {
 		System.out.println("부가서비스를 변경합니다.");
 		System.out.println("원하는 객실을 입력하세요. [ex: 201~206, 301~306, 401~403, 501~502]: ");
