@@ -15,7 +15,6 @@ public class CustomString {
 		return "C:\\Temp\\Hotel\\" + date.format(formatter);
 	}
 	
-	
 	public static final String PATH_RECORD(LocalDate date, String check) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 		String fileName = "";

@@ -428,6 +428,7 @@ public class HotelBooking {
 				break;
 			}
 		}
+		
 		while (true) {
 			System.out.println("아이디를 입력해주세요. (4자 이상  10자 이내)");
 			id = sc.nextLine();
@@ -442,6 +443,7 @@ public class HotelBooking {
 				break;
 			}
 		}
+		
 		while (true) {
 			System.out.println("비밀번호를 입력해주세요. (6자이상 10자 이내)");
 			password = sc.nextLine();
@@ -453,6 +455,7 @@ public class HotelBooking {
 				break;
 			}
 		}
+		
 		while (true) {
 			System.out.println("핸드폰번호를 입력해주세요. ( - 생략)");
 			System.out.println("Ex) 01012345678");
@@ -465,6 +468,7 @@ public class HotelBooking {
 				break;
 			}
 		}
+		
 		while (true) {
 			System.out.println("생년월일 8자리를 입력해주세요.");
 			System.out.println("Ex)96년생 7월 15일생이면 >> 19960715");
@@ -478,6 +482,7 @@ public class HotelBooking {
 				break;
 			}
 		}
+		
 		System.out.println("성공적으로 회원가입을 하셨습니다.!!");
 		System.out.println(name + "님 환영합니다^^~");
 		loginCheck = true;
