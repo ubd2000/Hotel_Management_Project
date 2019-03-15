@@ -512,7 +512,6 @@ public class HotelManager {
 	public void HotelCheckOutSave() {
 
 		List<String> guests = new ArrayList<String>();
-		Record record = null;
 
 		for (int i = 0; i < myHotel.getRooms().size(); i++) {
 			for (int j = 0; j < myHotel.getRooms().get(i).size(); j++) {
@@ -557,7 +556,6 @@ public class HotelManager {
 	public void HotelCheckInSave() {
 
 		List<String> guests = new ArrayList<String>();
-		Record record = null;
 
 		for (int i = 0; i < myHotel.getRooms().size(); i++) {
 			for (int j = 0; j < myHotel.getRooms().get(i).size(); j++) {
