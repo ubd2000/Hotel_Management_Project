@@ -2,15 +2,16 @@ package kr.or.bit.hotel;
 
 import java.time.LocalDate;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public abstract class Hotel implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	private List<List<Room>> rooms;
 	private Room[] roomInfos;
-	private int sales;
+	private long sales;
 	private Map<String, Member> members;
 	private int[] roomPrices;
 	private int breakfast;
@@ -70,11 +71,11 @@ public abstract class Hotel implements Serializable {
 		this.roomInfos = roomInfos;
 	}
 
-	public int getSales() {
+	public long getSales() {
 		return sales;
 	}
 
-	public void setSales(int sales) {
+	public void setSales(long sales) {
 		this.sales = sales;
 	}
 
@@ -92,8 +93,12 @@ public abstract class Hotel implements Serializable {
 
 	public int[] getServicePrices() {
 		return servicePrices;
+	}
+
 	public void setServicePrices(int[] servicePrices) {
 		this.servicePrices = servicePrices;
+	}
+
 	public LocalDate getToday() {
 		return today;
 	}

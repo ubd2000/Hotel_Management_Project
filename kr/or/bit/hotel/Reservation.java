@@ -1,6 +1,10 @@
 package kr.or.bit.hotel;
 
+import java.io.Serializable;
+
 public class Reservation implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	private Room room;
 	private int numberPeople;
 	private HotelDate dateCheckIn;
@@ -8,6 +12,13 @@ public class Reservation implements Serializable {
 	private boolean breakfast;
 	private boolean therapy;
 	private long amountPaid;
+	
+	@Override
+	public String toString() {
+		return "Reservation [room=" + room + ", numberPeople=" + numberPeople + ", dateCheckIn=" + dateCheckIn
+				+ ", dateCheckOut=" + dateCheckOut + ", breakfast=" + breakfast + ", therapy=" + therapy
+				+ ", amountPaid=" + amountPaid + "]";
+	}
 
 	public int getNumberPeople() {
 		return numberPeople;
@@ -65,5 +76,4 @@ public class Reservation implements Serializable {
 	public void setAmountPaid(long l) {
 		this.amountPaid = l;
 	}
-
 }

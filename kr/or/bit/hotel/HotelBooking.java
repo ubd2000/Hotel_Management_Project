@@ -104,7 +104,6 @@ public class HotelBooking {
 	}
 
 	public void getRoomInfo() { // 객실정보보기
-		System.out.println(memberLoggedIn == hotel.getMembers().get(memberLoggedIn.getId()));
 		for (int i = 0; i < hotel.getRoomInfos().length; i++) {
 			String kitchen = "";
 			if (hotel.getRoomInfos()[i].isKitchen()) {
@@ -541,7 +540,7 @@ public class HotelBooking {
 			case "4":
 				if (!loginCheck) {
 					saveHotel();
-					System.exit(0);
+					return;
 				} else {
 					changeInfo();
 				}
@@ -551,7 +550,7 @@ public class HotelBooking {
 					System.out.println("번호를 잘못 입력했습니다.");
 				} else {
 					saveHotel();
-					System.exit(0);
+					return;
 				}
 				break;
 			default:

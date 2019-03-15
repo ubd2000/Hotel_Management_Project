@@ -1,15 +1,21 @@
 package kr.or.bit.hotel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Record {
+public class Record implements Serializable {
 	private List<Reservation> reservations;
-	private int totalPaid;
+	private long totalPaid;
 	
 	public Record() {
 		reservations = new ArrayList<Reservation>();
 		totalPaid = 0;
+	}
+	
+	public void addReservation(Reservation reservation) {
+		reservations.add(reservation);
+		totalPaid += reservation.getAmountPaid();
 	}
 
 	public List<Reservation> getReservations() {
@@ -20,11 +26,11 @@ public class Record {
 		this.reservations = reservations;
 	}
 
-	public int getTotalPaid() {
+	public long getTotalPaid() {
 		return totalPaid;
 	}
 
-	public void setTotalPaid(int totalPaid) {
+	public void setTotalPaid(long totalPaid) {
 		this.totalPaid = totalPaid;
 	}
 }
