@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class Reservation implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	private Room room;
 	private int numberPeople;
 	private HotelDate dateCheckIn;
@@ -12,21 +12,25 @@ public class Reservation implements Serializable {
 	private boolean breakfast;
 	private boolean therapy;
 	private long amountPaid;
-	
+
 	@Override
 	public String toString() {
-		return "Reservation [room=" + room + ", numberPeople=" + numberPeople + ", dateCheckIn=" + dateCheckIn
-				+ ", dateCheckOut=" + dateCheckOut + ", breakfast=" + breakfast + ", therapy=" + therapy
-				+ ", amountPaid=" + amountPaid + "]";
+		return "###예약확인### \n방 이름=[" + room.getRoomName() + "]룸," + " " + room.getRoomNumber() + "호" + "\n예약 인원=["
+				+ numberPeople + "], \n체크인 날짜=[" + dateCheckIn.getCheckDate()
+
+				+ "], \n체크아웃날짜=[" + getDateCheckOut().getCheckDate() + "], \n조식=[" + getBreakfastString()
+				+ "], \n전신 테라피=[" + getTherapyString() + "], \n총 요금 =[" + CustomString.putComma(amountPaid)
+				+ "]원\n----------------------";
 	}
 
 	public int getNumberPeople() {
 		return numberPeople;
 	}
-	
+
 	public void setNumberPeople(int numberPeople) {
 		this.numberPeople = numberPeople;
 	}
+
 	public Room getRoom() {
 		return room;
 	}
@@ -73,6 +77,14 @@ public class Reservation implements Serializable {
 
 	public void setAmountPaid(long l) {
 		this.amountPaid = l;
+	}
+
+	public String getBreakfastString() {
+		return (breakfast) ? "O" : "X";
+	}
+
+	public String getTherapyString() {
+		return (therapy) ? "O" : "X";
 	}
 
 }
