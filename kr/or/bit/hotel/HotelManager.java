@@ -1,4 +1,4 @@
-package kr.or.bit.hotel;
+﻿package kr.or.bit.hotel;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,8 +7,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -38,6 +40,9 @@ public class HotelManager {
 	public Hotel setHotel() {
 		while (true) {
 			System.out.println("호텔사이즈 입력[소형, 중형, 대형]: ");
+			System.out.println("1층 로비\n2층 디럭스 룸 8개\n3층 디럭스 룸 8개\n4층 디럭스 룸 8개\n5층 디럭스 룸 4개\n      이그제큐티브 룸 2개\n6층 이그제큐티브 룸 4개\n7층 스위트 룸 3개");
+					"1층 로비\n2층 디럭스 룸 8개\n3층 디럭스 룸 8개\n4층 디럭스 룸 8개\n5층 디럭스 룸 4개\n      이그제큐티브 룸 2개\n6층 이그제큐티브 룸 4개\n7층 스위트 룸 3개");
+			
 			String hotelSize = sc.nextLine();
 
 			switch (hotelSize) {
@@ -50,7 +55,8 @@ public class HotelManager {
 				saveHotel();
 				return this.myHotel = new MediumHotel();
 			case "대형":
-				System.out.println("대형 호텔이 생성되었다.");
+				System.out.println("1층 로비\n2층 디럭스 룸 8개\n3층 디럭스 룸 8개\n4층 디럭스 룸 8개\n5층 디럭스 룸 4개\n      이그제큐티브 룸 2개\n6층 이그제큐티브 룸 4개\n7층 스위트 룸 3개");
+						"1층 로비\n2층 디럭스 룸 8개\n3층 디럭스 룸 8개\n4층 디럭스 룸 8개\n5층 디럭스 룸 4개\n      이그제큐티브 룸 2개\n6층 이그제큐티브 룸 4개\n7층 스위트 룸 3개");
 				saveHotel();
 				return this.myHotel = new LargeHotel();
 			default:
@@ -226,8 +232,8 @@ public class HotelManager {
 		//부가서비스 확인
 		String breakfast = "";
 		String therapy = "";
-		breakfast = (guest.getReservation().isBreakfast()) ? "조식O" : "조식X";
-		therapy = (guest.getReservation().isTherapy()) ? "전신테라피O" : "전신테라피X";
+		breakfast = guest.getReservation().isBreakfast() ? CustomString.breakfast + " O"
+				: CustomString.breakfast + " X";
 
 		System.out.println("이름 : " + guest.getName() + "\n인원수 : " + guest.getReservation().getNumberPeople()
 				+ "\n부가서비스 : " + breakfast + "/" + therapy + "\n총 요금 : " + CustomString.putComma(guest.getReservation().getAmountPaid()) + "원"
@@ -394,7 +400,7 @@ public class HotelManager {
 	// 부가서비스 가격 설정
 	private void setServicePrice() {
 		int service;
-		String[] servicename = { "Breakfast", "Therapy" }; // 한글로 교체 (이런거는 CustomString) CustomString.BreakfastString
+		String[] servicename = { CustomString.breakfast , CustomString.therapy }; // 한글로 교체 (이런거는 CustomString) CustomString.BreakfastString
 
 		do {
 			try {
@@ -466,8 +472,9 @@ public class HotelManager {
 		System.out.println("현재 호텔 매출 - " + myHotel.getSales() + "원 입니다.");
 	}
 
-	// 세림
+	// 작성 : 우세림
 	// 회원 정보 보기
+	// 수정 : 윤종석
 	public void getMemberInfo() {
 		Iterator<String> it = myHotel.getMembers().keySet().iterator();
 
@@ -475,7 +482,8 @@ public class HotelManager {
 			String key = it.next();
 			System.out.println(" 이름 :" + myHotel.getMembers().get(key).getName() + " 생년월일 : "
 					+ myHotel.getMembers().get(key).getBirthday() + " 전화번호 : "
-					+ myHotel.getMembers().get(key).getPhoneNumber() + " VIP : true" + " 호텔 이용 총 금액 : "
+					+ myHotel.getMembers().get(key).getPhoneNumber() + " VIP : "
+					+ myHotel.getMembers().get(key).isVipString() + " 호텔 이용 총 금액 : "
 					+ myHotel.getMembers().get(key).getRecords().getTotalPaid() + "원");
 		}
 	}
@@ -489,24 +497,58 @@ public class HotelManager {
 	public void getRecord() {
 
 		/*
-		 * 확인할 날짜 입력 ex)20190315 FileInputStream fis = new
-		 * FileInputStream(CustomString.PATH_DIRECTORY + 20190315 + ".info");
+		 * 확인할 날짜 입력 ex)20190315 FileInputStream fis = new FileInputStream(CustomString.PATH_DIRECTORY + 20190315 + ".info");
 		 * ObjectInputStream in = new ObjectInputStream(fis);
 		 */
 
-		Iterator<String> it = myHotel.getMembers().keySet().iterator();
+		System.out.println("체크인 체크아웃 기록을 확인할 날짜를 선택하세요.");
+		String date = sc.nextLine();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+		LocalDate dateToCheck = LocalDate.parse(date, formatter);
 
-		while (it.hasNext()) {
-			String key = it.next();
+		file = new File(CustomString.PATH_RECORD_DIRECTORY(dateToCheck));
 
-			//			//체크아웃 확인
-			//			if(myHotel.getMembers().get(key).getRecords().getDateCheckOut() > new Date()) {
-			//				
-			//			}
-
-			System.out.println("체크인: " + myHotel.getMembers().get(key).getReservation().getDateCheckIn().getCheckDate()
-					+ "체크아웃: " + myHotel.getMembers().get(key).getReservation().getDateCheckOut().getCheckDate());
+		if (!file.exists()) {
+			System.out.println("저장된 기록이 없습니다.");
+			return;
 		}
+		
+		try {
+			file = new File(CustomString.PATH_RECORD(dateToCheck, "in"));
+			fis = new FileInputStream(file);
+			in = new ObjectInputStream(fis);
+			
+			System.out.println("체크인");
+			Reservation data = null;
+			while ((data = (Reservation) in.readObject()) != null) {
+				System.out.println(data);
+			}
+			
+			in.close();
+			fis.close();
+			
+			file = new File(CustomString.PATH_RECORD(dateToCheck, "out"));
+			fis = new FileInputStream(file);
+			in = new ObjectInputStream(fis);
+			
+			System.out.println("체크아웃");
+			
+			data = null;
+			while ((data = (Reservation) in.readObject()) != null) {
+				System.out.println(data);
+			}
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	public void saveHotelCheckOut() {
