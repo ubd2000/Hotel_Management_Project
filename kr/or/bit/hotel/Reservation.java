@@ -23,12 +23,10 @@ public class Reservation implements Serializable {
 	public int getNumberPeople() {
 		return numberPeople;
 	}
-
+	
 	public void setNumberPeople(int numberPeople) {
 		this.numberPeople = numberPeople;
 	}
-
-
 	public Room getRoom() {
 		return room;
 	}
@@ -76,4 +74,5 @@ public class Reservation implements Serializable {
 	public void setAmountPaid(long l) {
 		this.amountPaid = l;
 	}
+
 }
