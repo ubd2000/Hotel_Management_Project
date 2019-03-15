@@ -1,26 +1,14 @@
 package kr.or.bit.hotel;
-<<<<<<< HEAD
-
-import java.io.Serializable;
-
-public class Member implements Serializable {
-	private Reservation reservation;
-	private Record records;
-	private String id;
-	private String name;
-=======
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * @author os
  *
  */
-public class Member implements Serializable{
+public class Member {
 	private Reservation Reservation;
 	private ArrayList<Record[]> Record;
 	private String id; // 추가
->>>>>>> 308194e9c0521cdc068e9e32934c7f86c06cceff
 	private String password;
 	private String name;
 	private String birthday;

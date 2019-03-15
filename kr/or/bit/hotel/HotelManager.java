@@ -121,7 +121,7 @@ public class HotelManager {
 			}
 		}
 	}
-
+	
 	public void printMenu() {
 		while (true) {
 			System.out.println("2조 호텔 관리 프로그램");

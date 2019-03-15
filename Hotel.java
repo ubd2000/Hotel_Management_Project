@@ -1,29 +1,25 @@
 package kr.or.bit.hotel;
 
-import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class Hotel implements Serializable {
-	private static final long serialVersionUID = 1L;
-	
+public abstract class Hotel {
 	private List<List<Room>> rooms;
+	private List<Service> services;
 	private Room[] roomInfos;
-	private long sales;
+	private int sales;
 	private Map<String, Member> members;
 	private int[] roomPrices;
-	private int breakfast;
-	private int therapy;
-	private LocalDate today;
+	private Calendar today;
 
 	public Hotel() {
 		this.sales = 0;
 		roomInfos = new Room[] { new DeluxeRoom(), new ExecutiveRoom(), new SuiteRoom() };
 		members = new HashMap<String, Member>();
-		today = LocalDate.now();
-		breakfast = Number.breakfast;
-		therapy = Number.therapy;
+		today = Calendar.getInstance();
 		setHotelRoomPrices();
 		setHotelRooms();
 	}
@@ -31,22 +27,6 @@ public abstract class Hotel implements Serializable {
 	public abstract void setHotelRoomPrices();
 
 	public abstract void setHotelRooms();
-
-	public int getBreakfast() {
-		return breakfast;
-	}
-
-	public void setBreakfast(int breakfast) {
-		this.breakfast = breakfast;
-	}
-
-	public int getTherapy() {
-		return therapy;
-	}
-
-	public void setTherapy(int therapy) {
-		this.therapy = therapy;
-	}
 
 	public void setRooms(List<List<Room>> rooms) {
 		this.rooms = rooms;
@@ -68,11 +48,11 @@ public abstract class Hotel implements Serializable {
 		this.roomInfos = roomInfos;
 	}
 
-	public long getSales() {
+	public int getSales() {
 		return sales;
 	}
 
-	public void setSales(long sales) {
+	public void setSales(int sales) {
 		this.sales = sales;
 	}
 
@@ -84,26 +64,19 @@ public abstract class Hotel implements Serializable {
 		this.members = members;
 	}
 
-<<<<<<< HEAD
-	public List<List<Room>> getRooms() {
-		return rooms;
+	public List<Service> getServices() {
+		return services;
 	}
 
-	public int[] getServicePrices() {
-		return servicePrices;
+	public void setServices(List<Service> services) {
+		this.services = services;
 	}
 
-	public void setServicePrices(int[] servicePrices) {
-		this.servicePrices = servicePrices;
-	}
-
-=======
->>>>>>> 308194e9c0521cdc068e9e32934c7f86c06cceff
-	public LocalDate getToday() {
+	public Calendar getToday() {
 		return today;
 	}
 
-	public void setToday(LocalDate today) {
+	public void setToday(Calendar today) {
 		this.today = today;
 	}
 
@@ -111,3 +84,4 @@ public abstract class Hotel implements Serializable {
 		return rooms;
 	}
 }
+
