@@ -1,0 +1,85 @@
+package kr.or.bit.hotel;
+<<<<<<< HEAD
+
+import java.io.Serializable;
+
+public class Member implements Serializable {
+	private Reservation reservation;
+	private Record records;
+	private String id;
+	private String name;
+=======
+import java.io.Serializable;
+import java.util.ArrayList;
+
+/**
+ * @author os
+ *
+ */
+public class Member implements Serializable{
+	private Reservation Reservation;
+	private ArrayList<Record[]> Record;
+	private String id; // 추가
+>>>>>>> 308194e9c0521cdc068e9e32934c7f86c06cceff
+	private String password;
+	private String name;
+	private String birthday;
+	private String phoneNumber;
+	
+	public Member() {
+		Record = new ArrayList<Record[]>();
+		Reservation = new Reservation();
+	}
+	public Member(String Id , String name, String password , String phoneNumber , String birthday) {
+		this.name = name;
+		this.password = password;
+		this.phoneNumber = phoneNumber;
+		this.birthday = birthday;
+		this.id = Id;
+
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getBirthday() {
+		return birthday;
+	}
+	public void setBirthday(String birthday) {
+		this.birthday = birthday;
+	}
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+	public Reservation getReservation() {
+		return Reservation;
+	}
+	public void setReservation(Reservation reservation) {
+		Reservation = reservation;
+	}
+	public ArrayList<Record[]> getRecord() {
+		return Record;
+	}
+	public void setRecord(ArrayList<Record[]> record) {
+		Record = record;
+	}
+	
+	
+}

@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Room implements Serializable {
 	private String roomName;
+	private String roomNumber;
 	private int defaultNumberPeople;
 	private int maxNumberPeople;
 	private int numberBed;
@@ -88,4 +89,13 @@ public class Room implements Serializable {
 	public void setBooked(boolean isBooked) {
 		this.isBooked = isBooked;
 	}
+
+	public String getRoomNumber() {
+		return roomNumber;
+	}
+
+	public void setRoomNumber(String roomNumber) {
+		this.roomNumber = roomNumber;
+	}
+
 }
