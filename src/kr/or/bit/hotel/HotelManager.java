@@ -30,9 +30,7 @@ public class HotelManager {
 
 	public void run() {
 		loadHotel();
-		myHotel.setToday(LocalDate.now());
-		// 여기다 자동 처리하는 함수
-		setPrice();
+		printMenu();
 	}
 
 	// 지훈, 세림
@@ -121,7 +119,7 @@ public class HotelManager {
 			}
 		}
 	}
-	
+
 	public void printMenu() {
 		while (true) {
 			System.out.println("2조 호텔 관리 프로그램");
