@@ -65,7 +65,16 @@ public class HotelManager {
 			}
 		}
 	}
-
+	
+	/*
+	 * 호텔 정보 불러오기
+	 * 
+	 * 프로그램에서 활용한 호텔의 정보를 불러오는 함수
+	 * 
+	 * 호텔 정보 파일이 없으면 새로운 호텔 정보 생성
+	 * 
+	 * 작성자 : 윤종석
+	 */
 	private void loadHotel() {
 		file = new File(CustomString.PATH_HOTEL);
 		if (!file.exists()) {
@@ -111,11 +120,7 @@ public class HotelManager {
 		try {
 			fos = new FileOutputStream(file);
 			out = new ObjectOutputStream(fos);
-			
 			out.writeObject(myHotel);
-			out.writeObject(myHotel.getRooms());
-			out.writeObject(myHotel.getMembers());
-			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -133,7 +138,6 @@ public class HotelManager {
 	// 세림
 	// 객실관리 : 투숙객, 부가서비스, 체크인아웃을 관리하는 메뉴를 보여준다.
 	private void roomManage() {
-		loadHotel();
 		String menu = "";
 
 		while (true) {
@@ -150,11 +154,9 @@ public class HotelManager {
 				return;
 			case "2":
 				setService();
-				saveHotel();
 				return;
 			case "3":
 				setCheckInOut();
-				saveHotel();
 				return;
 			default:
 				System.out.println("객실관리: 1,2,3 중에 선택해주세요");
@@ -223,11 +225,9 @@ public class HotelManager {
 			switch (menu) {
 			case "1":
 				setRoomPrice();
-				saveHotel();
 				return;
 			case "2":
 				setServicePrice();
-				saveHotel();
 				return;
 			default:
 				System.out.println("기본가격 설정: 1,2 중에 선택해주세요");

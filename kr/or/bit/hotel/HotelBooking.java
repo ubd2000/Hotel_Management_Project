@@ -88,16 +88,7 @@ public class HotelBooking {
 		try {
 			fos = new FileOutputStream(file);
 			out = new ObjectOutputStream(fos);
-
 			out.writeObject(hotel);
-			out.writeObject(hotel.getRooms());
-			out.writeObject(hotel.getMembers());
-
-			for (String id : hotel.getMembers().keySet()) {
-				Reservation r = hotel.getMembers().get(id).getReservation();
-				out.writeObject(r);
-			}
-
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -113,7 +104,7 @@ public class HotelBooking {
 	}
 
 	public void getRoomInfo() { // 객실정보보기
-		loadHotel();
+		System.out.println(memberLoggedIn == hotel.getMembers().get(memberLoggedIn.getId()));
 		for (int i = 0; i < hotel.getRoomInfos().length; i++) {
 			String kitchen = "";
 			if (hotel.getRoomInfos()[i].isKitchen()) {
@@ -131,7 +122,6 @@ public class HotelBooking {
 	}
 
 	public void reserveRoom() { // 객실예약
-		loadHotel();
 		if (memberLoggedIn.getReservation() != null) {
 			System.out.println("이미 예약함");
 			return;
@@ -143,8 +133,7 @@ public class HotelBooking {
 		setService(r);
 		System.out.println("총 금액 : " + r.getAmountPaid());
 		memberLoggedIn.setReservation(r);
-		hotel.getMembers().get(memberLoggedIn.getId()).setReservation(r);
-		saveHotel();
+		// hotel.getMembers().get(memberLoggedIn.getId()).setReservation(r);
 	}
 
 	public void setDate(Reservation r) { // 날짜 선택
@@ -309,12 +298,10 @@ public class HotelBooking {
 	 * 작성자 : 윤종석
 	 */
 	public void cancelReservation() { // 예약 취소
-		loadHotel();
 		memberLoggedIn.getReservation().getRoom().getGuests().remove(memberLoggedIn.getId());
 		memberLoggedIn.setReservation(null);
-		hotel.getMembers().get(memberLoggedIn.getId()).setReservation(null);
+		// hotel.getMembers().get(memberLoggedIn.getId()).setReservation(null);
 		System.out.println("기존 예약이 취소되었습니다.");
-		saveHotel();
 	}
 
 	/*
@@ -325,14 +312,11 @@ public class HotelBooking {
 	 * 작성자 : 윤종석
 	 */
 	public void changeReservation() { // 예약 변경
-		loadHotel();
 		cancelReservation();
 		reserveRoom();
-		saveHotel();
 	}
 
 	public void signUp() { // 회원 가입
-		loadHotel();
 
 		String id, password, phoneNumber, birthday;
 
@@ -396,9 +380,8 @@ public class HotelBooking {
 		System.out.println("성공적으로 회원가입을 하셨습니다.!!");
 		System.out.println(name + "님 환영합니다^^~");
 		loginCheck = true;
-		memberLoggedIn = new Member(id, name, password, phoneNumber, birthday);
-		hotel.getMembers().put(id, memberLoggedIn);		
-		saveHotel();
+		hotel.getMembers().put(id, new Member(id, name, password, phoneNumber, birthday));
+		memberLoggedIn = hotel.getMembers().get(id);
 	}
 
 	public void login() { // 로그인
@@ -421,7 +404,6 @@ public class HotelBooking {
 	}
 
 	public void changeInfo() { // 회원 정보 수정
-		loadHotel();
 		String password = null;
 		String password2 = null;
 		String phone = null;
@@ -446,7 +428,7 @@ public class HotelBooking {
 				System.out.println("다시 한번 입력해주세요.");
 				password2 = sc.nextLine();
 				if (password.equals(password2)) {
-					hotel.getMembers().get(memberLoggedIn.getId()).setPassword(password2);
+					memberLoggedIn.setPassword(password2);
 					System.out.println("비밀번호가 바뀌었습니다.");
 				} else if (password.length() > 10 || password.length() < 6) {
 					JOptionPane.showMessageDialog(null, "비밀번호의 길이를 확인해주세요.");
@@ -458,7 +440,6 @@ public class HotelBooking {
 					System.out.println("비밀번호가 일치하지 않습니다.");
 					System.out.println("다시 시도 해 주세요.");
 				}
-				saveHotel();
 				break;
 
 			case "2":
@@ -466,14 +447,13 @@ public class HotelBooking {
 				System.out.println("바꾸실 전화번호를 입력해주세요.");
 				phone = sc.nextLine();
 				if (phone.matches("^010[0-9]{8}")) {
-					hotel.getMembers().get(memberLoggedIn.getId()).setPhoneNumber(phone);
+					memberLoggedIn.setPhoneNumber(phone);
 					System.out.println("바꾸신 핸드폰 번호입니다.");
 					System.out.println("바뀐 전화번호 : " + phone);
 				} else {
 					System.out.println("잘못된 핸드폰번호입니다.");
 					System.out.println("Ex)01012341234 ( - 제외 )");
 				}
-				saveHotel();
 				break;
 			case "3":
 				quit();
@@ -500,7 +480,6 @@ public class HotelBooking {
 			System.out.println("1. 회원 탈퇴 하였습니다.");
 			hotel.getMembers().remove(memberLoggedIn.getId());
 			loginCheck = false;
-			saveHotel();
 			break;
 		case "2":
 			System.out.println("취소 하였습니다.");
