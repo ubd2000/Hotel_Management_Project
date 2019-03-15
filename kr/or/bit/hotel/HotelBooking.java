@@ -134,6 +134,13 @@ public class HotelBooking {
 		saveHotel();
 	}
 
+	/*
+	 * 변경사항
+	 * 
+	 * 날짜형식 아니면 받지않음
+	 * 
+	 * 작성자 : 정진호
+	 */
 	public void setDate(Reservation r) { // 날짜 선택
 		LocalDate today = LocalDate.now();
 		HotelDate dateCheckIn;
@@ -146,6 +153,7 @@ public class HotelBooking {
 					"^20(\\d{2})(((0(1|3|5|7|8)|1(0|2))(0[1-9]|[1-2][0-9]|3[0-1]))|((0(4|6|9)|11)(0[1-9]|[1-2][0-9]|30))|(02(0[1-9]|(1|2)[0-9]$)))")) {
 				System.out.println("체크인 날짜를 선택해주세요.");
 			} else {
+
 				dateCheckIn = new HotelDate(checkIn);
 				if (dateCheckIn.getCheckDate().isBefore(today)) {
 					System.out.println("선택 불가능한 날짜입니다. 다시 입력해주세요.");
@@ -245,8 +253,7 @@ public class HotelBooking {
 	}
 
 	/*
-	 * 변경사항
-	 * 숙박일수 만큼 추가 인원비용 추가
+	 * 변경사항 숙박일수 만큼 추가 인원비용 추가
 	 * 
 	 * 작성자 : 정진호
 	 */
@@ -283,8 +290,7 @@ public class HotelBooking {
 	/*
 	 * 변경사항
 	 * 
-	 * 부가서비스 요금을 숙박 일수에 맞춰 표시 ( 인원 포함 )
-	 * 테라피는 몇일 숙박을 하던 단 1회만 받는다.
+	 * 부가서비스 요금을 숙박 일수에 맞춰 표시 ( 인원 포함 ) 테라피는 몇일 숙박을 하던 단 1회만 받는다.
 	 * 
 	 * 작성자 : 정진호
 	 */
@@ -330,8 +336,8 @@ public class HotelBooking {
 	}
 	/*
 	 * 변경사항
-	 *  
-	 *  예약 확인 기능에 예약 변경, 예약 취소 기능을 추가함
+	 * 
+	 * 예약 확인 기능에 예약 변경, 예약 취소 기능을 추가함
 	 * 
 	 * 작성자 : 정진호
 	 */
@@ -628,8 +634,7 @@ public class HotelBooking {
 	/*
 	 * 메뉴
 	 * 
-	 * 비로그인 , 로그인 회원의 보이는 메뉴가 다르다.
-	 * 회원 가입을 하면 자동 로그인이 됨으로 로그인회원 화면이 보이게 된다.
+	 * 비로그인 , 로그인 회원의 보이는 메뉴가 다르다. 회원 가입을 하면 자동 로그인이 됨으로 로그인회원 화면이 보이게 된다.
 	 * 
 	 * 작성자 : 정진호
 	 */
