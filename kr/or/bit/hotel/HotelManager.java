@@ -589,6 +589,9 @@ public class HotelManager {
 					out.writeObject(member.getReservation());
 					member.setReservation(null);
 				}
+				if(member.getRecords().getTotalPaid() >= 10000000) {
+						member.setVip(true);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -623,7 +626,11 @@ public class HotelManager {
 			out = new ObjectOutputStream(fos);
 			for (int i = 0; i < guests.size(); i++) {
 				Member member = myHotel.getMembers().get(guests.get(i));
+				if (member.getReservation().getDateCheckIn().getCheckDate().isEqual(myHotel.getToday())) {
+					member.getRecords().addReservation(member.getReservation());
 				out.writeObject(member.getReservation());
+					member.setReservation(null);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
