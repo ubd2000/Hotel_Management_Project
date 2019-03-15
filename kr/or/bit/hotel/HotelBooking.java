@@ -412,7 +412,7 @@ public class HotelBooking {
 	 */
 
 	public void signUp() {
-		String id;
+		String id = "";
 		String name;
 		String password;
 		String phoneNumber;

@@ -106,8 +106,4 @@ public abstract class Hotel implements Serializable {
 	public void setToday(LocalDate today) {
 		this.today = today;
 	}
-
-	public List<List<Room>> getRooms() {
-		return rooms;
-	}
 }
