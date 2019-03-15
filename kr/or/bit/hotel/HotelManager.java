@@ -332,7 +332,71 @@ public class HotelManager {
 	 * 체크까지는 됐고
 	 */
 	private void setCheckInOut() {
-		System.out.println("체크인체크아웃 설정  메서드");
+		
+		System.out.println("체크인체크아웃 설정- id 입력: ");
+        String id = sc.nextLine();
+        
+        List<Member> member = new ArrayList<Member>();
+        
+        Iterator<String> it = myHotel.getMembers().keySet().iterator();
+
+		while (it.hasNext()) {
+			String key = it.next();
+			if(!myHotel.getMembers().get(key).getId().equals(id)) {
+				member.add(myHotel.getMembers().get(key));
+			}
+		}
+        
+        LocalDate checkIn = null;
+        LocalDate checkOut = null;
+        checkIn = myHotel.getMembers().get(id).getReservation().getDateCheckIn().getCheckDate();
+        checkOut = myHotel.getMembers().get(id).getReservation().getDateCheckOut().getCheckDate();
+        System.out.println(id + "의 체크인: " + checkIn);
+        System.out.println(id + "의 체크아웃: " + checkOut);
+        LocalDate today = LocalDate.now();
+        HotelDate dateCheckInd = null;
+        HotelDate dateCheckOutd = null;
+        
+        
+        while (true) {
+            System.out.println("체크인 날짜를 입력해주세요. (20190314와 같이 입력해주세요.)");
+            String checkInd = sc.nextLine();
+            if (!checkInd.matches(
+                    "^20(\\d{2})(((0(1|3|5|7|8)|1(0|2))(0[1-9]|[1-2][0-9]|3[0-1]))|((0(4|6|9)|11)(0[1-9]|[1-2][0-9]|30))|(02(0[1-9]|(1|2)[0-9]$)))")) {
+                System.out.println("체크인 날짜를 선택해주세요.");
+            } else {
+            	
+            	
+                dateCheckInd = new HotelDate(checkInd);
+                if (dateCheckInd.getCheckDate().isBefore(today)) {
+                    System.out.println("선택 불가능한 날짜입니다. 다시 입력해주세요.");
+                } else {
+                    break;
+                }
+            }
+        }
+        
+        while (true) {
+            System.out.println("체크아웃 날짜를 입력해주세요. (20190314와 같이 입력해주세요.)");
+            String checkOutd = sc.nextLine();
+            if (!checkOutd.matches("^[0-9]{8}+$")) {
+                System.out.println("체크아웃 날짜를 선택해주세요.");
+            } else {
+                dateCheckOutd = new HotelDate(checkOutd);
+                if (dateCheckOutd.getCheckDate().isBefore(today)
+                        || dateCheckOutd.getCheckDate().isBefore(dateCheckInd.getCheckDate())
+                        || dateCheckOutd.getCheckDate().isEqual(dateCheckInd.getCheckDate())) {
+                    System.out.println("선택 불가능한 날짜입니다. 다시 입력해주세요.");
+                } else {
+                    break;
+                }
+            }
+        }
+        
+        System.out.println(id + "의 체크인: " + checkIn);
+        System.out.println(id + "의 체크아웃: " + checkOut);
+        myHotel.getMembers().get(id).getReservation().setDateCheckIn(dateCheckInd);
+        myHotel.getMembers().get(id).getReservation().setDateCheckOut(dateCheckOutd);
 		/* 투숙객의 체크인, 체크아웃을 변경할 수 있다. */
 	}
 

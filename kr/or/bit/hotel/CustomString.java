@@ -9,7 +9,6 @@ public class CustomString {
 	public static final String PATH_HOTEL = "C:\\Temp\\Hotel\\hotel.info";
 	public static final String breakfast = "조식";
 	public static final String therapy = "전신테라피";
-	
 	public static final String PATH_RECORD_DIRECTORY(LocalDate date) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 		return "C:\\Temp\\Hotel\\" + date.format(formatter);
@@ -24,8 +23,7 @@ public class CustomString {
 			fileName = "CheckOut";
 		}
 		
-		return "C:\\Temp\\Hotel\\" + date.format(formatter) + "\\" + fileName + ".info"
-				+ "";
+		return "C:\\Temp\\Hotel\\" + date.format(formatter) + "\\" + fileName + ".info";
 	}
 	
 	public static String putComma(long number) {
