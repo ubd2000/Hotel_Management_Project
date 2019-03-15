@@ -221,7 +221,7 @@ public class HotelBooking {
 					}
 				}
 				if (canReserve) {
-					System.out.print((i + 2) + "0" + (j + 1) + "호");
+					System.out.print((i + 2) + "0" + (j + 1) + "호 ");
 				}
 			}
 			System.out.println();
@@ -242,7 +242,7 @@ public class HotelBooking {
 		}
 		room.getGuests().add(memberLoggedIn.getId());
 		r.setAmountPaid(r.getAmountPaid() + (hotel.getRoomPrices()[0] * diff.getDays()));
-		System.out.println("숙박일수 [" + diff.getDays() + "]\n 숙박 요금 [" + CustomString.putComma(r.getAmountPaid()) + "]원 입니다.");
+		System.out.println("숙박일수 [" + diff.getDays() + "]\n숙박 요금 [" + CustomString.putComma(r.getAmountPaid()) + "]원 입니다.");
 		r.setRoom(room);
 	}
 
@@ -378,7 +378,7 @@ public class HotelBooking {
 	 */
 	public void cancelReservation() { // 예약 취소
 
-		memberLoggedIn.getReservation().getRoom().getGuests().remove(memberLoggedIn);
+		memberLoggedIn.getReservation().getRoom().getGuests().remove(memberLoggedIn.getId());
 		memberLoggedIn.setReservation(null);
 		System.out.println("기존 예약이 취소되었습니다.");
 

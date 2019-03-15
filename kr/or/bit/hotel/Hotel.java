@@ -29,11 +29,20 @@ public abstract class Hotel implements Serializable {
 		servicePrices = new int[] { Number.breakfast, Number.therapy };
 		setHotelRoomPrices();
 		setHotelRooms();
+		setHotelRoomNumber();
 	}
 
 	public abstract void setHotelRoomPrices();
 
 	public abstract void setHotelRooms();
+	
+	private void setHotelRoomNumber() {
+		for (int i = 0; i < rooms.size(); i++) {
+			for (int j = 0; j < rooms.get(i).size(); j++) {
+				rooms.get(i).get(j).setRoomNumber((i + 2) + "0" + (j + 1));
+			}
+		}
+	}
 
 	public int getBreakfast() {
 		return breakfast;

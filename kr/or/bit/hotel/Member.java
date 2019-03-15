@@ -3,6 +3,8 @@ package kr.or.bit.hotel;
 import java.io.Serializable;
 
 public class Member implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	private Reservation reservation;
 	private Record records;
 	private String id;
