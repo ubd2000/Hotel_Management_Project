@@ -144,23 +144,25 @@ public class HotelBooking {
 			// TODO : 정규표현식으로 포맷 제한
 			System.out.println("체크인 날짜를 입력해주세요. (20190314와 같이 입력해주세요.)");
 			String checkIn = sc.nextLine();
-			if (!checkIn.matches("^[0-9]{8}+$")) {
+			if (!checkIn.matches("^20(\\d{2})(((0(1|3|5|7|8)|1(0|2))(0[1-9]|[1-2][0-9]|3[0-1]))|((0(4|6|9)|11)(0[1-9]|[1-2][0-9]|30))|(02(0[1-9]|(1|2)[0-9]$)))")) {
 				System.out.println("체크인 날짜를 선택해주세요.");
 			} else {
+				
 				dateCheckIn = new HotelDate(checkIn);
 				if (dateCheckIn.getCheckDate().isBefore(today)) {
 					System.out.println("선택 불가능한 날짜입니다. 다시 입력해주세요.");
 				} else {
 					break;
 				}
+				}
 			}
-		}
+		
 
 		while (true) {
 			// TODO : 정규표현식으로 포맷 제한
 			System.out.println("체크아웃 날짜를 입력해주세요. (20190314와 같이 입력해주세요.)");
 			String checkOut = sc.nextLine();
-			if (!checkOut.matches("^[0-9]{8}+$")) {
+			if (!checkOut.matches("^20(\\\\d{2})(((0(1|3|5|7|8)|1(0|2))(0[1-9]|[1-2][0-9]|3[0-1]))|((0(4|6|9)|11)(0[1-9]|[1-2][0-9]|30))|(02(0[1-9]|(1|2)[0-9]$)))")) {
 				System.out.println("체크아웃 날짜를 선택해주세요.");
 			} else {
 				dateCheckOut = new HotelDate(checkOut);
