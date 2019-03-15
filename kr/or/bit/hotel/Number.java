@@ -1,12 +1,12 @@
 package kr.or.bit.hotel;
 
 public class Number {
-	public static long[] SMALL_ROOM_PRICE = new long[] { 100000, 200000, 500000 };
-	public static long[] MEDIUM_ROOM_PRICE = new long[] { 300000, 500000, 1000000 };
-	public static long[] LARGE_ROOM_PRICE = new long[] { 300000, 600000, 1000000 };
+	public static int[] SMALL_ROOM_PRICE = new int[] { 100000, 200000, 500000 };
+	public static int[] MEDIUM_ROOM_PRICE = new int[] { 300000, 500000, 1000000 };
+	public static int[] LARGE_ROOM_PRICE = new int[] { 300000, 600000, 1000000 };
 	
-	public static long breakfast = 50000;
-	public static long therapy = 300000;
+	public static int breakfast = 50000;
+	public static int therapy = 300000;
 	
 	public static final int DEFAULT_PEOPLE_DELUXE = 2;
 	public static final int DEFAULT_PEOPLE_EXECUTIVE = 3;

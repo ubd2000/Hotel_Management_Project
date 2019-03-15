@@ -42,10 +42,9 @@ public class HotelManager {
 			System.out.println("\n중형 호텔");
 			System.out.println("1층 로비\n2층 디럭스 룸 6개\n3층 디럭스 룸 6개\n4층 이그제큐티브 룸 4개\n5층 스위트 룸 2개");
 			System.out.println("\n대형 호텔");
-			System.out.println(
-					"1층 로비\n2층 디럭스 룸 8개\n3층 디럭스 룸 8개\n4층 디럭스 룸 8개\n5층 디럭스 룸 4개\n      이그제큐티브 룸 2개\n6층 이그제큐티브 룸 4개\n7층 스위트 룸 3개");
+			System.out.println("1층 로비\n2층 디럭스 룸 8개\n3층 디럭스 룸 8개\n4층 디럭스 룸 8개\n5층 디럭스 룸 4개\n      이그제큐티브 룸 2개\n6층 이그제큐티브 룸 4개\n7층 스위트 룸 3개");
 			System.out.println("\n호텔사이즈 입력[소형, 중형, 대형]: ");
-
+			
 			String hotelSize = sc.nextLine();
 
 			switch (hotelSize) {
@@ -60,8 +59,7 @@ public class HotelManager {
 				saveHotel();
 				return this.myHotel = new MediumHotel();
 			case "대형":
-				System.out.println(
-						"1층 로비\n2층 디럭스 룸 8개\n3층 디럭스 룸 8개\n4층 디럭스 룸 8개\n5층 디럭스 룸 4개\n      이그제큐티브 룸 2개\n6층 이그제큐티브 룸 4개\n7층 스위트 룸 3개");
+				System.out.println("1층 로비\n2층 디럭스 룸 8개\n3층 디럭스 룸 8개\n4층 디럭스 룸 8개\n5층 디럭스 룸 4개\n      이그제큐티브 룸 2개\n6층 이그제큐티브 룸 4개\n7층 스위트 룸 3개");
 				System.out.println("대형 호텔이 생성되었습니다.");
 				saveHotel();
 				return this.myHotel = new LargeHotel();
@@ -195,8 +193,12 @@ public class HotelManager {
 	}
 
 	/*
-	 * 1. ID를 가져와서 2. ID를 통해서 회원정보로 간다음에 3. 회원 정보에서 예약정보를 가져오고 4. 체크인 날짜 <= 오늘 날짜 <=
-	 * 체크아웃 날짜 이런 사람을 찾아서 5. 이사람 정보만 보여주게 6. 없으면 투숙객 없음
+	 * 1. ID를 가져와서 
+	 * 2. ID를 통해서 회원정보로 간다음에 
+	 * 3. 회원 정보에서 예약정보를 가져오고 
+	 * 4. 체크인 날짜 <= 오늘 날짜 <= 체크아웃 날짜 이런 사람을 찾아서 
+	 * 5. 이사람 정보만 보여주게 
+	 * 6. 없으면 투숙객 없음
 	 */
 	public void getGuest() {
 		Member guest = null;
@@ -225,11 +227,10 @@ public class HotelManager {
 			return;
 		}
 
-		// 부가서비스 확인
+		//부가서비스 확인
 		String breakfast = "";
 		String therapy = "";
-		breakfast = guest.getReservation().isBreakfast() ? CustomString.breakfast + " O"
-				: CustomString.breakfast + " X";
+		breakfast = guest.getReservation().isBreakfast() ? CustomString.breakfast + " O" : CustomString.breakfast + " X";
 		therapy = guest.getReservation().isTherapy() ? CustomString.therapy + " O" : CustomString.therapy + " X";
 
 		System.out.println("이름 : " + guest.getName() + "\n인원수 : " + guest.getReservation().getNumberPeople()
@@ -238,12 +239,18 @@ public class HotelManager {
 	}
 
 	/*
-	 * 부가서비스 변경 1. ID를 가져와서 2. ID를 통해서 회원정보로 간다음에 3. 회원 정보에서 예약정보를 가져오고 4. 체크인 날짜 <=
-	 * 오늘 날짜 <= 체크아웃 날짜 이런 사람을 찾아서 5. 이사람의 서비스 변경 6. 조식이 1박당 1번 = 오늘부터 체크아웃 날짜까지 *
-	 * 조식 가격 >> amountPaid에 6-1. 오늘 체크아웃이면 서비스 변경 안되게 6-2. 전신 테라피는 취소하면 amountPaid
-	 * 감소 7. 없으면 투숙객 없음
+	 * 부가서비스 변경
+	 * 1. ID를 가져와서 
+	 * 2. ID를 통해서 회원정보로 간다음에 
+	 * 3. 회원 정보에서 예약정보를 가져오고 
+	 * 4. 체크인 날짜 <= 오늘 날짜 <= 체크아웃 날짜 이런 사람을 찾아서 
+	 * 5. 이사람의 서비스 변경 
+	 * 6. 조식이 1박당 1번 = 오늘부터 체크아웃 날짜까지 * 조식 가격 >> amountPaid에 
+	 * 6-1. 오늘 체크아웃이면 서비스 변경 안되게 6-2. 전신 테라피는 취소하면 amountPaid 감소 
+	 * 7. 없으면 투숙객 없음
 	 * 
-	 * 작성자 : 장지훈 수정 : 윤종석
+	 * 작성자 : 장지훈
+	 * 수정 : 윤종석
 	 */
 	private void setService() {
 		System.out.println("부가서비스를 변경합니다.");
@@ -350,7 +357,7 @@ public class HotelManager {
 	// 지훈
 	// 방 가격 설정
 	private void setRoomPrice() {
-		String room;
+		int room;
 
 		do {
 			try {
@@ -359,11 +366,10 @@ public class HotelManager {
 						myHotel.getRoomInfos()[1].getRoomName(), myHotel.getRoomInfos()[2].getRoomName());
 				;
 
-				room = sc.nextLine();
+				room = Integer.parseInt(sc.nextLine());
 
-				if (Integer.parseInt(room) >= 1 && Integer.parseInt(room) <= 3) {
-					System.out.println(
-							"[" + myHotel.getRoomInfos()[Integer.parseInt(room) - 1].getRoomName() + "룸을 선택하셨습니다.");
+				if (room >= 1 && room <= 3) {
+					System.out.println("[" + myHotel.getRoomInfos()[room - 1].getRoomName() + "룸을 선택하셨습니다.");
 					break;
 				}
 			} catch (Exception e) {
@@ -373,19 +379,13 @@ public class HotelManager {
 
 		exit: while (true) {
 			switch (room) {
-			case "1":
-			case "2":
-			case "3":
+			case 1:
+			case 2:
+			case 3:
 				System.out.println("변경할 가격을 입력해주세요");
-				String price = sc.nextLine();
-				if (!price.matches("^[0-9]*$")) {
-					System.out.println("숫자만 입력해주세요.");
-				} else {
-					long money = Long.parseLong(price);
-					myHotel.getRoomPrices()[Integer.parseInt(room) - 1] = money; // 오류 캐치
-					System.out.println("가격이 변경 되었습니다.");
-					break exit;
-				}
+				myHotel.getRoomPrices()[room - 1] = Integer.parseInt(sc.nextLine()); // 오류 캐치
+				System.out.println("가격이 변경 되었습니다.");
+				break exit;
 			default:
 				System.out.println("잘못 입력하였습니다.");
 			}
@@ -398,8 +398,7 @@ public class HotelManager {
 	// 부가서비스 가격 설정
 	private void setServicePrice() {
 		int service;
-		String[] servicename = { CustomString.breakfast, CustomString.therapy }; // 한글로 교체 (이런거는 CustomString)
-																					// CustomString.BreakfastString
+		String[] servicename = { CustomString.breakfast , CustomString.therapy }; // 한글로 교체 (이런거는 CustomString) CustomString.BreakfastString
 
 		do {
 			try {
@@ -408,7 +407,7 @@ public class HotelManager {
 				;
 
 				service = Integer.parseInt(sc.nextLine());
-
+				
 				if (service >= 1 && service <= 2) {
 					System.out.println("[" + servicename[service - 1] + "]" + "을 선택하셨습니다.");
 					break;
@@ -418,20 +417,18 @@ public class HotelManager {
 			}
 		} while (true);
 
-		exit: while (true) {
+		while (true) {
 			switch (service) {
 			case 1:
+				System.out.println("변경할 가격을 입력해주세요");
+				myHotel.getServicePrices()[0] = Integer.parseInt(sc.nextLine());
+				System.out.println("가격이 변경 되었습니다.");
+				return;
 			case 2:
 				System.out.println("변경할 가격을 입력해주세요");
-				String price = sc.nextLine();
-				if (!price.matches("^[0-9]*$")) {
-					System.out.println("숫자만 입력해주세요.");
-				} else {
-					long money = Long.parseLong(price);
-					myHotel.getServicePrices()[service - 1] = money;
-					System.out.println("가격이 변경 되었습니다.");
-					break exit;
-				}
+				myHotel.getServicePrices()[1] = Integer.parseInt(sc.nextLine());
+				System.out.println("가격이 변경 되었습니다.");
+				return;
 			default:
 				System.out.println("잘못 입력하였습니다.");
 				break;
@@ -506,11 +503,10 @@ public class HotelManager {
 		while (it.hasNext()) {
 			String key = it.next();
 
-			// //체크아웃 확인
-			// if(myHotel.getMembers().get(key).getRecords().getDateCheckOut() > new Date())
-			// {
-			//
-			// }
+			//			//체크아웃 확인
+			//			if(myHotel.getMembers().get(key).getRecords().getDateCheckOut() > new Date()) {
+			//				
+			//			}
 
 			System.out.println("체크인: " + myHotel.getMembers().get(key).getReservation().getDateCheckIn().getCheckDate()
 					+ "체크아웃: " + myHotel.getMembers().get(key).getReservation().getDateCheckOut().getCheckDate());

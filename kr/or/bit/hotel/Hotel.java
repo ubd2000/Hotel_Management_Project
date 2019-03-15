@@ -13,10 +13,10 @@ public abstract class Hotel implements Serializable {
 	private Room[] roomInfos;
 	private long sales;
 	private Map<String, Member> members;
-	private long[] roomPrices;
-	private long breakfast;
-	private long therapy;
-	private long[] servicePrices;
+	private int[] roomPrices;
+	private int breakfast;
+	private int therapy;
+	private int[] servicePrices;
 	private LocalDate today;
 
 	public Hotel() {
@@ -26,7 +26,7 @@ public abstract class Hotel implements Serializable {
 		today = LocalDate.now();
 		breakfast = Number.breakfast;
 		therapy = Number.therapy;
-		servicePrices = new long[] { Number.breakfast, Number.therapy };
+		servicePrices = new int[] { Number.breakfast, Number.therapy };
 		setHotelRoomPrices();
 		setHotelRooms();
 		setHotelRoomNumber();
@@ -44,7 +44,7 @@ public abstract class Hotel implements Serializable {
 		}
 	}
 
-	public long getBreakfast() {
+	public int getBreakfast() {
 		return breakfast;
 	}
 
@@ -52,7 +52,7 @@ public abstract class Hotel implements Serializable {
 		this.breakfast = breakfast;
 	}
 
-	public long getTherapy() {
+	public int getTherapy() {
 		return therapy;
 	}
 
@@ -64,11 +64,11 @@ public abstract class Hotel implements Serializable {
 		this.rooms = rooms;
 	}
 
-	public void setRoomPrices(long[] roomPrices) {
+	public void setRoomPrices(int[] roomPrices) {
 		this.roomPrices = roomPrices;
 	}
 
-	public long[] getRoomPrices() {
+	public int[] getRoomPrices() {
 		return roomPrices;
 	}
 
@@ -100,11 +100,11 @@ public abstract class Hotel implements Serializable {
 		return rooms;
 	}
 
-	public long[] getServicePrices() {
+	public int[] getServicePrices() {
 		return servicePrices;
 	}
 
-	public void setServicePrices(long[] servicePrices) {
+	public void setServicePrices(int[] servicePrices) {
 		this.servicePrices = servicePrices;
 	}
 
