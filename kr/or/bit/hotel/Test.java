@@ -34,10 +34,10 @@ public class Test {
 //		System.out.println(p.getDays());
 //		hb.getRoomInfo();
 		System.out.println(LocalDate.parse("2011-12-12"));
-//		HotelManager hm = new HotelManager();
-//		HotelBooking hb = new HotelBooking();
-//		hm.run();
-//		hb.run();
-//		hm.run();
+		HotelManager hm = new HotelManager();
+		HotelBooking hb = new HotelBooking();
+		hm.run();
+		hb.run();
+		hm.run();
 	}
 }
