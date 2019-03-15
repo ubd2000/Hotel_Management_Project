@@ -7,17 +7,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
 public class HotelManager {
 	private Hotel myHotel;
+	
 	private Scanner sc;
 	private File file;
 	private FileInputStream fis;
@@ -25,41 +22,43 @@ public class HotelManager {
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
 
-	// ?�성??!
+	// 생성자!
 	public HotelManager() {
 		this.sc = new Scanner(System.in);
+		myHotel = new HotelBooking().getHotel();
 	}
-
+	
 	public void run() {
 		loadHotel();
-		myHotel.setToday(LocalDate.now());
-		// ?�기?? ?�동 처리?�는 ?�수
 		setPrice();
 		saveHotel();
 	}
 
-	// 지??, ?�림
-	// ?�텔 ?�이�? ?�정
-	public Hotel setHotel() {
+	// 지훈, 세림
+	// 호텔 사이즈 설정
+	private void setHotel() {
 		while (true) {
-			System.out.println("?�텔?�이�? ?�력[?�형, 중형, ?�??: ");
+			System.out.println("호텔사이즈 입력[소형, 중형, 대형]: ");
 			String hotelSize = sc.nextLine();
 
 			switch (hotelSize) {
-			case "?�형":
-				System.out.println("?�형 ?�텔?? ?�성?�었??.");
-				// saveHotel();
-				return this.myHotel = new SmallHotel();
+			case "소형":
+				System.out.println("소형 호텔이 생성되었다.");
+				this.myHotel = new SmallHotel();
+				saveHotel();
+				return;
 			case "중형":
-				System.out.println("중형 ?�텔?? ?�성?�었??.");
-				// saveHotel();
-				return this.myHotel = new MediumHotel();
-			case "?�??":
-				System.out.println("?�?? ?�텔?? ?�성?�었??.");
-				// saveHotel();
-				return this.myHotel = new LargeHotel();
+				System.out.println("중형 호텔이 생성되었다.");
+				this.myHotel = new MediumHotel();
+				saveHotel();
+				return;
+			case "대형":
+				System.out.println("대형 호텔이 생성되었다.");
+				this.myHotel = new LargeHotel();
+				saveHotel();
+				return;
 			default:
-				System.out.println("?�형, 중형, ?�?? 중에 ?�택?�세??.");
+				System.out.println("소형, 중형, 대형 중에 선택하세요.");
 				break;
 			}
 		}
@@ -68,7 +67,7 @@ public class HotelManager {
 	private void loadHotel() {
 		file = new File(CustomString.PATH_HOTEL);
 		if (!file.exists()) {
-			System.out.println("?�텔 ?�보가 존재?��? ?�습?�다.");
+			System.out.println("호텔 정보가 존재하지 않습니다.");
 			setHotel();
 			return;
 		}
@@ -93,13 +92,13 @@ public class HotelManager {
 	}
 
 	/*
-	 * ?�텔 ?�보 ?�?�하�?
+	 * 호텔 정보 저장하기
 	 * 
-	 * 변경된 ?�텔 ?�보�? ?�??
+	 * 변경된 호텔 정보를 저장
 	 * 
-	 * ?�더가 ?�으�? ?�동?�로 ?�더 ?�성 ?? ?�??
+	 * 폴더가 없으면 자동으로 폴더 생성 후 저장
 	 * 
-	 * ?�성?? : ?�종??
+	 * 작성자 : 윤종석
 	 */
 	private void saveHotel() {
 		file = new File(CustomString.PATH_DIRECTORY);
@@ -125,16 +124,18 @@ public class HotelManager {
 		}
 	}
 
-	// 객실관�? : ?�숙�?, 부가?�비??, 체크?�아?�을 관리하?? 메뉴�? 보여준??.
+	// 세림
+	// 객실관리 : 투숙객, 부가서비스, 체크인아웃을 관리하는 메뉴를 보여준다.
 	private void roomManage() {
 		loadHotel();
 		String menu = "";
 
 		while (true) {
-			System.out.println("객실관�?: ?�하?? 번호�? ?�력?�세??.");
-			System.out.println("1. ?�숙�? ?�보 ?�인");
-			System.out.println("2. 부가?�비?? 변�?");
-			System.out.println("3. 체크??, 체크?�웃 관�?");
+			System.out.println("객실관리: 원하는 번호를 입력하세요.");
+			System.out.println("1. 투숙객 정보 확인");
+			System.out.println("2. 부가서비스 변경");
+			System.out.println("3. 체크인, 체크아웃 관리");
+			System.out.println("4. 뒤로 가기");
 
 			menu = sc.nextLine();
 
@@ -150,159 +151,98 @@ public class HotelManager {
 				setCheckInOut();
 				saveHotel();
 				return;
+			case "4": 
+				System.out.println("메인화면으로 돌아갑니다.");
+				return;
 			default:
-				System.out.println("객실관�?: 1,2,3 중에 ?�택?�주?�요");
+				System.out.println("객실관리: 1,2,3,4 중에 선택해주세요");
 				break;
 			}
 		}
 	}
 
-	// ?�숙�? ?�보
-	/*
-	 * 1. ID�? 가?��???
-     * 2. ID�? ?�해?? ?�원?�보�? 간다?�에
-     * 3. ?�원 ?�보?�서 ?�약?�보�? 가?�오�?
-     * 4. 체크?? ?�짜 <= ?�늘 ?�짜 <= 체크?�웃 ?�짜 ?�런 ?�람?? 찾아??
-     * 5. ?�사?? ?�보�? 보여주게
-     * 6. ?�으�? ?�숙�? ?�음
-	 */
-	public void getGuest() {
-		System.out.println("?�숙�? ?�보�? ?�인?�니??.");
-		// ex ?�정
-		System.out.println("?�하?? 객실?? ?�력?�세??. [ex: 201~206, 301~306, 401~403, 501~502]: ");
-		String roomNumber = sc.nextLine();
+	// 세림
+	// 투숙객 정보
+	private void getGuest() {
+		// System.out.println("투숙객 정보보기 메서드");
 
-		char floor = roomNumber.charAt(0);
-		char number = roomNumber.charAt(roomNumber.length() - 1);
-		Room room = myHotel.getRooms().get(floor - 50).get(number - 49); // char '1' = 49
+		// 1. 원하는 객실을 입력받는다.(scanner)
+		System.out.println("원하는 객실을 입력하세요[ex: 201~206, 301~306, 401~403, 501~502]: ");
+		String wantRoom = sc.nextLine();
 
-		List<String> temp = new ArrayList<String>();
+		// 2. [원하는 객실]에 머무는 [투숙객]을 찾는다.
+		String frontRoom = wantRoom.substring(0, 1);
+		// System.out.println(frontRoom);
+		String endRoom = wantRoom.substring(wantRoom.length() - 1, wantRoom.length());
+		// System.out.println(endRoom);
 
-		for (int i = 0; i < room.getGuests().size(); i++) {
-			temp.add(room.getGuests().get(i));
-		}
+		Member roomInfo = (Member) myHotel.getRooms().get(Integer.parseInt(frontRoom) - 2)
+				.get(Integer.parseInt(endRoom) - 1).getGuests();
 
-		Member temp1 = new Member();
-
-		Iterator<String> it = myHotel.getMembers().keySet().iterator();
-		int i = 0;
-		while (it.hasNext()) {
-			String key = it.next();
-			if (temp.get(i).equals(myHotel.getMembers().get(key).getId())) {
-				temp1 = myHotel.getMembers().get(key);
-			}
-			i++;
-
-//			System.out.println("temp: "+ temp);
-//			System.out.println("myHotel.getMembers().get(key).getId(): "+myHotel.getMembers().get(key).getId());
-
-		}
-
-		System.out.println("?�름 : " + temp1.getName() + "\n?�원?? : " + temp1.getReservation().getNumberPeople()
-
-				+ "\n부가?�비?? : " + (temp1.getReservation().isBreakfast() ? "조식" : "?�신?�라??")
-
-				+ "\n�? ?�금 : " + temp1.getReservation().getAmountPaid() + "??" + "\n체크?? : "
-				+ temp1.getReservation().getDateCheckIn().getCheckDate() + "\n체크?�웃 : " + temp1.getReservation().getDateCheckOut().getCheckDate());
-
+		// 3. 그 투숙객의 정보를 출력한다. (이름, 인원수, 부가서비스, 총 요금, 체크인, 체크아웃 날짜)
+		System.out.println(wantRoom + "의 투숙객 정보입니다.");
+		System.out.println("이름: " + roomInfo.getName() + "인원 수: " + roomInfo.getReservation()
+//		+ "부가서비스: " + roomInfo.
+				+ "총 요금: " + roomInfo.getReservation().getAmountPaid() + "체크인: "
+				+ roomInfo.getReservation().getDateCheckIn() + "체크아웃: " + roomInfo.getReservation().getDateCheckOut());
 	}
 
-	// 부가?�비?? 변�?
-	/*
-	 * 1. ID�? 가?��???
-     * 2. ID�? ?�해?? ?�원?�보�? 간다?�에
-     * 3. ?�원 ?�보?�서 ?�약?�보�? 가?�오�?
-     * 4. 체크?? ?�짜 <= ?�늘 ?�짜 <= 체크?�웃 ?�짜 ?�런 ?�람?? 찾아??
-     * 5. ?�사?�의 ?�비?? 변�?
-     * 6. 조식?? 1박당 1�? = ?�늘부?? 체크?�웃 ?�짜까�? * 조식 가�? >> amountPaid??
-     * 6-1. ?�늘 체크?�웃?�면 ?�비?? 변�? ?�되�?
-     * 6-2. ?�신 ?�라?�는 취소?�면 amountPaid 감소
-     * 7. ?�으�? ?�숙�? ?�음
-	 */
+	// 세림
+	// 부가서비스 변경
 	private void setService() {
-		System.out.println("부가?�비?��? 변경합?�다.");
-		System.out.println("?�하?? 객실?? ?�력?�세??. [ex: 201~206, 301~306, 401~403, 501~502]: ");
-		String roomNumber = sc.nextLine();
+		System.out.println("부가서비스 변경  메서드");
 
-		char floor = roomNumber.charAt(0);
-		char number = roomNumber.charAt(roomNumber.length() - 1);
-		Room room = myHotel.getRooms().get(floor - 50).get(number - 49); // char '1' = 49
+		// 1. 원하는 객실을 입력받는다.
+		// 2. [원하는 객실]에 머무는 [투숙객]을 찾는다.
+		// 3. 그 투숙객의 객실 정보를 출력한다.(이름, 인원수, 부가서비스, 총 요금, 체크인, 체크아웃 날짜)
 
-		List<String> temp = new ArrayList<String>();
+		/* 관리자는 투숙객의 부가서비스를 변경할 수 있다. */
 
-		for (int i = 0; i < room.getGuests().size(); i++) {
-			temp.add(room.getGuests().get(i));
-		}
-
-		Member temp1 = new Member();
-
-		Iterator<String> it = myHotel.getMembers().keySet().iterator();
-		int i = 0;
-		while (it.hasNext()) {
-			String key = it.next();
-			if (temp.get(i).equals(myHotel.getMembers().get(key).getId())) {
-				temp1 = myHotel.getMembers().get(key);
-			}
-			i++;
-
-			System.out.println("temp: " + temp);
-			System.out.println("myHotel.getMembers().get(key).getId(): " + myHotel.getMembers().get(key).getId());
-		}
-
-		System.out.println(roomNumber + "?? 부가?�비?? ?�황?�: ");
-
-		System.out.println("?�름 : " + temp1.getName() + "\n?�원?? : " + temp1.getReservation().getNumberPeople()
-
-				+ "\n부가?�비?? : " + (temp1.getReservation().isBreakfast() ? "조식" : "?�신?�라??")
-
-				+ "\n�? ?�금 : " + temp1.getRecords().getAmountPaid() + "??" + "\n체크?? : "
-				+ temp1.getReservation().getDateCheckIn() + "\n체크?�웃 : " + temp1.getReservation().getDateCheckOut());
 	}
 
-	// 체크?�아?? ?�정
-	/*
-	 * HotelBooking?�서 ?�약?�는 거랑 거의 같게 ?�면 ?�건??
-	 * ?�?? 처음?? ?�떤 ?�원?�로 ?�약?��? 받게(로그?�처??) - 비�?번호 체크까�??? ?�고
-	 */
+	// 체크인아웃 설정
 	private void setCheckInOut() {
-		System.out.println("체크?�체?�아?? ?�정  메서??");
-		/* ?�숙객의 체크??, 체크?�웃?? 변경할 ?? ?�다. */
+		System.out.println("체크인체크아웃 설정  메서드");
+		/* 투숙객의 체크인, 체크아웃을 변경할 수 있다. */
 	}
 
-	// 지??
-	// 기본가�? ?�정 : �? 가�? ?�정, 부가?�비?? 메뉴�? 보여준??.
+	// 지훈
+	// 기본가격 설정 : 방 가격 설정, 부가서비스 메뉴를 보여준다.
 	private void setPrice() {
+		loadHotel();
 		String menu = "";
 
 		while (true) {
-			System.out.println("기본가�? ?�정: ?�하?? 번호�? ?�력?�세??.");
-			System.out.println("1. �? 가�? ?�정");
-			System.out.println("2. 부가?�비?? 가�? ?�정");
+			System.out.println("기본가격 설정: 원하는 번호를 입력하세요.");
+			System.out.println("1. 방 가격 설정");
+			System.out.println("2. 부가서비스 가격 설정");
 
 			menu = sc.nextLine();
 
 			switch (menu) {
 			case "1":
 				setRoomPrice();
+				saveHotel();
 				return;
 			case "2":
 				setServicePrice();
+				saveHotel();
 				return;
 			default:
-				System.out.println("기본가�? ?�정: 1,2 중에 ?�택?�주?�요");
+				System.out.println("기본가격 설정: 1,2 중에 선택해주세요");
 				break;
 			}
 		}
 	}
 
-	// 지??
-	// �? 가�? ?�정
+	// 지훈
+	// 방 가격 설정
 	private void setRoomPrice() {
 		int room;
 
 		do {
 			try {
-				System.out.println("가격을 바꾸?? 객실?? ?�택?�주?�요.");
+				System.out.println("가격을 바꾸실 객실을 선택해주세요.");
 				System.out.printf("1. %s 2. %s 3. %s\n", myHotel.getRoomInfos()[0].getRoomName(),
 						myHotel.getRoomInfos()[1].getRoomName(), myHotel.getRoomInfos()[2].getRoomName());
 				;
@@ -310,11 +250,11 @@ public class HotelManager {
 				room = Integer.parseInt(sc.nextLine());
 
 				if (room >= 1 && room <= 3) {
-					System.out.println("[" + myHotel.getRoomInfos()[room - 1].getRoomName() + "룸을 ?�택?�셨?�니??.");
+					System.out.println("[" + myHotel.getRoomInfos()[room - 1].getRoomName() + "룸을 선택하셨습니다.");
 					break;
 				}
 			} catch (Exception e) {
-				System.out.println("?�바�? 값을 ?�력?�주?�요.");
+				System.out.println("올바른 값을 입력해주세요.");
 			}
 		} while (true);
 
@@ -323,69 +263,71 @@ public class HotelManager {
 			case 1:
 			case 2:
 			case 3:
-				System.out.println("변경할 가격을 ?�력?�주?�요");
-				myHotel.getRoomPrices()[room - 1] = Integer.parseInt(sc.nextLine()); // ?�류 캐치
-				System.out.println("가격이 변�? ?�었?�니??.");
+				System.out.println("변경할 가격을 입력해주세요");
+				myHotel.getRoomPrices()[room - 1] = Integer.parseInt(sc.nextLine());
+				System.out.println("가격이 변경 되었습니다.");
 				break exit;
 			default:
-				System.out.println("?�못 ?�력?��??�니??.");
+				System.out.println("잘못 입력하였습니다.");
 			}
 
 		}
+
 		System.out.println();
 	}
 
-	// 지??
-	// 부가?�비?? 가�? ?�정
+	// 지훈
+	// 부가서비스 가격 설정
 	private void setServicePrice() {
 		int service;
-		String[] servicename = { "Breakfast", "Therapy" }; // ?��?�? 교체 (?�런거는 CustomString) CustomString.BreakfastString
+		String[] servicename = { "조식", "전신 테라피" };
 
 		do {
 			try {
-				System.out.println("가격을 바꾸?? 부가?�비?��? ?�택?�주?�요.");
+				System.out.println("가격을 바꾸실 부가서비스를 선택해주세요.");
 				System.out.printf("1. %s 2. %s \n", servicename[0], servicename[1]);
 				;
 
 				service = Integer.parseInt(sc.nextLine());
 
 				if (service >= 1 && service <= 2) {
-					System.out.println("[" + servicename[service - 1] + "]" + "?? ?�택?�셨?�니??.");
+					System.out.println("[" + servicename[service - 1] + "]" + "을 선택하셨습니다.");
 					break;
 				}
 			} catch (Exception e) {
-				System.out.println("?�바�? 값을 ?�력?�주?�요.");
+				System.out.println("올바른 값을 입력해주세요.");
 			}
 		} while (true);
 
 		while (true) {
 			switch (service) {
 			case 1:
-				System.out.println("변경할 가격을 ?�렵?�주?�요");
-				myHotel.getServicePrices()[0] = Integer.parseInt(sc.nextLine());
-				System.out.println("가격이 변�? ?�었?�니??.");
+				System.out.println("변경할 가격을 입력해주세요");
+				Number.breakfast = Integer.parseInt(sc.nextLine());
+				System.out.println("가격이 변경 되었습니다.");
 				return;
 			case 2:
-				System.out.println("변경할 가격을 ?�렵?�주?�요");
-				myHotel.getServicePrices()[1] = Integer.parseInt(sc.nextLine());
-				System.out.println("가격이 변�? ?�었?�니??.");
+				System.out.println("변경할 가격을 입력해주세요");
+				Number.therapy = Integer.parseInt(sc.nextLine());
+				System.out.println("가격이 변경 되었습니다.");
 				return;
 			default:
-				System.out.println("?�못 ?�력?��??�니??.");
+				System.out.println("잘못 입력하였습니다.");
 				break;
 			}
+
 		}
 	}
 
-	// ?�보 보기 : 매출?�인
+	// 정보 보기 : 매출확인
 	private void getInfo() {
 		String menu = "";
 
 		while (true) {
-			System.out.println("?�보 보기: ?�하?? 번호�? ?�력?�세??.");
-			System.out.println("1. 매출 ?�인");
-			System.out.println("2. ?�원 ?�보 ?�인");
-			System.out.println("3. ?�숙 ?�보 ?�인");
+			System.out.println("정보보기: 원하는 번호를 입력하세요.");
+			System.out.println("1. 매출확인");
+			System.out.println("2. 회원정보 확인");
+			System.out.println("3. 투숙정보 확인");
 
 			menu = sc.nextLine();
 
@@ -400,7 +342,7 @@ public class HotelManager {
 				getRecord();
 				return;
 			default:
-				System.out.println("기본가�? ?�정: 1,2,3 중에 ?�택?�주?�요");
+				System.out.println("기본가격 설정: 1,2,3 중에 선택해주세요");
 				break;
 			}
 		}
@@ -408,61 +350,94 @@ public class HotelManager {
 
 	// 매출 보기
 	private void getSales() {
-		System.out.println("?�재 ?�텔 매출 - " + myHotel.getSales() + "?? ?�니??.");
+		System.out.println("매출보기 메서드");
 	}
 
-	// ?�림
-	// ?�원 ?�보 보기
-	public void getMemberInfo() {
-		Iterator<String> it = myHotel.getMembers().keySet().iterator();
+	// 세림
+	// 회원 정보 보기
+	private void getMemberInfo() {
+		System.out.println("회원 정보 보기");
+
+		Member memberLoggedIn = new Member("ubd2000", "김동민", "12345", "123441241", "8765544");
+		myHotel.getMembers().put("ubd2000", memberLoggedIn);
+		Member memberLoggedIn2 = new Member("ubd2001", "우세림", "67890", "123567945", "23454125");
+		myHotel.getMembers().put("ubd2001", memberLoggedIn2);
+		Member memberLoggedIn3 = new Member("ubd2002", "정진호", "34567", "35645167", "46434125");
+		myHotel.getMembers().put("ubd2002", memberLoggedIn3);
+		Member memberLoggedIn4 = new Member("ubd2003", "장지훈", "56789", "145897654", "3345125");
+		myHotel.getMembers().put("ubd2003", memberLoggedIn4);
+		Member memberLoggedIn5 = new Member("ubd2004", "권태환", "23456", "91256434", "3544125");
+		myHotel.getMembers().put("ubd2004", memberLoggedIn5);
+
+		Map<String, Member> memberId = myHotel.getMembers();
+
+		Set<String> set = memberId.keySet();
+		Iterator<String> it = set.iterator();
 
 		while (it.hasNext()) {
-			String key = it.next();
-			System.out.println(" ?�름 :" + myHotel.getMembers().get(key).getName() + " ?�년?�일 : "
-					+ myHotel.getMembers().get(key).getBirthday() + " ?�화번호 : "
-					+ myHotel.getMembers().get(key).getPhoneNumber() + " VIP : true" + " ?�텔 ?�용 �? 금액 : "
-					+ myHotel.getMembers().get(key).getRecords().getTotalPaid() + "??");
+			System.out.println(it.next());
 		}
+
+		// 아이디를 가지는 사람들
+		// 전체 회원정보를 가져온다
+//		System.out.println("이름: "+ member.getName()
+//							+ "생년월일: "+ member.getBirthday()
+//							+ "전화번호: "+ member.getPhoneNumber()
+//							+ "VIP유무: "+ member
+//							+ "총누적금액: "+ member.getRecords());
 	}
 
-	// 지??, ?�림
-	// ?�숙 기록 보기 : ?�텔?�약?�체 기록?? 가?��???(?�디?? 가?�오?�진 모름) 출력?�다.
-	/*
-	 * ?�짜별로 체크?�과 체크?�웃?? ?�?�이 ?�다
-	 * CheckIn20190315.info, CheckOut20190315.info
-	 * ?�중?? ?�짜�? 불러?�면 그날 체크?�한 ?�람�? 체크?�웃?? ?�람?? ?�고
-	 * ?? ?�람?? ?�떻�? 객실?? ?�용?�는지 불러?�다
-	 */
-	public void getRecord() {
+	// 지훈, 세림
+	// 투숙 기록 보기
+	private void getRecord() {
+		System.out.println("투숙 기록보기 메서드");
 		
-		/*
-		 * ?�인?? ?�짜 ?�력 ex)20190315
-		 * FileInputStream fis = new FileInputStream(CustomString.PATH_DIRECTORY + 20190315 + ".info");
-		 * ObjectInputStream in = new ObjectInputStream(fis);
-		 */
-
-		Iterator<String> it = myHotel.getMembers().keySet().iterator();
-
-		while (it.hasNext()) {
-			String key = it.next();
-
-//			//체크?�웃 ?�인
-//			if(myHotel.getMembers().get(key).getRecords().getDateCheckOut() > new Date()) {
-//				
+//		for(int i=0; i<2; i++) {
+//			for(int j=1; j<6; j++) {
+//				myHotel.getRooms().get(i).get(j).getGuests();
 //			}
+//		}
+//		myHotel.getRooms().
+		
+		//날짜별 체크인, 아웃, 투숙 고객(예약한 사람 이름)
+		
+		//호텔에 예약한 기록들을 전부 다 본다.
+		
+		
+	}
+	public void managerMenuPrint() {
+		while(true) {
+		System.out.println("2조 호텔 관리자 메뉴 입니다.");
+		System.out.println("┎                               ┒");
+		System.out.println("         1.   객실 관리");
+		System.out.println();
+		System.out.println("         2.   요금 설정");
+		System.out.println();
+		System.out.println("         3.   정보 확인");
+		System.out.println();
+		System.out.println("         4.   종료하기");
+		System.out.println("┖                               ┚");
+		
+		String select = sc.nextLine();
+		switch (select) {
+		case "1":
+			roomManage();
+			break;
+		case "2":
+			setPrice();
+			break;
+		case "3": 
+			getInfo();
+			break;
+		case "4": 
+			System.exit(0);
+			System.out.println("관리자 메뉴를 종료합니다.");
+		default: 
+			System.out.println("번호를 잘못 입력했습니다.");
+			break;
 
-			System.out.println("체크??: " + myHotel.getMembers().get(key).getRecords().getDateCheckin() + "체크?�웃: "
-					+ myHotel.getMembers().get(key).getRecords().getDateCheckOut());
 		}
 	}
-	
-	/*
-	 * ?�텔 매니?��? ?�행?�면
-	 * ?�텔 매니?�가 ?�늘 ?�짜�? 가?�온??
-	 * 모든 방을 체크?�서 ?�늘 체크?�웃?? ?�람?? ?? 가?�온??
-	 * Room?�서 Guests?�서 ?? ?�람?�을 ??��?�다
-	 * ??��?�면?? ?? ?�람?�의 amountPaid만큼 sales?? ?�해준??
-	 * ?? ?�람?�의 reservation ?�보�? record?? ?�아주고 reservation?� null�? 만들�?
-	 * ?�늘 체크?�하?? ?�람�? ?�늘 체크?�웃 ?�는 ?�람?? ?�보�? ?�일�? ?�??
-	 */
+}
+
 }
