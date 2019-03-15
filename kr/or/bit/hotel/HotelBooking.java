@@ -243,18 +243,12 @@ public class HotelBooking {
 		}
 
 		Room room;
-		while (true) {
 			System.out.println("예약할 방 번호를 입력해주세요");
 			String roomNumber = sc.nextLine();
 			char floor = roomNumber.charAt(0);
 			char number = roomNumber.charAt(roomNumber.length() - 1);
 			room = hotel.getRooms().get(floor - 50).get(number - 49); // char '1' = 49
-			if (roomNumber가 roomToReserve 안의 방들 중에 없으면) {
-				System.out.println("잘못 선택했습니다.");
-			} else {
-				break;
-			}
-		}
+			
 		room.getGuests().add(memberLoggedIn.getId());
 		r.setAmountPaid(r.getAmountPaid() + (hotel.getRoomPrices()[0] * diff.getDays()));
 		System.out.println(
