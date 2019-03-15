@@ -136,17 +136,26 @@ public class HotelBooking {
 
 	}
 
+	/*
+	 * 변경사항
+	 * 
+	 * 날짜형식 아니면 받지않음
+	 * 
+	 * 작성자 : 정진호
+	 */
 	public void setDate(Reservation r) { // 날짜 선택
 		LocalDate today = LocalDate.now();
-		HotelDate dateCheckIn; 
+		HotelDate dateCheckIn;
 		HotelDate dateCheckOut;
 		while (true) {
 			// TODO : 정규표현식으로 포맷 제한
 			System.out.println("체크인 날짜를 입력해주세요. (20190314와 같이 입력해주세요.)");
 			String checkIn = sc.nextLine();
-			if (!checkIn.matches("^[0-9]{8}+$")) {
+			if (!checkIn.matches(
+					"^20(\\d{2})(((0(1|3|5|7|8)|1(0|2))(0[1-9]|[1-2][0-9]|3[0-1]))|((0(4|6|9)|11)(0[1-9]|[1-2][0-9]|30))|(02(0[1-9]|(1|2)[0-9]$)))")) {
 				System.out.println("체크인 날짜를 선택해주세요.");
 			} else {
+
 				dateCheckIn = new HotelDate(checkIn);
 				if (dateCheckIn.getCheckDate().isBefore(today)) {
 					System.out.println("선택 불가능한 날짜입니다. 다시 입력해주세요.");
@@ -240,13 +249,13 @@ public class HotelBooking {
 		}
 		room.getGuests().add(memberLoggedIn.getId());
 		r.setAmountPaid(r.getAmountPaid() + (hotel.getRoomPrices()[0] * diff.getDays()));
-		System.out.println("숙박일수 [" + diff.getDays() + "]\n숙박 요금 [" + CustomString.putComma(r.getAmountPaid()) + "]원 입니다.");
+		System.out.println(
+				"숙박일수 [" + diff.getDays() + "]\n숙박 요금 [" + CustomString.putComma(r.getAmountPaid()) + "]원 입니다.");
 		r.setRoom(room);
 	}
 
 	/*
-	 * 변경사항
-	 * 숙박일수 만큼 추가 인원비용 추가
+	 * 변경사항 숙박일수 만큼 추가 인원비용 추가
 	 * 
 	 * 작성자 : 정진호
 	 */
@@ -283,8 +292,7 @@ public class HotelBooking {
 	/*
 	 * 변경사항
 	 * 
-	 * 부가서비스 요금을 숙박 일수에 맞춰 표시 ( 인원 포함 )
-	 * 테라피는 몇일 숙박을 하던 단 1회만 받는다.
+	 * 부가서비스 요금을 숙박 일수에 맞춰 표시 ( 인원 포함 ) 테라피는 몇일 숙박을 하던 단 1회만 받는다.
 	 * 
 	 * 작성자 : 정진호
 	 */
@@ -332,8 +340,8 @@ public class HotelBooking {
 	}
 	/*
 	 * 변경사항
-	 *  
-	 *  예약 확인 기능에 예약 변경, 예약 취소 기능을 추가함
+	 * 
+	 * 예약 확인 기능에 예약 변경, 예약 취소 기능을 추가함
 	 * 
 	 * 작성자 : 정진호
 	 */
@@ -428,7 +436,7 @@ public class HotelBooking {
 				break;
 			}
 		}
-		
+
 		while (true) {
 			System.out.println("아이디를 입력해주세요. (4자 이상  10자 이내)");
 			id = sc.nextLine();
@@ -443,7 +451,7 @@ public class HotelBooking {
 				break;
 			}
 		}
-		
+
 		while (true) {
 			System.out.println("비밀번호를 입력해주세요. (6자이상 10자 이내)");
 			password = sc.nextLine();
@@ -455,7 +463,7 @@ public class HotelBooking {
 				break;
 			}
 		}
-		
+
 		while (true) {
 			System.out.println("핸드폰번호를 입력해주세요. ( - 생략)");
 			System.out.println("Ex) 01012345678");
@@ -468,7 +476,7 @@ public class HotelBooking {
 				break;
 			}
 		}
-		
+
 		while (true) {
 			System.out.println("생년월일 8자리를 입력해주세요.");
 			System.out.println("Ex)96년생 7월 15일생이면 >> 19960715");
@@ -482,7 +490,7 @@ public class HotelBooking {
 				break;
 			}
 		}
-		
+
 		System.out.println("성공적으로 회원가입을 하셨습니다.!!");
 		System.out.println(name + "님 환영합니다^^~");
 		loginCheck = true;
@@ -624,8 +632,7 @@ public class HotelBooking {
 	/*
 	 * 메뉴
 	 * 
-	 * 비로그인 , 로그인 회원의 보이는 메뉴가 다르다.
-	 * 회원 가입을 하면 자동 로그인이 됨으로 로그인회원 화면이 보이게 된다.
+	 * 비로그인 , 로그인 회원의 보이는 메뉴가 다르다. 회원 가입을 하면 자동 로그인이 됨으로 로그인회원 화면이 보이게 된다.
 	 * 
 	 * 작성자 : 정진호
 	 */
