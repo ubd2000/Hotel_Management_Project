@@ -531,11 +531,11 @@ public class HotelManager {
 			for (int i = 0; i < temp1.size(); i++) {
 				Member member = myHotel.getMembers().get(temp1.get(i));
 				if (member.getReservation().getDateCheckOut().getCheckDate().isEqual(myHotel.getToday())) {
-					member.setReservation(null);
 					myHotel.setSales(member.getReservation().getAmountPaid());
-					record.addReservation(member.getReservation());
+					member.getRecords().addReservation(member.getReservation());
+					member.setReservation(null);
 					member.getReservation().getRoom().getGuests().remove(member.getId());
-					out.writeObject(member.getReservation().getDateCheckOut());
+					out.writeObject(member.getReservation());
 				}
 			}
 		} catch (FileNotFoundException e) {
