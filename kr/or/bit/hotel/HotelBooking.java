@@ -9,6 +9,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class HotelBooking {
@@ -187,11 +189,15 @@ public class HotelBooking {
 
 		r.setDateCheckIn(dateCheckIn);
 		r.setDateCheckOut(dateCheckOut);
+		
 	}
 
 	public void setRoom(Reservation r) {
 		Period diff = Period.between(r.getDateCheckIn().getCheckDate(), r.getDateCheckOut().getCheckDate());
 		System.out.println("예약 가능 객실 번호");
+		
+		List<Room> roomToReserve = new ArrayList<Room>();
+		
 		for (int i = 0; i < hotel.getRooms().size(); i++) {
 			for (int j = 0; j < hotel.getRooms().get(i).size(); j++) {
 				boolean canReserve = true;
@@ -226,10 +232,14 @@ public class HotelBooking {
 					}
 				}
 				if (canReserve) {
-					System.out.print((i + 2) + "0" + (j + 1) + "호 ");
+					roomToReserve.add(hotel.getRooms().get(i).get(j));
 				}
 			}
 			System.out.println();
+		}
+		
+		for (int i = 0; i < roomToReserve.size(); i++) {
+			System.out.println(roomToReserve.get(i).getRoomNumber() + "호 "); 
 		}
 
 		Room room;
@@ -239,7 +249,7 @@ public class HotelBooking {
 			char floor = roomNumber.charAt(0);
 			char number = roomNumber.charAt(roomNumber.length() - 1);
 			room = hotel.getRooms().get(floor - 50).get(number - 49); // char '1' = 49
-			if (room.getGuests().size() != 0) {
+			if (roomNumber가 roomToReserve 안의 방들 중에 없으면) {
 				System.out.println("잘못 선택했습니다.");
 			} else {
 				break;
