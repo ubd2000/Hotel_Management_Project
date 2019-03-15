@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MediumHotel extends Hotel implements Serializable {
-	
+	private static final long serialVersionUID = 1L;
 	/*
 	 * 중형 호텔
 	 * 

@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;;
 
 public class HotelDate implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	private LocalDate checkDate;
 	private String DateString;
 	

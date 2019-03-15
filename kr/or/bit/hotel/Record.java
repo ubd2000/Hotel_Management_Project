@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Record implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	private List<Reservation> reservations;
 	private long totalPaid;
 	

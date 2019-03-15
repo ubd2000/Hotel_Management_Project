@@ -220,11 +220,11 @@ public class HotelManager {
 		//부가서비스 확인
 		String breakfast = "";
 		String therapy = "";
-		breakfast = guest.getReservation().isBreakfast() == true ? "조식O" : "조식X";
-		therapy = guest.getReservation().isBreakfast() == true ? "전신테라피O" : "전신테라피X";
+		breakfast = (guest.getReservation().isBreakfast()) ? "조식O" : "조식X";
+		therapy = (guest.getReservation().isTherapy()) ? "전신테라피O" : "전신테라피X";
 
 		System.out.println("이름 : " + guest.getName() + "\n인원수 : " + guest.getReservation().getNumberPeople()
-				+ "\n부가서비스 : " + breakfast + "/" + therapy + "\n총 요금 : " + guest.getReservation().getAmountPaid() + "원"
+				+ "\n부가서비스 : " + breakfast + "/" + therapy + "\n총 요금 : " + CustomString.putComma(guest.getReservation().getAmountPaid()) + "원"
 				+ "\n체크인 : " + checkIn + "\n체크아웃 : " + checkOut);
 	}
 
