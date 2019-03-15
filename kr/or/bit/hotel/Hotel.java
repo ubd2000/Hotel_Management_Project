@@ -1,24 +1,32 @@
 package kr.or.bit.hotel;
 
-import java.util.ArrayList;
-import java.util.Calendar;
+import java.time.LocalDate;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class Hotel {
+public abstract class Hotel implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	private List<List<Room>> rooms;
 	private Room[] roomInfos;
-	private int sales;
+	private long sales;
 	private Map<String, Member> members;
 	private int[] roomPrices;
-	private Calendar today;
+	private int breakfast;
+	private int therapy;
+	private int[] servicePrices;
+	private LocalDate today;
 
 	public Hotel() {
 		this.sales = 0;
 		roomInfos = new Room[] { new DeluxeRoom(), new ExecutiveRoom(), new SuiteRoom() };
 		members = new HashMap<String, Member>();
-		today = Calendar.getInstance();
+		today = LocalDate.now();
+		breakfast = Number.breakfast;
+		therapy = Number.therapy;
+		servicePrices = new int[] { Number.breakfast, Number.therapy };
 		setHotelRoomPrices();
 		setHotelRooms();
 	}
@@ -26,6 +34,22 @@ public abstract class Hotel {
 	public abstract void setHotelRoomPrices();
 
 	public abstract void setHotelRooms();
+
+	public int getBreakfast() {
+		return breakfast;
+	}
+
+	public void setBreakfast(int breakfast) {
+		this.breakfast = breakfast;
+	}
+
+	public int getTherapy() {
+		return therapy;
+	}
+
+	public void setTherapy(int therapy) {
+		this.therapy = therapy;
+	}
 
 	public void setRooms(List<List<Room>> rooms) {
 		this.rooms = rooms;
@@ -47,11 +71,11 @@ public abstract class Hotel {
 		this.roomInfos = roomInfos;
 	}
 
-	public int getSales() {
+	public long getSales() {
 		return sales;
 	}
 
-	public void setSales(int sales) {
+	public void setSales(long sales) {
 		this.sales = sales;
 	}
 
@@ -63,24 +87,23 @@ public abstract class Hotel {
 		this.members = members;
 	}
 
-	public List<Service> getServices() {
-		return services;
-	}
-
-	public void setServices(List<Service> services) {
-		this.services = services;
-	}
-
-	public Calendar getToday() {
-		return today;
-	}
-
-	public void setToday(Calendar today) {
-		this.today = today;
-	}
-
 	public List<List<Room>> getRooms() {
 		return rooms;
 	}
-}
 
+	public int[] getServicePrices() {
+		return servicePrices;
+	}
+
+	public void setServicePrices(int[] servicePrices) {
+		this.servicePrices = servicePrices;
+	}
+
+	public LocalDate getToday() {
+		return today;
+	}
+
+	public void setToday(LocalDate today) {
+		this.today = today;
+	}
+}

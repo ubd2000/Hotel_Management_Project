@@ -1,9 +1,10 @@
 package kr.or.bit.hotel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SmallHotel extends Hotel {
+public class SmallHotel extends Hotel implements Serializable {
 
 	/*
 	 * 소형 호텔
@@ -21,8 +22,7 @@ public class SmallHotel extends Hotel {
 	 * 소형 호텔 3층 (1층은 로비)
 	 * 
 	 * 2층 디럭스 룸 4개 
-	 * 3층 이그제큐티브 1개 
-	 * 스위트 1개
+	 * 3층 이그제큐티브 1개 스위트 룸 1개
 	 */
 	@Override
 	public void setHotelRooms() {
