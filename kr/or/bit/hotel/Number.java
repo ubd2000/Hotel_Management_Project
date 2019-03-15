@@ -20,7 +20,4 @@ public class Number {
 	public static final int BATHROOM_DELUXE = 1;
 	public static final int BATHROOM_EXECUTIVE = 1;
 	public static final int BATHROOM_SUITE = 2;
-	
-	public static final int CHECKIN_HOUR = 15;
-	public static final int CHECKOUT_HOUR = 11;
 }
