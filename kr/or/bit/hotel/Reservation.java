@@ -3,6 +3,11 @@ package kr.or.bit.hotel;
 public class Reservation {
 	private Room room;
 	private int numberPeople;
+	private HotelDate dateCheckIn;
+	private HotelDate dateCheckOut;
+	private boolean breakfast;
+	private boolean therapy;
+	private long amountPaid;
 
 	public int getNumberPeople() {
 		return numberPeople;
@@ -12,11 +17,6 @@ public class Reservation {
 		this.numberPeople = numberPeople;
 	}
 
-	private HotelDate dateCheckIn;
-	private HotelDate dateCheckOut;
-	private boolean breakfast;
-	private boolean therapy;
-	private long amountPaid;
 
 	public Room getRoom() {
 		return room;

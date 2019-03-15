@@ -1,5 +1,6 @@
 package kr.or.bit.hotel;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -12,13 +13,14 @@ public abstract class Hotel {
 	private int sales;
 	private Map<String, Member> members;
 	private int[] roomPrices;
-	private Calendar today;
+	private int[] servicePrices;
+	private LocalDate today;
 
 	public Hotel() {
 		this.sales = 0;
 		roomInfos = new Room[] { new DeluxeRoom(), new ExecutiveRoom(), new SuiteRoom() };
 		members = new HashMap<String, Member>();
-		today = Calendar.getInstance();
+		servicePrices = new int[] { Number.breakfast, Number.therapy };
 		setHotelRoomPrices();
 		setHotelRooms();
 	}
@@ -63,24 +65,24 @@ public abstract class Hotel {
 		this.members = members;
 	}
 
-	public List<Service> getServices() {
-		return services;
+	public List<List<Room>> getRooms() {
+		return rooms;
 	}
 
-	public void setServices(List<Service> services) {
-		this.services = services;
+	public int[] getServicePrices() {
+		return servicePrices;
 	}
 
-	public Calendar getToday() {
+	public void setServicePrices(int[] servicePrices) {
+		this.servicePrices = servicePrices;
+	}
+
+	public LocalDate getToday() {
 		return today;
 	}
 
-	public void setToday(Calendar today) {
+	public void setToday(LocalDate today) {
 		this.today = today;
-	}
-
-	public List<List<Room>> getRooms() {
-		return rooms;
 	}
 }
 
