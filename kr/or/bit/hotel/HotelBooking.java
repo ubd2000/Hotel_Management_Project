@@ -11,8 +11,6 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.Scanner;
 
-import javax.swing.JOptionPane;
-
 public class HotelBooking {
 	private boolean loginCheck; // 로그인 유무
 	private Member memberLoggedIn; // 로그인된 회원
@@ -434,10 +432,8 @@ public class HotelBooking {
 			System.out.println("아이디를 입력해주세요. (4자 이상  10자 이내)");
 			id = sc.nextLine();
 			if (id.length() > 10 || id.length() < 4) {
-				JOptionPane.showMessageDialog(null, "ID의 길이를 확인해주세요.");
 				System.out.println("ID의 길이가 올바르지 않습니다.");
 			} else if (!id.matches("\\p{Alnum}+")) {
-				JOptionPane.showMessageDialog(null, "ID형식이 올바르지 않습니다.");
 				System.out.println("영어,숫자만 입력해주세요.");
 			} else if (hotel.getMembers().containsKey(id)) {
 				System.out.println("동일한 ID가 존재합니다.");
@@ -450,10 +446,8 @@ public class HotelBooking {
 			System.out.println("비밀번호를 입력해주세요. (6자이상 10자 이내)");
 			password = sc.nextLine();
 			if (password.length() > 10 || password.length() < 6) {
-				JOptionPane.showMessageDialog(null, "비밀번호의 길이를 확인해주세요.");
 				System.out.println("PWD의 길이가 올바르지 않습니다.");
 			} else if (!password.matches("\\p{Alnum}+")) {
-				JOptionPane.showMessageDialog(null, "비밀번호 형식이 올바르지 않습니다.");
 				System.out.println("영어,숫자만 입력해주세요.");
 			} else {
 				break;
@@ -551,10 +545,8 @@ public class HotelBooking {
 					memberLoggedIn.setPassword(password2);
 					System.out.println("비밀번호가 바뀌었습니다.");
 				} else if (password.length() > 10 || password.length() < 6) {
-					JOptionPane.showMessageDialog(null, "비밀번호의 길이를 확인해주세요.");
 					System.out.println("PWD의 길이가 올바르지 않습니다.");
 				} else if (!password.matches("\\p{Alnum}+")) {
-					JOptionPane.showMessageDialog(null, "비밀번호 형식이 올바르지 않습니다.");
 					System.out.println("영어,숫자만 입력해주세요.");
 				} else {
 					System.out.println("비밀번호가 일치하지 않습니다.");
