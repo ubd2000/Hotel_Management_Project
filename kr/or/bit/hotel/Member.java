@@ -12,8 +12,8 @@ public class Member implements Serializable {
 	private String birthday;
 
 	public Member(String id, String name, String password, String phoneNumber, String birthday) {
-	        this.reservation = null;
-	        this.record = new Record();
+		this.reservation = null;
+		this.records = new Record();
 		this.id = id;
 		this.password = password;
 		this.name = name;
@@ -24,6 +24,7 @@ public class Member implements Serializable {
 	public String getId() {
 		return id;
 	}
+
 	public void setId(String id) {
 		this.id = id;
 	}
