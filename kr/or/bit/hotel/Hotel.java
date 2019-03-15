@@ -85,7 +85,7 @@ public abstract class Hotel implements Serializable {
 	}
 
 	public void setSales(long sales) {
-		this.sales = sales;
+		this.sales += sales;
 	}
 
 	public Map<String, Member> getMembers() {

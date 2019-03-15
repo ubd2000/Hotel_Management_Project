@@ -147,7 +147,8 @@ public class HotelManager {
 				getInfo();
 				break;
 			case "4":
-				HotelManagerSave();
+				HotelCheckInSave();
+				HotelCheckOutSave();
 				break;
 			case "5":
 				saveHotel();
@@ -508,28 +509,28 @@ public class HotelManager {
 		}
 	}
 
-	public void HotelManagerSave() {
+	public void HotelCheckOutSave() {
 
-		List<String> temp1 = new ArrayList<String>();
+		List<String> guests = new ArrayList<String>();
 		Record record = null;
 
 		for (int i = 0; i < myHotel.getRooms().size(); i++) {
 			for (int j = 0; j < myHotel.getRooms().get(i).size(); j++) {
-				temp1 = myHotel.getRooms().get(i).get(j).getGuests();
+				guests = myHotel.getRooms().get(i).get(j).getGuests();
 			}
 		}
 		
-		file = new File(CustomString.PATH_DIRECTORY);
+		file = new File(CustomString.PATH_RECORD_DIRECTORY(myHotel.getToday()));
 		if (!file.exists()) {
 			file.mkdirs();
 		}
-		file = new File(CustomString.PATH_DIRECTORY + myHotel.getToday()+".info");
+		file = new File(CustomString.PATH_RECORD(myHotel.getToday(), "out"));
 
 		try {
 			fos = new FileOutputStream(file);
 			out = new ObjectOutputStream(fos);
-			for (int i = 0; i < temp1.size(); i++) {
-				Member member = myHotel.getMembers().get(temp1.get(i));
+			for (int i = 0; i < guests.size(); i++) {
+				Member member = myHotel.getMembers().get(guests.get(i));
 				if (member.getReservation().getDateCheckOut().getCheckDate().isEqual(myHotel.getToday())) {
 					myHotel.setSales(member.getReservation().getAmountPaid());
 					member.getRecords().addReservation(member.getReservation());
@@ -537,10 +538,47 @@ public class HotelManager {
 					member.getReservation().getRoom().getGuests().remove(member.getId());
 					out.writeObject(member.getReservation());
 				}
+//				if(member.getRecords().getTotalPaid() >= 10000000) {
+//						member.setVip(true);
+//				}
 			}
-		} catch (FileNotFoundException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-		} catch (IOException e) {
+		} finally {
+			try {
+				out.close();
+				fos.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void HotelCheckInSave() {
+
+		List<String> guests = new ArrayList<String>();
+		Record record = null;
+
+		for (int i = 0; i < myHotel.getRooms().size(); i++) {
+			for (int j = 0; j < myHotel.getRooms().get(i).size(); j++) {
+				guests = myHotel.getRooms().get(i).get(j).getGuests();
+			}
+		}
+		
+		file = new File(CustomString.PATH_RECORD_DIRECTORY(myHotel.getToday()));
+		if (!file.exists()) {
+			file.mkdirs();
+		}
+		file = new File(CustomString.PATH_RECORD(myHotel.getToday(), "in"));
+
+		try {
+			fos = new FileOutputStream(file);
+			out = new ObjectOutputStream(fos);
+			for (int i = 0; i < guests.size(); i++) {
+				Member member = myHotel.getMembers().get(guests.get(i));
+					out.writeObject(member.getReservation());
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			try {
