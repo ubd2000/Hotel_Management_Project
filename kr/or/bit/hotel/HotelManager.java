@@ -147,8 +147,8 @@ public class HotelManager {
 				getInfo();
 				break;
 			case "4":
-				HotelCheckInSave();
-				HotelCheckOutSave();
+				saveHotelCheckIn();
+				saveHotelCheckOut();
 				break;
 			case "5":
 				saveHotel();
@@ -509,7 +509,7 @@ public class HotelManager {
 		}
 	}
 
-	public void HotelCheckOutSave() {
+	public void saveHotelCheckOut() {
 
 		List<String> guests = new ArrayList<String>();
 
@@ -537,9 +537,9 @@ public class HotelManager {
 					member.getReservation().getRoom().getGuests().remove(member.getId());
 					out.writeObject(member.getReservation());
 				}
-//				if(member.getRecords().getTotalPaid() >= 10000000) {
-//						member.setVip(true);
-//				}
+				if(member.getRecords().getTotalPaid() >= 10000000) {
+						member.setVip(true);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -553,7 +553,7 @@ public class HotelManager {
 		}
 	}
 	
-	public void HotelCheckInSave() {
+	public void saveHotelCheckIn() {
 
 		List<String> guests = new ArrayList<String>();
 
@@ -574,7 +574,11 @@ public class HotelManager {
 			out = new ObjectOutputStream(fos);
 			for (int i = 0; i < guests.size(); i++) {
 				Member member = myHotel.getMembers().get(guests.get(i));
+				if (member.getReservation().getDateCheckIn().getCheckDate().isEqual(myHotel.getToday())) {
+					member.getRecords().addReservation(member.getReservation());
 					out.writeObject(member.getReservation());
+					member.setReservation(null);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
