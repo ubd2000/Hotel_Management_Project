@@ -130,7 +130,9 @@ public class HotelManager {
 			System.out.println();
 			System.out.println("         3. 호텔 정보 확인");
 			System.out.println();
-			System.out.println("         4. 종료하기");
+			System.out.println("         4. 체크아웃 세이브");
+			System.out.println();
+			System.out.println("         5. 종료하기");
 			System.out.println("┖                                  ┚");
 
 			String select = sc.nextLine();
@@ -145,6 +147,9 @@ public class HotelManager {
 				getInfo();
 				break;
 			case "4":
+				HotelManagerSave();
+				break;
+			case "5":
 				saveHotel();
 				return;
 			default:
@@ -505,7 +510,6 @@ public class HotelManager {
 
 	public void HotelManagerSave() {
 
-		List<Member> temp = new ArrayList<Member>();
 		List<String> temp1 = new ArrayList<String>();
 		Record record = null;
 
@@ -514,18 +518,37 @@ public class HotelManager {
 				temp1 = myHotel.getRooms().get(i).get(j).getGuests();
 			}
 		}
+		
+		file = new File(CustomString.PATH_DIRECTORY);
+		if (!file.exists()) {
+			file.mkdirs();
+		}
+		file = new File(CustomString.PATH_DIRECTORY + myHotel.getToday()+".info");
 
-		LocalDate date = LocalDate.now();
-		for (int i = 0; i < temp1.size(); i++) {
-			Member member = myHotel.getMembers().get(temp1.get(i));
-			if (member.getReservation().getDateCheckOut().getCheckDate().isEqual(myHotel.getToday())) {
-				member.setReservation(null);
-				myHotel.setSales(member.getReservation().getAmountPaid());
-				Reservation reservations = member.getReservation();
-				record.addReservation(member.getReservation());
-				member.getReservation().getRoom().getGuests().remove(member.getId());
+		try {
+			fos = new FileOutputStream(file);
+			out = new ObjectOutputStream(fos);
+			for (int i = 0; i < temp1.size(); i++) {
+				Member member = myHotel.getMembers().get(temp1.get(i));
+				if (member.getReservation().getDateCheckOut().getCheckDate().isEqual(myHotel.getToday())) {
+					member.setReservation(null);
+					myHotel.setSales(member.getReservation().getAmountPaid());
+					record.addReservation(member.getReservation());
+					member.getReservation().getRoom().getGuests().remove(member.getId());
+					out.writeObject(member.getReservation().getDateCheckOut());
+				}
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				out.close();
+				fos.close();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
-
 	}
 }
