@@ -1,5 +1,6 @@
 ﻿package kr.or.bit.hotel;
 
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -7,7 +8,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
@@ -75,7 +75,6 @@ public class HotelManager {
 			}
 		}
 	}
-
 
 	private void loadHotel() {
 		file = new File(CustomString.PATH_HOTEL);
@@ -239,6 +238,7 @@ public class HotelManager {
 		String therapy = "";
 		breakfast = guest.getReservation().isBreakfast() ? CustomString.breakfast + " O"
 				: CustomString.breakfast + " X";
+		therapy = guest.getReservation().isTherapy() ? CustomString.therapy + " O" : CustomString.therapy + " X";
 
 		System.out.println("이름 : " + guest.getName() + "\n인원수 : " + guest.getReservation().getNumberPeople()
 				+ "\n부가서비스 : " + breakfast + "/" + therapy + "\n총 요금 : "
@@ -377,7 +377,7 @@ public class HotelManager {
 				room = Integer.parseInt(sc.nextLine());
 
 				if (room >= 1 && room <= 3) {
-					System.out.println("[" + myHotel.getRoomInfos()[room - 1].getRoomName() + "룸을 선택하셨습니다.");
+					System.out.println(myHotel.getRoomInfos()[room - 1].getRoomName() + "룸을 선택하셨습니다.");
 					break;
 				}
 			} catch (Exception e) {
@@ -506,11 +506,6 @@ public class HotelManager {
 	 */
 	public void getRecord() {
 
-		/*
-		 * 확인할 날짜 입력 ex)20190315 FileInputStream fis = new FileInputStream(CustomString.PATH_DIRECTORY + 20190315 + ".info");
-		 * ObjectInputStream in = new ObjectInputStream(fis);
-		 */
-
 		System.out.println("체크인 체크아웃 기록을 확인할 날짜를 선택하세요.");
 		String date = sc.nextLine();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
@@ -529,9 +524,14 @@ public class HotelManager {
 			in = new ObjectInputStream(fis);
 
 			System.out.println("체크인");
-			Reservation data = null;
-			while ((data = (Reservation) in.readObject()) != null) {
-				System.out.println(data);
+			
+			String data = null;
+			try {
+				while ((data = (String) in.readObject()) != null) {
+					System.out.println(data);
+				}
+			} catch (EOFException e) {
+				System.out.println();
 			}
 
 			in.close();
@@ -542,11 +542,16 @@ public class HotelManager {
 			in = new ObjectInputStream(fis);
 
 			System.out.println("체크아웃");
-
+			
 			data = null;
-			while ((data = (Reservation) in.readObject()) != null) {
-				System.out.println(data);
+			try {
+				while ((data = (String) in.readObject()) != null) {
+					System.out.println(data);
+				}
+			} catch (EOFException e) {
+				System.out.println();
 			}
+
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -557,6 +562,14 @@ public class HotelManager {
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			try {
+				in.close();
+				fis.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 	}
@@ -567,7 +580,9 @@ public class HotelManager {
 
 		for (int i = 0; i < myHotel.getRooms().size(); i++) {
 			for (int j = 0; j < myHotel.getRooms().get(i).size(); j++) {
-				guests = myHotel.getRooms().get(i).get(j).getGuests();
+				for (int k = 0; k < myHotel.getRooms().get(i).get(j).getGuests().size(); k++) {
+					guests.add(myHotel.getRooms().get(i).get(j).getGuests().get(k));
+				}
 			}
 		}
 
@@ -582,15 +597,17 @@ public class HotelManager {
 			out = new ObjectOutputStream(fos);
 			for (int i = 0; i < guests.size(); i++) {
 				Member member = myHotel.getMembers().get(guests.get(i));
-				if (member.getReservation().getDateCheckOut().getCheckDate().isEqual(myHotel.getToday())) {
-					myHotel.setSales(member.getReservation().getAmountPaid());
-					member.getRecords().addReservation(member.getReservation());
-					member.getReservation().getRoom().getGuests().remove(member.getId());
-					out.writeObject(member.getReservation());
-					member.setReservation(null);
+				if (member.getReservation() != null) {
+					if (member.getReservation().getDateCheckOut().getCheckDate().isEqual(myHotel.getToday())) {
+						myHotel.setSales(member.getReservation().getAmountPaid());
+						member.getRecords().addReservation(member.getReservation());
+						member.getReservation().getRoom().getGuests().remove(member.getId());
+						out.writeObject(member.getReservation().checkRecord(member));
+						member.setReservation(null);
+					}
 				}
-				if(member.getRecords().getTotalPaid() >= 10000000) {
-						member.setVip(true);
+				if (member.getRecords().getTotalPaid() >= 10000000) {
+					member.setVip(true);
 				}
 			}
 		} catch (Exception e) {
@@ -611,7 +628,9 @@ public class HotelManager {
 
 		for (int i = 0; i < myHotel.getRooms().size(); i++) {
 			for (int j = 0; j < myHotel.getRooms().get(i).size(); j++) {
-				guests = myHotel.getRooms().get(i).get(j).getGuests();
+				for (int k = 0; k < myHotel.getRooms().get(i).get(j).getGuests().size(); k++) {
+					guests.add(myHotel.getRooms().get(i).get(j).getGuests().get(k));
+				}
 			}
 		}
 
@@ -626,10 +645,11 @@ public class HotelManager {
 			out = new ObjectOutputStream(fos);
 			for (int i = 0; i < guests.size(); i++) {
 				Member member = myHotel.getMembers().get(guests.get(i));
-				if (member.getReservation().getDateCheckIn().getCheckDate().isEqual(myHotel.getToday())) {
-					member.getRecords().addReservation(member.getReservation());
-				out.writeObject(member.getReservation());
-					member.setReservation(null);
+				if (member.getReservation() != null) {
+					if (member.getReservation().getDateCheckIn().getCheckDate().isEqual(myHotel.getToday())) {
+						member.getRecords().addReservation(member.getReservation());
+						out.writeObject(member.getReservation().checkRecord(member));
+					}
 				}
 			}
 		} catch (Exception e) {

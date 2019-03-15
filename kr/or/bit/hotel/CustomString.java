@@ -24,7 +24,8 @@ public class CustomString {
 			fileName = "CheckOut";
 		}
 		
-		return "C:\\Temp\\Hotel\\" + date.format(formatter) + "\\" + fileName + ".info";
+		return "C:\\Temp\\Hotel\\" + date.format(formatter) + "\\" + fileName + ".info"
+				+ "";
 	}
 	
 	public static String putComma(long number) {
