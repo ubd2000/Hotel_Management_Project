@@ -2,7 +2,6 @@ package kr.or.bit.hotel;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -143,7 +142,6 @@ public class HotelBooking {
         HotelDate dateCheckIn;
         HotelDate dateCheckOut;
         while (true) {
-            // TODO : 정규표현식으로 포맷 제한
             System.out.println("체크인 날짜를 입력해주세요. (20190314와 같이 입력해주세요.)");
             String checkIn = sc.nextLine();
             if (!checkIn.matches(
@@ -160,7 +158,6 @@ public class HotelBooking {
         }
 
         while (true) {
-            // TODO : 정규표현식으로 포맷 제한
             System.out.println("체크아웃 날짜를 입력해주세요. (20190314와 같이 입력해주세요.)");
             String checkOut = sc.nextLine();
             if (!checkOut.matches(
