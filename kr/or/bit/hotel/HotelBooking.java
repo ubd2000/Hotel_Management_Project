@@ -128,11 +128,13 @@ public class HotelBooking {
     }
 
     /*
-     * 변경사항
-     *
-     * 날짜형식 아니면 받지않음
-     *
-     * 작성자 : 정진호
+     *  변경사항
+     *  다른사람이 체크아웃하는 날에 체크인 예약할수있게 하기
+     *  
+     *  오류 수정사항 : 입력값이 숫자가 아니면 예외처리가 뜸 --- 해결완료
+     *  
+     *  작성자 : 정진호
+     *  
      */
     private void setDate(Reservation r) { // 날짜 선택
         LocalDate today = LocalDate.now();
@@ -183,9 +185,9 @@ public class HotelBooking {
     public void setRoom(Reservation r) {
         Period diff = Period.between(r.getDateCheckIn().getCheckDate(), r.getDateCheckOut().getCheckDate());
         System.out.println("예약 가능 객실 번호");
-
+        
         List<Room> roomToReserve = new ArrayList<Room>();
-
+        
         for (int i = 0; i < hotel.getRooms().size(); i++) {
             for (int j = 0; j < hotel.getRooms().get(i).size(); j++) {
                 boolean canReserve = true;
@@ -220,8 +222,8 @@ public class HotelBooking {
             System.out.println();
         }
 
-        for (int i = 0; i < roomToReserve.size(); i++) {
-            System.out.println(roomToReserve.get(i).getRoomNumber() + "호 ");
+        for (Room room1 : roomToReserve) {
+            System.out.println(room1.getRoomNumber() + "호 ");
         }
 
         if (roomToReserve.size() == 0) {

@@ -3,6 +3,7 @@ package kr.or.bit.hotel;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -262,7 +264,7 @@ public class HotelManager {
         Room room = myHotel.getRooms().get(floor - 50).get(number - 49); // char '1' = 49
 
         Member guest = null;
-        LocalDate checkIn = null;
+        LocalDate checkIn;
         LocalDate checkOut = null;
 
         for (String id : room.getGuests()) {
@@ -458,7 +460,7 @@ public class HotelManager {
 //        System.out.println(id + "의 체크아웃: " + checkOut);
 //        LocalDate today = LocalDate.now();
 //        HotelDate dateCheckInd = null;
-//        HotelDate dateCheckOut = null;
+//        HotelDate dateCheckOutd = null;
 //        
 //        
 //        while (true) {
@@ -500,6 +502,7 @@ public class HotelManager {
 //        System.out.println(id + "의 체크아웃: " + checkOut);
 //        myHotel.getMembers().get(id).getReservation().setDateCheckIn(dateCheckInd);
 //        myHotel.getMembers().get(id).getReservation().setDateCheckOut(dateCheckOutd);
+
     /* 투숙객의 체크인, 체크아웃을 변경할 수 있다. */
 
 
