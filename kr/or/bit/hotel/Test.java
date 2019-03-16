@@ -31,10 +31,11 @@ public class Test {
 //		Period p = Period.between(d1, d2);
 //		System.out.println(p.getDays());
 //		hb.getRoomInfo();
+		System.out.println("".length());
 		HotelManager hm = new HotelManager();
-		HotelBooking hb = new HotelBooking();
 		hm.run();
-		hb.run();
-		hm.run();
+//		HotelBooking hb = new HotelBooking();
+//		hb.run();
+
 	}
-}
+			}

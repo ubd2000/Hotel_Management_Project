@@ -338,10 +338,8 @@ public class HotelManager {
         System.out.print("예약을 변경합니다.");
 
         myHotel.getMembers().get(id).getReservation().getRoom().getGuests().remove(id);
-        myHotel.getMembers().get(id).setReservation(null);
 
         Reservation r = myHotel.getMembers().get(id).getReservation();
-
 
         LocalDate today = LocalDate.now();
         HotelDate dateCheckIn;
@@ -555,16 +553,20 @@ public class HotelManager {
 
         exit:
         while (true) {
-            switch (room) {
-                case 1:
-                case 2:
-                case 3:
-                    System.out.println("변경할 가격을 입력해주세요");
-                    myHotel.getRoomPrices()[room - 1] = Integer.parseInt(sc.nextLine()); // 오류 캐치
-                    System.out.println("가격이 변경 되었습니다.");
-                    break exit;
-                default:
-                    System.out.println("잘못 입력하였습니다.");
+            try {
+                switch (room) {
+                    case 1:
+                    case 2:
+                    case 3:
+                        System.out.println("변경할 가격을 입력해주세요");
+                        myHotel.getRoomPrices()[room - 1] = Integer.parseInt(sc.nextLine());
+                        System.out.println("가격이 변경 되었습니다.");
+                        break exit;
+                    default:
+                        System.out.println("잘못 입력하였습니다.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("올바른 값을 입력해주세요.");
             }
         }
         System.out.println();
@@ -674,11 +676,20 @@ public class HotelManager {
      * 불러오면 그날 체크인한 사람과 체크아웃한 사람이 있고 이 사람이 어떻게 객실을 이용했는지 불러온다
      */
     private void getRecord() {
+        LocalDate dateToCheck;
 
-        System.out.println("체크인 체크아웃 기록을 확인할 날짜를 선택하세요.");
-        String date = sc.nextLine();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        LocalDate dateToCheck = LocalDate.parse(date, formatter);
+        while (true) {
+            System.out.println("체크인 체크아웃 기록을 확인할 날짜를 선택하세요.");
+            String date = sc.nextLine();
+            if (!date.matches(
+                    "^20(\\d{2})(((0([13578])|1([02]))(0[1-9]|[1-2][0-9]|3[0-1]))|((0([469])|11)(0[1-9]|[1-2][0-9]|30))|(02(0[1-9]|([12])[0-9]$)))")) {
+                System.out.println("체크인 날짜를 선택해주세요.");
+            } else {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+                dateToCheck = LocalDate.parse(date, formatter);
+                break;
+            }
+        }
 
         file = new File(CustomString.PATH_RECORD_DIRECTORY(dateToCheck));
 
