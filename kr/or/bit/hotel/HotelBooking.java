@@ -22,7 +22,6 @@ public class HotelBooking {
     private ObjectInputStream in;
     private FileOutputStream fos;
     private ObjectOutputStream out;
-    private Reservation r;
 
     public HotelBooking() {
         sc = new Scanner(System.in);
@@ -98,7 +97,7 @@ public class HotelBooking {
         }
     }
 
-    private void getRoomInfo() { // 객실정보보기
+    private void getRoomInfo() { // 객실 정보 보기
         for (int i = 0; i < hotel.getRoomInfos().length; i++) {
             String kitchen;
             if (hotel.getRoomInfos()[i].isKitchen()) {
@@ -107,7 +106,7 @@ public class HotelBooking {
                 kitchen = "무";
             }
             System.out.println("  [방이름] : " + hotel.getRoomInfos()[i].getRoomName() + "룸  " + "  [가격] : "
-                    + hotel.getRoomPrices()[i] + "원  " + "  [기본인원] : "
+                    + CustomString.putComma(hotel.getRoomPrices()[i]) + "원  " + "  [기본인원] : "
                     + hotel.getRoomInfos()[i].getDefaultNumberPeople() + "명  " + "  [최대인원] : "
                     + hotel.getRoomInfos()[i].getMaxNumberPeople() + "명  " + "  [화장실] : "
                     + hotel.getRoomInfos()[i].getNumberBathroom() + "개  " + "  [침대] : "
@@ -117,7 +116,7 @@ public class HotelBooking {
 
     private void reserveRoom() {
         if (memberLoggedIn.getReservation() != null) {
-            System.out.println("예약 추가·변경이 불가능합니다.");
+            System.out.println("예약 추가·변경이 불가능합니다. 관리자에게 문의하세요.");
             return;
         }
         Reservation r = new Reservation();
@@ -624,7 +623,6 @@ public class HotelBooking {
                 quit();
                 break;
         }
-
     }
 
     /*
