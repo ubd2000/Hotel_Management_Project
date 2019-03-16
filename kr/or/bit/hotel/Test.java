@@ -1,5 +1,7 @@
 package kr.or.bit.hotel;
 
+import java.time.LocalDate;
+
 public class Test {
 	public static void main(String[] args) {
 		String regex = "\\p{Alnum}+";
@@ -31,6 +33,7 @@ public class Test {
 //		Period p = Period.between(d1, d2);
 //		System.out.println(p.getDays());
 //		hb.getRoomInfo();
+		System.out.println(LocalDate.parse("2011-12-12"));
 		HotelManager hm = new HotelManager();
 		HotelBooking hb = new HotelBooking();
 		hm.run();

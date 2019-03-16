@@ -13,14 +13,19 @@ public class Reservation implements Serializable {
 	private boolean therapy;
 	private long amountPaid;
 
-	@Override
-	public String toString() {
+	public String checkReservation() {
 		return "###예약확인### \n방 이름=[" + room.getRoomName() + "]룸," + " " + room.getRoomNumber() + "호" + "\n예약 인원=["
 				+ numberPeople + "], \n체크인 날짜=[" + dateCheckIn.getCheckDate()
 
 				+ "], \n체크아웃날짜=[" + getDateCheckOut().getCheckDate() + "], \n조식=[" + getBreakfastString()
 				+ "], \n전신 테라피=[" + getTherapyString() + "], \n총 요금 =[" + CustomString.putComma(amountPaid)
 				+ "]원\n----------------------";
+	}
+
+	public String checkRecord(Member member) {
+		return "이름 : " + member.getName() + " 객실 : " + room.getRoomName() + " 객실 번호 : " + room.getRoomNumber()
+				+ " 지불 금액 : " + amountPaid + " 체크인 날짜 : " + dateCheckIn.getDateString() + " 체크아웃 날짜 : "
+				+ dateCheckOut.getDateString();
 	}
 
 	public int getNumberPeople() {

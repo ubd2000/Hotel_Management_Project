@@ -12,6 +12,7 @@ public class Member implements Serializable {
 	private String password;
 	private String phoneNumber;
 	private String birthday;
+	private boolean vip;
 
 	public Member(String id, String name, String password, String phoneNumber, String birthday) {
 		this.reservation = null;
@@ -21,6 +22,7 @@ public class Member implements Serializable {
 		this.name = name;
 		this.birthday = birthday;
 		this.phoneNumber = phoneNumber;
+		this.vip = false;
 	}
 
 	public String getId() {
@@ -29,6 +31,30 @@ public class Member implements Serializable {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	@Override
+	public String toString() {
+		return name + "  " + id + "  " + phoneNumber + "  " + birthday + "  " + records.getTotalPaid();
+	}
+	
+	public String isVipString() {
+		String isVip = "";
+		if (vip) {
+			isVip = "O";
+		} else {
+			isVip = "X";
+		}
+		
+		return isVip;
+	}
+
+	public boolean isVip() {
+		return vip;
+	}
+
+	public void setVip(boolean vip) {
+		this.vip = vip;
 	}
 
 	public Reservation getReservation() {
