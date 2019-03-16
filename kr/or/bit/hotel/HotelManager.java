@@ -1,9 +1,8 @@
-﻿package kr.or.bit.hotel;
+package kr.or.bit.hotel;
 
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -12,7 +11,6 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -340,10 +338,8 @@ public class HotelManager {
         System.out.print("예약을 변경합니다.");
         
         myHotel.getMembers().get(id).getReservation().getRoom().getGuests().remove(id);
-        myHotel.getMembers().get(id).setReservation(null);
 
         Reservation r = myHotel.getMembers().get(id).getReservation();
-        
         
         LocalDate today = LocalDate.now();
 		HotelDate dateCheckIn;

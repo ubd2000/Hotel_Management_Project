@@ -108,7 +108,7 @@ public class HotelBooking {
                 kitchen = "무";
             }
             System.out.println("  [방이름] : " + hotel.getRoomInfos()[i].getRoomName() + "룸  " + "  [가격] : "
-                    + hotel.getRoomPrices()[i] + "원  " + "  [기본인원] : "
+                    + CustomString.putComma(hotel.getRoomPrices()[i]) + "원  " + "  [기본인원] : "
                     + hotel.getRoomInfos()[i].getDefaultNumberPeople() + "명  " + "  [최대인원] : "
                     + hotel.getRoomInfos()[i].getMaxNumberPeople() + "명  " + "  [화장실] : "
                     + hotel.getRoomInfos()[i].getNumberBathroom() + "개  " + "  [침대] : "
@@ -332,6 +332,7 @@ public class HotelBooking {
             }
         }
     }
+
     /*
      * 변경사항
      *
@@ -339,7 +340,6 @@ public class HotelBooking {
      *
      * 작성자 : 정진호
      */
-
     private void getReservation() { // 예약 확인
         if (memberLoggedIn.getReservation() == null) {
             System.out.println("예약 기록이 없습니다.");
