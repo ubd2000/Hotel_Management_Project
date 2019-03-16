@@ -228,16 +228,15 @@ public class HotelManager {
 		}
 
 		//부가서비스 확인
-		String breakfast;
-		String therapy;
+		String breakfast = "";
+		String therapy = "";
 		breakfast = guest.getReservation().isBreakfast() ? CustomString.breakfast + " O"
 				: CustomString.breakfast + " X";
 		therapy = guest.getReservation().isTherapy() ? CustomString.therapy + " O" : CustomString.therapy + " X";
 
 		System.out.println("이름 : " + guest.getName() + "\n인원수 : " + guest.getReservation().getNumberPeople()
-				+ "\n부가서비스 : " + breakfast + "/" + therapy + "\n총 요금 : "
-				+ CustomString.putComma(guest.getReservation().getAmountPaid()) + "원" + "\n체크인 : " + checkIn
-				+ "\n체크아웃 : " + checkOut);
+				+ "\n부가서비스 : " + breakfast + "/" + therapy + "\n총 요금 : " + guest.getReservation().getAmountPaid() + "원"
+				+ "\n체크인 : " + checkIn + "\n체크아웃 : " + checkOut);
 	}
 
 	/*
@@ -251,8 +250,7 @@ public class HotelManager {
 	 * 6-1. 오늘 체크아웃이면 서비스 변경 안되게 6-2. 전신 테라피는 취소하면 amountPaid 감소 
 	 * 7. 없으면 투숙객 없음
 	 * 
-	 * 작성자 : 장지훈
-	 * 수정 : 윤종석
+	 * 작성자 : 장지훈 수정 : 윤종석
 	 */
 	private void setService() {
 		System.out.println("부가서비스를 변경합니다.");
@@ -536,7 +534,7 @@ public class HotelManager {
 	// 지훈
 	// 방 가격 설정
 	private void setRoomPrice() {
-		int room;
+		String room;
 
 		do {
 			try {
@@ -545,10 +543,11 @@ public class HotelManager {
 						myHotel.getRoomInfos()[1].getRoomName(), myHotel.getRoomInfos()[2].getRoomName());
 				;
 
-				room = Integer.parseInt(sc.nextLine());
+				room = sc.nextLine();
 
-				if (room >= 1 && room <= 3) {
-					System.out.println(myHotel.getRoomInfos()[room - 1].getRoomName() + "룸을 선택하셨습니다.");
+				if (Integer.parseInt(room) >= 1 && Integer.parseInt(room) <= 3) {
+					System.out.println(
+							"[" + myHotel.getRoomInfos()[Integer.parseInt(room) - 1].getRoomName() + "룸을 선택하셨습니다.");
 					break;
 				}
 			} catch (Exception e) {
@@ -558,13 +557,19 @@ public class HotelManager {
 
 		exit: while (true) {
 			switch (room) {
-			case 1:
-			case 2:
-			case 3:
+			case "1":
+			case "2":
+			case "3":
 				System.out.println("변경할 가격을 입력해주세요");
-				myHotel.getRoomPrices()[room - 1] = Integer.parseInt(sc.nextLine()); // 오류 캐치
-				System.out.println("가격이 변경 되었습니다.");
-				break exit;
+				String price = sc.nextLine();
+				if (!price.matches("^[0-9]*$")) {
+					System.out.println("숫자만 입력해주세요.");
+				} else {
+					long money = Long.parseLong(price);
+					myHotel.getRoomPrices()[Integer.parseInt(room) - 1] = money; // 오류 캐치
+					System.out.println("가격이 변경 되었습니다.");
+					break exit;
+				}
 			default:
 				System.out.println("잘못 입력하였습니다.");
 			}
@@ -572,42 +577,44 @@ public class HotelManager {
 		}
 		System.out.println();
 	}
-
 	// 지훈
 	// 부가서비스 가격 설정
-	private void setServicePrice() {
-		int service;
-		String[] serviceName = { CustomString.breakfast, CustomString.therapy }; // 한글로 교체 (이런거는 CustomString) CustomString.BreakfastString
+
+		int service;	private void setServicePrice() {
+		String[] servicename = { CustomString.breakfast, CustomString.therapy }; // 한글로 교체 (이런거는 CustomString)
+		// 한글로 교체 (이런거는 CustomString) CustomString.BreakfastString
 
 		do {
 			try {
 				System.out.println("가격을 바꾸실 부가서비스를 선택해주세요.");
-				System.out.printf("1. %s 2. %s \n", serviceName[0], serviceName[1]);
+				System.out.printf("1. %s 2. %s \n", CustomString.breakfast, CustomString.therapy);
 				;
 
 				service = Integer.parseInt(sc.nextLine());
 
 				if (service >= 1 && service <= 2) {
-					System.out.println("[" + serviceName[service - 1] + "]" + "을 선택하셨습니다.");
+					System.out.println("[" + servicename[service - 1] + "]" + "을 선택하셨습니다.");
 					break;
 				}
-			} catch (NumberFormatException e) {
+			} catch (Exception e) {
 				System.out.println("올바른 값을 입력해주세요.");
 			}
 		} while (true);
 
-		while (true) {
+		exit: while (true) {
 			switch (service) {
 			case 1:
-				System.out.println("변경할 가격을 입렵해주세요");
-				myHotel.getServicePrices()[0] = Integer.parseInt(sc.nextLine());
-				System.out.println("가격이 변경 되었습니다.");
-				return;
 			case 2:
-				System.out.println("변경할 가격을 입렵해주세요");
-				myHotel.getServicePrices()[1] = Integer.parseInt(sc.nextLine());
-				System.out.println("가격이 변경 되었습니다.");
-				return;
+				System.out.println("변경할 가격을 입력해주세요");
+				String price = sc.nextLine();
+				if (!price.matches("^[0-9]*$")) {
+					System.out.println("숫자만 입력해주세요.");
+				} else {
+					long money = Long.parseLong(price);
+					myHotel.getServicePrices()[service - 1] = money;
+					System.out.println("가격이 변경 되었습니다.");
+					break exit;
+				}
 			default:
 				System.out.println("잘못 입력하였습니다.");
 				break;
