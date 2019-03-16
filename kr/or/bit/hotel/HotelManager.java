@@ -1,12 +1,6 @@
 package kr.or.bit.hotel;
 
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
@@ -324,14 +318,13 @@ public class HotelManager {
      * 체크까지는 됐고
      */
     private void setCheckInOut() {
-
         System.out.println("체크인·체크아웃 설정- id 입력: ");
         String id = sc.nextLine();
 
-        String roomnumber = myHotel.getMembers().get(id).getReservation().getRoom().getRoomNumber();
+        String roomNumber = myHotel.getMembers().get(id).getReservation().getRoom().getRoomNumber();
 
         System.out.println(myHotel.getMembers().get(id).getName() + "님의 예약 정보 입니다.");
-        System.out.println("현재 예약 된 방 : " + roomnumber + "호");
+        System.out.println("현재 예약 된 방 : " + roomNumber + "호");
         System.out.println("체크인 날짜 : " + myHotel.getMembers().get(id).getReservation().getDateCheckIn().getCheckDate());
         System.out.println("체크인 날짜 : " + myHotel.getMembers().get(id).getReservation().getDateCheckOut().getCheckDate());
 
@@ -435,7 +428,7 @@ public class HotelManager {
 
         Room room;
         System.out.println("예약할 방 번호를 입력해주세요");
-        String roomNumber = sc.nextLine();
+        roomNumber = sc.nextLine();
         char floor = roomNumber.charAt(0);
         char number = roomNumber.charAt(roomNumber.length() - 1);
         room = myHotel.getRooms().get(floor - 50).get(number - 49); // char '1' = 49
@@ -499,338 +492,333 @@ public class HotelManager {
 //        myHotel.getMembers().get(id).getReservation().setDateCheckIn(dateCheckInd);
 //        myHotel.getMembers().get(id).getReservation().setDateCheckOut(dateCheckOutd);
 
-    /* 투숙객의 체크인, 체크아웃을 변경할 수 있다. */
+		/* 투숙객의 체크인, 체크아웃을 변경할 수 있다. */
+	
+
+	// 지훈
+	// 기본가격 설정 : 방 가격 설정, 부가서비스 메뉴를 보여준다.
+	private void setPrice() {
+		String menu;
+
+		while (true) {
+			System.out.println("기본 가격 설정: 원하는 번호를 입력하세요.");
+			System.out.println("1. 방 가격 설정");
+			System.out.println("2. 부가서비스 가격 설정");
+
+			menu = sc.nextLine();
+
+			switch (menu) {
+			case "1":
+				setRoomPrice();
+				return;
+			case "2":
+				setServicePrice();
+				return;
+			default:
+				System.out.println("기본 가격 설정: 1,2 중에 선택해주세요");
+				break;
+			}
+		}
+	}
+
+	// 지훈
+	// 방 가격 설정
+	private void setRoomPrice() {
+		String room;
+
+		do {
+			try {
+				System.out.println("가격을 바꾸실 객실을 선택해주세요.");
+				System.out.printf("1. %s 2. %s 3. %s\n", myHotel.getRoomInfos()[0].getRoomName(),
+						myHotel.getRoomInfos()[1].getRoomName(), myHotel.getRoomInfos()[2].getRoomName());
+				room = sc.nextLine();
+
+				if (Integer.parseInt(room) >= 1 && Integer.parseInt(room) <= 3) {
+					System.out.println(
+							"[" + myHotel.getRoomInfos()[Integer.parseInt(room) - 1].getRoomName() + "룸을 선택하셨습니다.");
+					break;
+				}
+			} catch (Exception e) {
+				System.out.println("올바른 값을 입력해주세요.");
+			}
+		} while (true);
+
+		exit: while (true) {
+			switch (room) {
+			case "1":
+			case "2":
+			case "3":
+				System.out.println("변경할 가격을 입력해주세요");
+				String price = sc.nextLine();
+				if (!price.matches("^[0-9]*$")) {
+					System.out.println("숫자만 입력해주세요.");
+				} else {
+					long money = Long.parseLong(price);
+					myHotel.getRoomPrices()[Integer.parseInt(room) - 1] = money; // 오류 캐치
+					System.out.println("가격이 변경 되었습니다.");
+					break exit;
+				}
+			default:
+				System.out.println("잘못 입력하였습니다.");
+			}
+
+		}
+		System.out.println();
+	}
+	// 지훈
+	// 부가서비스 가격 설정
+
+	private void setServicePrice() {
+		int service;
+		String[] serviceNames = {CustomString.breakfast, CustomString.therapy}; // 한글로 교체 (이런거는 CustomString)
+		// 한글로 교체 (이런거는 CustomString) CustomString.BreakfastString
+
+		do {
+			try {
+				System.out.println("가격을 바꾸실 부가서비스를 선택해주세요.");
+				System.out.printf("1. %s 2. %s \n", CustomString.breakfast, CustomString.therapy);
+
+				service = Integer.parseInt(sc.nextLine());
+
+				if (service >= 1 && service <= 2) {
+					System.out.println("[" + serviceNames[service - 1] + "]" + "을 선택하셨습니다.");
+					break;
+				}
+			} catch (Exception e) {
+				System.out.println("올바른 값을 입력해주세요.");
+			}
+		} while (true);
+
+		exit:
+		while (true) {
+			switch (service) {
+				case 1:
+				case 2:
+					System.out.println("변경할 가격을 입력해주세요");
+					String price = sc.nextLine();
+					if (!price.matches("^[0-9]*$")) {
+						System.out.println("숫자만 입력해주세요.");
+					} else {
+						long money = Long.parseLong(price);
+						myHotel.getServicePrices()[service - 1] = money;
+						System.out.println("가격이 변경 되었습니다.");
+						break exit;
+					}
+				default:
+					System.out.println("잘못 입력하였습니다.");
+					break;
+			}
+		}
+	}
+
+	// 정보 보기 : 매출확인
+	private void getInfo() {
+		String menu;
+
+		while (true) {
+			System.out.println("정보 보기: 원하는 번호를 입력하세요.");
+			System.out.println("1. 매출 확인");
+			System.out.println("2. 회원 정보 확인");
+			System.out.println("3. 투숙 정보 확인");
+
+			menu = sc.nextLine();
+
+			switch (menu) {
+			case "1":
+				getSales();
+				return;
+			case "2":
+				getMemberInfo();
+				return;
+			case "3":
+				getRecord();
+				return;
+			default:
+				System.out.println("기본가격 설정: 1,2,3 중에 선택해주세요");
+				break;
+			}
+		}
+	}
+
+	// 매출 보기
+	private void getSales() {
+		System.out.println("현재 호텔 매출 - " + myHotel.getSales() + "원 입니다.");
+	}
+
+	// 작성 : 우세림
+	// 회원 정보 보기
+	// 수정 : 윤종석
+	private void getMemberInfo() {
+		if (myHotel.getMembers().size() == 0) {
+			System.out.println("가입된 회원이 없습니다.");
+			return;
+		}
+
+		for (String key : myHotel.getMembers().keySet()) {
+			System.out.println("이름 :" + myHotel.getMembers().get(key).getName() + " 생년월일 : "
+					+ myHotel.getMembers().get(key).getBirthday() + " 전화번호 : "
+					+ myHotel.getMembers().get(key).getPhoneNumber() + " VIP : "
+					+ myHotel.getMembers().get(key).isVipString() + " 호텔 이용 총 금액 : "
+					+ myHotel.getMembers().get(key).getRecords().getTotalPaid() + "원");
+		}
+	}
+
+	// 지훈, 세림
+	// 투숙 기록 보기 : 호텔예약전체 기록을 가져와서(어디서 가져오는진 모름) 출력한다.
+	/*
+	 * 날짜별로 체크인과 체크아웃이 저장이 된다 CheckIn20190315.info, CheckOut20190315.info 나중에 날짜를
+	 * 불러오면 그날 체크인한 사람과 체크아웃한 사람이 있고 이 사람이 어떻게 객실을 이용했는지 불러온다
+	 */
+	private void getRecord() {
+
+		System.out.println("체크인 체크아웃 기록을 확인할 날짜를 선택하세요.");
+		String date = sc.nextLine();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+		LocalDate dateToCheck = LocalDate.parse(date, formatter);
+
+		file = new File(CustomString.PATH_RECORD_DIRECTORY(dateToCheck));
+
+		if (!file.exists()) {
+			System.out.println("저장된 기록이 없습니다.");
+			return;
+		}
+
+		try {
+			file = new File(CustomString.PATH_RECORD(dateToCheck, "in"));
+			fis = new FileInputStream(file);
+			in = new ObjectInputStream(fis);
+
+			System.out.println("체크인");
+			
+			String data;
+			try {
+				while ((data = (String) in.readObject()) != null) {
+					System.out.println(data);
+				}
+			} catch (EOFException e) {
+				System.out.println();
+			}
+
+			in.close();
+			fis.close();
+
+			file = new File(CustomString.PATH_RECORD(dateToCheck, "out"));
+			fis = new FileInputStream(file);
+			in = new ObjectInputStream(fis);
+
+			System.out.println("체크아웃");
+
+			try {
+				while ((data = (String) in.readObject()) != null) {
+					System.out.println(data);
+				}
+			} catch (EOFException e) {
+				System.out.println();
+			}
 
 
-    // 지훈
-    // 기본가격 설정 : 방 가격 설정, 부가서비스 메뉴를 보여준다.
-    private void setPrice() {
-        String menu;
+		} catch (IOException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				in.close();
+				fis.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 
-        while (true) {
-            System.out.println("기본 가격 설정: 원하는 번호를 입력하세요.");
-            System.out.println("1. 방 가격 설정");
-            System.out.println("2. 부가서비스 가격 설정");
+	}
 
-            menu = sc.nextLine();
+	private void saveHotelCheckOut() {
 
-            switch (menu) {
-                case "1":
-                    setRoomPrice();
-                    return;
-                case "2":
-                    setServicePrice();
-                    return;
-                default:
-                    System.out.println("기본 가격 설정: 1,2 중에 선택해주세요");
-                    break;
-            }
-        }
-    }
+		List<String> guests = new ArrayList<String>();
 
-    // 지훈
-    // 방 가격 설정
-    private void setRoomPrice() {
-        int room;
+		for (int i = 0; i < myHotel.getRooms().size(); i++) {
+			for (int j = 0; j < myHotel.getRooms().get(i).size(); j++) {
+				for (int k = 0; k < myHotel.getRooms().get(i).get(j).getGuests().size(); k++) {
+					guests.add(myHotel.getRooms().get(i).get(j).getGuests().get(k));
+				}
+			}
+		}
 
-        do {
-            try {
-                System.out.println("가격을 바꾸실 객실을 선택해주세요.");
-                System.out.printf("1. %s 2. %s 3. %s\n", myHotel.getRoomInfos()[0].getRoomName(),
-                        myHotel.getRoomInfos()[1].getRoomName(), myHotel.getRoomInfos()[2].getRoomName());
+		file = new File(CustomString.PATH_RECORD_DIRECTORY(myHotel.getToday()));
+		if (!file.exists()) {
+			file.mkdirs();
+		}
+		file = new File(CustomString.PATH_RECORD(myHotel.getToday(), "out"));
 
-                room = Integer.parseInt(sc.nextLine());
+		try {
+			fos = new FileOutputStream(file);
+			out = new ObjectOutputStream(fos);
+			for (String guest : guests) {
+				Member member = myHotel.getMembers().get(guest);
+				if (member.getReservation() != null) {
+					if (member.getReservation().getDateCheckOut().getCheckDate().isEqual(myHotel.getToday())) {
+						myHotel.setSales(member.getReservation().getAmountPaid());
+						member.getRecords().addReservation(member.getReservation());
+						member.getReservation().getRoom().getGuests().remove(member.getId());
+						out.writeObject(member.getReservation().checkRecord(member));
+						member.setReservation(null);
+					}
+				}
+				if (member.getRecords().getTotalPaid() >= 10000000) {
+					member.setVip(true);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				out.close();
+				fos.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
-                if (room >= 1 && room <= 3) {
-                    System.out.println(myHotel.getRoomInfos()[room - 1].getRoomName() + "룸을 선택하셨습니다.");
-                    break;
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("올바른 값을 입력해주세요.");
-            }
-        } while (true);
+	private void saveHotelCheckIn() {
 
-        exit:
-        while (true) {
-            try {
-                switch (room) {
-                    case 1:
-                    case 2:
-                    case 3:
-                        System.out.println("변경할 가격을 입력해주세요");
-                        myHotel.getRoomPrices()[room - 1] = Integer.parseInt(sc.nextLine());
-                        System.out.println("가격이 변경 되었습니다.");
-                        break exit;
-                    default:
-                        System.out.println("잘못 입력하였습니다.");
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("올바른 값을 입력해주세요.");
-            }
-        }
-        System.out.println();
-    }
+		List<String> guests = new ArrayList<String>();
 
-    // 지훈
-    // 부가서비스 가격 설정
-    private void setServicePrice() {
-        int service;
-        String[] serviceName = {CustomString.breakfast, CustomString.therapy}; // 한글로 교체 (이런거는 CustomString) CustomString.BreakfastString
+		for (int i = 0; i < myHotel.getRooms().size(); i++) {
+			for (int j = 0; j < myHotel.getRooms().get(i).size(); j++) {
+				for (int k = 0; k < myHotel.getRooms().get(i).get(j).getGuests().size(); k++) {
+					guests.add(myHotel.getRooms().get(i).get(j).getGuests().get(k));
+				}
+			}
+		}
 
-        do {
-            try {
-                System.out.println("가격을 바꾸실 부가서비스를 선택해주세요.");
-                System.out.printf("1. %s 2. %s \n", serviceName[0], serviceName[1]);
+		file = new File(CustomString.PATH_RECORD_DIRECTORY(myHotel.getToday()));
+		if (!file.exists()) {
+			file.mkdirs();
+		}
+		file = new File(CustomString.PATH_RECORD(myHotel.getToday(), "in"));
 
-                service = Integer.parseInt(sc.nextLine());
-
-                if (service >= 1 && service <= 2) {
-                    System.out.println(serviceName[service - 1] + "을 선택하셨습니다.");
-                    break;
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("올바른 값을 입력해주세요.");
-            }
-        } while (true);
-
-        while (true) {
-            try {
-                switch (service) {
-                    case 1:
-                        System.out.println("변경할 가격을 입력해주세요");
-                        myHotel.getServicePrices()[0] = Integer.parseInt(sc.nextLine());
-                        System.out.println("가격이 변경 되었습니다.");
-                        return;
-                    case 2:
-                        System.out.println("변경할 가격을 입력해주세요");
-                        myHotel.getServicePrices()[1] = Integer.parseInt(sc.nextLine());
-                        System.out.println("가격이 변경 되었습니다.");
-                        return;
-                    default:
-                        System.out.println("잘못 입력하였습니다.");
-                        break;
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("올바른 값이 아닙니다.");
-            }
-        }
-    }
-
-    // 정보 보기 : 매출확인
-    private void getInfo() {
-        String menu;
-
-        while (true) {
-            System.out.println("정보 보기: 원하는 번호를 입력하세요.");
-            System.out.println("1. 매출 확인");
-            System.out.println("2. 회원 정보 확인");
-            System.out.println("3. 투숙 정보 확인");
-
-            menu = sc.nextLine();
-
-            switch (menu) {
-                case "1":
-                    getSales();
-                    return;
-                case "2":
-                    getMemberInfo();
-                    return;
-                case "3":
-                    getRecord();
-                    return;
-                default:
-                    System.out.println("기본가격 설정: 1,2,3 중에 선택해주세요");
-                    break;
-            }
-        }
-    }
-
-    // 매출 보기
-    private void getSales() {
-        System.out.println("현재 호텔 매출 - " + myHotel.getSales() + "원 입니다.");
-    }
-
-    // 작성 : 우세림
-    // 회원 정보 보기
-    // 수정 : 윤종석
-    private void getMemberInfo() {
-        if (myHotel.getMembers().size() == 0) {
-            System.out.println("가입된 회원이 없습니다.");
-            return;
-        }
-
-        for (String key : myHotel.getMembers().keySet()) {
-            System.out.println("이름 :" + myHotel.getMembers().get(key).getName() + " 생년월일 : "
-                    + myHotel.getMembers().get(key).getBirthday() + " 전화번호 : "
-                    + myHotel.getMembers().get(key).getPhoneNumber() + " VIP : "
-                    + myHotel.getMembers().get(key).isVipString() + " 호텔 이용 총 금액 : "
-                    + myHotel.getMembers().get(key).getRecords().getTotalPaid() + "원");
-        }
-    }
-
-    // 지훈, 세림
-    // 투숙 기록 보기 : 호텔예약전체 기록을 가져와서(어디서 가져오는진 모름) 출력한다.
-    /*
-     * 날짜별로 체크인과 체크아웃이 저장이 된다 CheckIn20190315.info, CheckOut20190315.info 나중에 날짜를
-     * 불러오면 그날 체크인한 사람과 체크아웃한 사람이 있고 이 사람이 어떻게 객실을 이용했는지 불러온다
-     */
-    private void getRecord() {
-        LocalDate dateToCheck;
-
-        while (true) {
-            System.out.println("체크인 체크아웃 기록을 확인할 날짜를 선택하세요.");
-            String date = sc.nextLine();
-            if (!date.matches(
-                    "^20(\\d{2})(((0([13578])|1([02]))(0[1-9]|[1-2][0-9]|3[0-1]))|((0([469])|11)(0[1-9]|[1-2][0-9]|30))|(02(0[1-9]|([12])[0-9]$)))")) {
-                System.out.println("체크인 날짜를 선택해주세요.");
-            } else {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-                dateToCheck = LocalDate.parse(date, formatter);
-                break;
-            }
-        }
-
-        file = new File(CustomString.PATH_RECORD_DIRECTORY(dateToCheck));
-
-        if (!file.exists()) {
-            System.out.println("저장된 기록이 없습니다.");
-            return;
-        }
-
-        try {
-            file = new File(CustomString.PATH_RECORD(dateToCheck, "in"));
-            fis = new FileInputStream(file);
-            in = new ObjectInputStream(fis);
-
-            System.out.println("체크인");
-
-            String data;
-            try {
-                while ((data = (String) in.readObject()) != null) {
-                    System.out.println(data);
-                }
-            } catch (EOFException e) {
-                System.out.println();
-            }
-
-            in.close();
-            fis.close();
-
-            file = new File(CustomString.PATH_RECORD(dateToCheck, "out"));
-            fis = new FileInputStream(file);
-            in = new ObjectInputStream(fis);
-
-            System.out.println("체크아웃");
-
-            try {
-                while ((data = (String) in.readObject()) != null) {
-                    System.out.println(data);
-                }
-            } catch (EOFException e) {
-                System.out.println();
-            }
-
-
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                in.close();
-                fis.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-    }
-
-    private void saveHotelCheckOut() {
-
-        List<String> guests = new ArrayList<String>();
-
-        for (int i = 0; i < myHotel.getRooms().size(); i++) {
-            for (int j = 0; j < myHotel.getRooms().get(i).size(); j++) {
-                for (int k = 0; k < myHotel.getRooms().get(i).get(j).getGuests().size(); k++) {
-                    guests.add(myHotel.getRooms().get(i).get(j).getGuests().get(k));
-                }
-            }
-        }
-
-        file = new File(CustomString.PATH_RECORD_DIRECTORY(myHotel.getToday()));
-        if (!file.exists()) {
-            file.mkdirs();
-        }
-        file = new File(CustomString.PATH_RECORD(myHotel.getToday(), "out"));
-
-        try {
-            fos = new FileOutputStream(file);
-            out = new ObjectOutputStream(fos);
-            for (String guest : guests) {
-                Member member = myHotel.getMembers().get(guest);
-                if (member.getReservation() != null) {
-                    if (member.getReservation().getDateCheckOut().getCheckDate().isEqual(myHotel.getToday())) {
-                        myHotel.setSales(member.getReservation().getAmountPaid());
-                        member.getRecords().addReservation(member.getReservation());
-                        member.getReservation().getRoom().getGuests().remove(member.getId());
-                        out.writeObject(member.getReservation().checkRecord(member));
-                        member.setReservation(null);
-                    }
-                }
-                if (member.getRecords().getTotalPaid() >= 10000000) {
-                    member.setVip(true);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                out.close();
-                fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void saveHotelCheckIn() {
-
-        List<String> guests = new ArrayList<String>();
-
-        for (int i = 0; i < myHotel.getRooms().size(); i++) {
-            for (int j = 0; j < myHotel.getRooms().get(i).size(); j++) {
-                for (int k = 0; k < myHotel.getRooms().get(i).get(j).getGuests().size(); k++) {
-                    guests.add(myHotel.getRooms().get(i).get(j).getGuests().get(k));
-                }
-            }
-        }
-
-        file = new File(CustomString.PATH_RECORD_DIRECTORY(myHotel.getToday()));
-        if (!file.exists()) {
-            file.mkdirs();
-        }
-        file = new File(CustomString.PATH_RECORD(myHotel.getToday(), "in"));
-
-        try {
-            fos = new FileOutputStream(file);
-            out = new ObjectOutputStream(fos);
-            for (String guest : guests) {
-                Member member = myHotel.getMembers().get(guest);
-                if (member.getReservation() != null) {
-                    if (member.getReservation().getDateCheckIn().getCheckDate().isEqual(myHotel.getToday())) {
-                        member.getRecords().addReservation(member.getReservation());
-                        out.writeObject(member.getReservation().checkRecord(member));
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                out.close();
-                fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+		try {
+			fos = new FileOutputStream(file);
+			out = new ObjectOutputStream(fos);
+			for (String guest : guests) {
+				Member member = myHotel.getMembers().get(guest);
+				if (member.getReservation() != null) {
+					if (member.getReservation().getDateCheckIn().getCheckDate().isEqual(myHotel.getToday())) {
+						member.getRecords().addReservation(member.getReservation());
+						out.writeObject(member.getReservation().checkRecord(member));
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				out.close();
+				fos.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }
