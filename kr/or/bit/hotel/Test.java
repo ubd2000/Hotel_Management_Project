@@ -32,8 +32,8 @@ public class Test {
 //		System.out.println(p.getDays());
 //		hb.getRoomInfo();
 		System.out.println("".length());
-//		HotelManager hm = new HotelManager();
-//		hm.run();
+		HotelManager hm = new HotelManager();
+		hm.run();
 		HotelBooking hb = new HotelBooking();
 		hb.run();
 

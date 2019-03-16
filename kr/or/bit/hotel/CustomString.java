@@ -9,6 +9,10 @@ public class CustomString {
 	public static final String PATH_HOTEL = "C:\\Temp\\Hotel\\hotel.info";
 	public static final String breakfast = "조식";
 	public static final String therapy = "전신테라피";
+	public static final String regex(Hotel hotel) {
+		return String.format("[2-%s]0[1-%s]", hotel.getRooms().size() + 1, hotel.getRooms().get(0).size());
+	}
+
 	public static String PATH_RECORD_DIRECTORY(LocalDate date) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 		return "C:\\Temp\\Hotel\\" + date.format(formatter);

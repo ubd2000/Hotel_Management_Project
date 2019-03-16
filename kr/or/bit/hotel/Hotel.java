@@ -26,7 +26,7 @@ public abstract class Hotel implements Serializable {
 		today = LocalDate.now();
 		breakfast = Number.breakfast;
 		therapy = Number.therapy;
-		servicePrices = servicePrices = new long[] { Number.breakfast, Number.therapy };
+		servicePrices = new long[] { Number.breakfast, Number.therapy };
 		setHotelRoomPrices();
 		setHotelRooms();
 		setHotelRoomNumber();

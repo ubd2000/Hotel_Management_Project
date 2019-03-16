@@ -3,9 +3,9 @@ package kr.or.bit.hotel;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
@@ -139,7 +139,6 @@ public class HotelBooking {
      *  오류 수정사항 : 입력값이 숫자가 아니면 예외처리가 뜸 --- 해결완료
      *
      *  작성자 : 정진호
-     *
      */
     private void setDate(Reservation r) { // 날짜 선택
         LocalDate today = LocalDate.now();
@@ -239,27 +238,36 @@ public class HotelBooking {
 
         Room room;
         while (true) {
+            int floor;
+            int number;
             System.out.println("예약할 방 번호를 입력해주세요");
             String roomNumber = sc.nextLine();
-            if (!roomNumber.matches("^\\d{3}$")) {
-                System.out.println("잘못 선택하셨습니다.");
+            if (!roomNumber.matches(CustomString.regex(hotel))) {
+                System.out.println("올바른 형식으로 입력하세요.");
+                continue;
             } else {
-                int floor = roomNumber.charAt(0) - 50;
-                int number = roomNumber.charAt(roomNumber.length() - 1) - 49; // char '1' = 49
+                floor = Integer.parseInt(roomNumber.substring(0, 1)) - 2;
+                number = Integer.parseInt(roomNumber.substring(2)) - 1;
+            }
+            if (number > hotel.getRooms().get(floor).size() - 1) {
+                System.out.println("없는 방입니다.");
+                continue;
+            } else {
                 room = hotel.getRooms().get(floor).get(number);
+            }
 
-                if (!roomToReserve.contains(room)) {
-                    System.out.println("예약하실 호실번호를 확인해주세요.");
-                } else {
-                    break;
-                }
+            if (roomToReserve.contains(room)) {
+                break;
+            } else {
+                System.out.println("예약할 수 없는 방입니다.");
+                continue;
             }
         }
 
         room.getGuests().add(memberLoggedIn.getId());
         r.setAmountPaid(r.getAmountPaid() + (hotel.getRoomPrices()[0] * diff.getDays()));
         System.out.println(
-                "숙박일수 " + diff.getDays() + "박 " + diff.getDays() + 1 + "일\n숙박 요금 " + CustomString.putComma(r.getAmountPaid()) + "원 입니다.");
+                "숙박일 수 " + diff.getDays() + "박 " + diff.getDays() + 1 + "일\n숙박 요금 " + CustomString.putComma(r.getAmountPaid()) + "원입니다.");
         r.setRoom(room);
     }
 
@@ -309,7 +317,7 @@ public class HotelBooking {
      *
      * 작성자 : 정진호
      */
-    private void setService(Reservation r) { // 遺媛쒕퉬좏깮
+    private void setService(Reservation r) { // 부가 서비스 선택
         Period diff = Period.between(r.getDateCheckIn().getCheckDate(), r.getDateCheckOut().getCheckDate());
         long breakfast = diff.getDays() * hotel.getBreakfast() * r.getNumberPeople();
         long therapy = hotel.getTherapy() * r.getNumberPeople();
@@ -323,21 +331,21 @@ public class HotelBooking {
                 case "1":
                     System.out.println("조식을 선택하셨습니다.");
                     r.setBreakfast(true);
-                    System.out.println("추가요금 : " + CustomString.putComma(breakfast) + "원 입니다");
+                    System.out.println("추가 요금 : " + CustomString.putComma(breakfast) + "원입니다");
                     r.setAmountPaid(r.getAmountPaid() + breakfast);
                     return;
                 case "2":
                     System.out.println("전신 테라피를 선택하셨습니다.");
                     r.setTherapy(true);
-                    System.out.println("추가요금 : " + CustomString.putComma(therapy) + "원 입니다");
+                    System.out.println("추가요금 : " + CustomString.putComma(therapy) + "원입니다");
                     r.setAmountPaid(r.getAmountPaid() + therapy);
                     return;
                 case "3":
                     System.out.println("조식과 전신 테라피를 선택하셨습니다.");
                     r.setBreakfast(true);
                     r.setTherapy(true);
-                    System.out.println("조식 추가요금 : [" + CustomString.putComma(breakfast) + "]원 입니다.");
-                    System.out.println("테라피 추가요금 : [" + CustomString.putComma(therapy) + "]원 입니다.");
+                    System.out.println("조식 추가요금 : " + CustomString.putComma(breakfast) + "원입니다.");
+                    System.out.println("테라피 추가요금 : " + CustomString.putComma(therapy) + "원입니다.");
                     r.setAmountPaid(r.getAmountPaid() + breakfast);
                     r.setAmountPaid(r.getAmountPaid() + therapy);
                     return;
@@ -349,6 +357,7 @@ public class HotelBooking {
             }
         }
     }
+
     /*
      * 변경사항
      *
@@ -356,7 +365,6 @@ public class HotelBooking {
      *
      * 작성자 : 정진호
      */
-
     private void getReservation() { // 예약 확인
         if (memberLoggedIn.getReservation() == null) {
             System.out.println("예약 기록이 없습니다.");
@@ -382,7 +390,7 @@ public class HotelBooking {
                 System.out.println("예약을 취소합니다.");
                 cancelReservation();
             case "3":
-                System.out.println("메인화면으로 돌아갑니다.");
+                System.out.println("메인 화면으로 돌아갑니다.");
                 break;
             default:
                 System.out.println("잘못 입력하였습니다.");
@@ -429,7 +437,6 @@ public class HotelBooking {
      *
      * 작성자 : 정진호
      */
-
     private void signUp() {
         String id;
         String name;
@@ -444,19 +451,19 @@ public class HotelBooking {
             if (name.length() > 10) {
                 System.out.println("이름이 너무 깁니다.");
             } else if (!name.matches("^[가-힣]*$")) {
-                System.out.println("한글만 입력할수 있습니다. ( 자음 불가 )");
+                System.out.println("한글만 입력할 수 있습니다. ( 자음 불가 )");
             } else {
                 break;
             }
         }
 
         while (true) {
-            System.out.println("아이디를 입력해주세요. (4자 이상  10자 이내)");
+            System.out.println("아이디를 입력해주세요. (4자 이상 10자 이내)");
             id = sc.nextLine();
             if (id.length() > 10 || id.length() < 4) {
                 System.out.println("ID의 길이가 올바르지 않습니다.");
             } else if (!id.matches("\\p{Alnum}+")) {
-                System.out.println("영어,숫자만 입력해주세요.");
+                System.out.println("알파벳, 숫자만 입력해주세요.");
             } else if (hotel.getMembers().containsKey(id)) {
                 System.out.println("동일한 ID가 존재합니다.");
                 System.out.println("다른 아이디를 입력해주세요.");
@@ -466,19 +473,19 @@ public class HotelBooking {
         }
 
         while (true) {
-            System.out.println("비밀번호를 입력해주세요. (6자이상 10자 이내)");
+            System.out.println("비밀번호를 입력해주세요. (6자 이상 10자 이내)");
             password = sc.nextLine();
             if (password.length() > 10 || password.length() < 6) {
-                System.out.println("PWD의 길이가 올바르지 않습니다.");
+                System.out.println("비밀번호의 길이가 올바르지 않습니다.");
             } else if (!password.matches("\\p{Alnum}+")) {
-                System.out.println("영어,숫자만 입력해주세요.");
+                System.out.println("알파벳, 숫자만 입력해주세요.");
             } else {
                 break;
             }
         }
 
         while (true) {
-            System.out.println("핸드폰번호를 입력해주세요. ( - 생략)");
+            System.out.println("휴대전화 번호를 입력해주세요. ( - 생략 )");
             System.out.println("Ex) 01012345678");
             phoneNumber = sc.nextLine();
             if (phoneNumber.length() > 12 || phoneNumber.length() < 11) {
@@ -567,7 +574,7 @@ public class HotelBooking {
             switch (number) {
                 case "1":
                     System.out.println("비밀번호 재설정입니다.");
-                    System.out.println("바꾸실 비밀번호를 입력해주세요. (6자이상 10자 이내)");
+                    System.out.println("새로운 비밀번호를 입력해주세요. (6자이상 10자 이내)");
                     password = sc.nextLine();
                     System.out.println("다시 한번 입력해주세요.");
                     password2 = sc.nextLine();
@@ -575,9 +582,9 @@ public class HotelBooking {
                         memberLoggedIn.setPassword(password2);
                         System.out.println("비밀번호가 바뀌었습니다.");
                     } else if (password.length() > 10 || password.length() < 6) {
-                        System.out.println("PWD의 길이가 올바르지 않습니다.");
+                        System.out.println("비밀번호의 길이가 올바르지 않습니다.");
                     } else if (!password.matches("\\p{Alnum}+")) {
-                        System.out.println("영어,숫자만 입력해주세요.");
+                        System.out.println("알파벳, 숫자만 입력해주세요.");
                     } else {
                         System.out.println("비밀번호가 일치하지 않습니다.");
                         System.out.println("다시 시도 해 주세요.");
@@ -586,15 +593,15 @@ public class HotelBooking {
                     break;
 
                 case "2":
-                    System.out.println("전화번호 재 설정입니다.");
-                    System.out.println("바꾸실 전화번호를 입력해주세요.");
+                    System.out.println("전화번호 재설정입니다.");
+                    System.out.println("새로운 전화번호를 입력해주세요.");
                     phone = sc.nextLine();
                     if (phone.matches("^010[0-9]{8}")) {
                         memberLoggedIn.setPhoneNumber(phone);
-                        System.out.println("바꾸신 핸드폰 번호입니다.");
+                        System.out.println("새로운 휴대전화 번호입니다.");
                         System.out.println("바뀐 전화번호 : " + phone);
                     } else {
-                        System.out.println("잘못된 핸드폰번호입니다.");
+                        System.out.println("잘못된 휴대전화 번호입니다.");
                         System.out.println("Ex)01012341234 ( - 제외 )");
                     }
                     saveHotel();
@@ -629,7 +636,7 @@ public class HotelBooking {
         String select = sc.nextLine();
         switch (select) {
             case "1":
-                System.out.println("1. 회원 탈퇴 하였습니다.");
+                System.out.println("회원 탈퇴 처리되었습니다.");
                 memberLoggedIn.getReservation().getRoom().getGuests().remove(memberLoggedIn.getId());
                 memberLoggedIn.setReservation(null);
                 hotel.getMembers().remove(memberLoggedIn.getId(), memberLoggedIn);
@@ -637,7 +644,7 @@ public class HotelBooking {
                 saveHotel();
                 break;
             case "2":
-                System.out.println("취소 하였습니다.");
+                System.out.println("취소하셨습니다.");
                 break;
             default:
                 System.out.println("잘못된 메뉴 번호입니다.");
@@ -681,7 +688,7 @@ public class HotelBooking {
             String select = sc.nextLine();
             switch (select) {
                 case "1":
-                    System.out.println("현재 객실 정보현황 입니다.");
+                    System.out.println("현재 객실 정보 현황 입니다.");
                     getRoomInfo();
                     break;
                 case "2":
