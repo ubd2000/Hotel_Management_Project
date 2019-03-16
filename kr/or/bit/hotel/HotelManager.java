@@ -3,7 +3,6 @@ package kr.or.bit.hotel;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -12,7 +11,6 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -206,7 +204,7 @@ public class HotelManager {
         LocalDate checkOut = null;
 
         System.out.println("투숙객 정보를 확인합니다.");
-        System.out.println("원하는 객실을 입력하세요. [ex: 201~206, 301~306, 401~403, 501~502]: ");
+        System.out.println("원하는 객실 번호를 입력하세요.");
         String roomNumber = sc.nextLine();
         char floor = roomNumber.charAt(0);
         char number = roomNumber.charAt(roomNumber.length() - 1);
@@ -234,7 +232,7 @@ public class HotelManager {
                 : CustomString.breakfast + " X";
         therapy = guest.getReservation().isTherapy() ? CustomString.therapy + " O" : CustomString.therapy + " X";
 
-        System.out.println("이름 : " + guest.getName() + "\n인원수 : " + guest.getReservation().getNumberPeople()
+        System.out.println("이름 : " + guest.getName() + "\n인원 수 : " + guest.getReservation().getNumberPeople()
                 + "\n부가서비스 : " + breakfast + "/" + therapy + "\n총 요금 : "
                 + CustomString.putComma(guest.getReservation().getAmountPaid()) + "원" + "\n체크인 : " + checkIn
                 + "\n체크아웃 : " + checkOut);
@@ -256,7 +254,7 @@ public class HotelManager {
      */
     private void setService() {
         System.out.println("부가서비스를 변경합니다.");
-        System.out.println("원하는 객실을 입력하세요. [ex: 201~206, 301~306, 401~403, 501~502]: ");
+        System.out.println("원하는 객실 번호를 입력하세요.");
         String roomNumber = sc.nextLine();
 
         char floor = roomNumber.charAt(0);
@@ -327,7 +325,7 @@ public class HotelManager {
      */
     private void setCheckInOut() {
 
-        System.out.println("체크인체크아웃 설정- id 입력: ");
+        System.out.println("체크인·체크아웃 설정- id 입력: ");
         String id = sc.nextLine();
 
         String roomnumber = myHotel.getMembers().get(id).getReservation().getRoom().getRoomNumber();
@@ -347,7 +345,6 @@ public class HotelManager {
         HotelDate dateCheckIn;
         HotelDate dateCheckOut;
         while (true) {
-            // TODO : 정규표현식으로 포맷 제한
             System.out.println("체크인 날짜를 입력해주세요. (20190314와 같이 입력해주세요.)");
             String checkIn = sc.nextLine();
             if (!checkIn.matches(
@@ -364,7 +361,6 @@ public class HotelManager {
         }
 
         while (true) {
-            // TODO : 정규표현식으로 포맷 제한
             System.out.println("체크아웃 날짜를 입력해주세요. (20190314와 같이 입력해주세요.)");
             String checkOut = sc.nextLine();
             if (!checkOut.matches(
@@ -447,7 +443,7 @@ public class HotelManager {
         room.getGuests().add(id);
         r.setAmountPaid(r.getAmountPaid() + (myHotel.getRoomPrices()[0] * diff.getDays()));
         System.out.println(
-                "숙박일수 [" + diff.getDays() + "]\n숙박 요금 [" + CustomString.putComma(r.getAmountPaid()) + "]원 입니다.");
+                "숙박일수 " + diff.getDays() + "박 " + diff.getDays() + 1 + "일\n숙박 요금 " + CustomString.putComma(r.getAmountPaid()) + "원 입니다.");
         r.setRoom(room);
     }
 
@@ -512,7 +508,7 @@ public class HotelManager {
         String menu;
 
         while (true) {
-            System.out.println("기본가격 설정: 원하는 번호를 입력하세요.");
+            System.out.println("기본 가격 설정: 원하는 번호를 입력하세요.");
             System.out.println("1. 방 가격 설정");
             System.out.println("2. 부가서비스 가격 설정");
 
@@ -526,7 +522,7 @@ public class HotelManager {
                     setServicePrice();
                     return;
                 default:
-                    System.out.println("기본가격 설정: 1,2 중에 선택해주세요");
+                    System.out.println("기본 가격 설정: 1,2 중에 선택해주세요");
                     break;
             }
         }
@@ -589,7 +585,7 @@ public class HotelManager {
                 service = Integer.parseInt(sc.nextLine());
 
                 if (service >= 1 && service <= 2) {
-                    System.out.println("[" + serviceName[service - 1] + "]" + "을 선택하셨습니다.");
+                    System.out.println(serviceName[service - 1] + "을 선택하셨습니다.");
                     break;
                 }
             } catch (NumberFormatException e) {
@@ -736,14 +732,12 @@ public class HotelManager {
 
 
         } catch (IOException | ClassNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
             try {
                 in.close();
                 fis.close();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }

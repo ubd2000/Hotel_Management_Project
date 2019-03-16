@@ -14,12 +14,12 @@ public class Reservation implements Serializable {
 	private long amountPaid;
 
 	public String checkReservation() {
-		return "###예약확인### \n방 이름=[" + room.getRoomName() + "]룸," + " " + room.getRoomNumber() + "호" + "\n예약 인원=["
-				+ numberPeople + "], \n체크인 날짜=[" + dateCheckIn.getCheckDate()
+		return "###예약확인### \n방 이름=" + room.getRoomName() + " 룸," + " " + room.getRoomNumber() + "호" + "\n예약 인원 : "
+				+ numberPeople + "명, \n체크인 날짜 : " + dateCheckIn.getCheckDate()
 
-				+ "], \n체크아웃날짜=[" + getDateCheckOut().getCheckDate() + "], \n조식=[" + getBreakfastString()
-				+ "], \n전신 테라피=[" + getTherapyString() + "], \n총 요금 =[" + CustomString.putComma(amountPaid)
-				+ "]원\n----------------------";
+				+ "\n체크아웃 날짜 : " + getDateCheckOut().getCheckDate() + "\n조식 : " + getBreakfastString()
+				+ "\n전신 테라피 : " + getTherapyString() + "\n총 요금 : " + CustomString.putComma(amountPaid)
+				+ "원\n----------------------";
 	}
 
 	public String checkRecord(Member member) {
