@@ -298,17 +298,15 @@ public class HotelBooking {
 
         room.getGuests().add(memberLoggedIn.getId());
         r.setRoom(room);
-        
+
         for (int k = 0; k < hotel.getRoomInfos().length; k++) {
-        	
-            if(room.getRoomName().equals(hotel.getRoomInfos()[k].getRoomName())) {
-            	
+            if (room.getRoomName().equals(hotel.getRoomInfos()[k].getRoomName())) {
                 r.setAmountPaid(r.getAmountPaid() + (hotel.getRoomPrices()[k] * diff.getDays()));
             }
-		}        
+        }
 
         System.out.println(
-                "숙박일 수 " + diff.getDays() + "박 " + ((int)diff.getDays() + 1) + "일\n숙박 요금 " + CustomString.putComma(r.getAmountPaid()) + "원입니다.");
+                "숙박일 수 " + diff.getDays() + "박 " + (diff.getDays() + 1) + "일\n숙박 요금 " + CustomString.putComma(r.getAmountPaid()) + "원입니다.");
         
     }
 
@@ -329,7 +327,7 @@ public class HotelBooking {
         while (true) {
             System.out.println("숙박할 인원을 입력해주세요.");
             System.out.printf("선택하신 방의 기본 인원은 %d명, 최대 인원은 %d명입니다.\r\n", defaultNumberPeople, maxNumberPeople);
-            System.out.println("인원 추가 시" + CustomString.putComma(Number.priceForAdditionalPerson) + "원이 추가됩니다.");
+            System.out.println("인원 추가 시 " + CustomString.putComma(Number.priceForAdditionalPerson) + "원이 추가됩니다.");
             numberPeople = sc.nextLine();
             if (!numberPeople.matches("^\\d$")) {
                 System.out.println("입력값을 확인해주세요.");
@@ -370,29 +368,29 @@ public class HotelBooking {
                 CustomString.THERAPY + "는 " + CustomString.putComma(hotel.getServicePrices()[1]) + "원입니다.");
 
         while (true) {
-            System.out.println("1. " + CustomString.BREAKFAST + "2. " + CustomString.THERAPY + " 3. 둘 다 4. 선택 안 함");
+            System.out.println("1. " + CustomString.BREAKFAST + " 2. " + CustomString.THERAPY + " 3. 둘 다 4. 선택 안 함");
             String service = sc.nextLine();
             switch (service) {
                 case "1":
                     System.out.println(CustomString.BREAKFAST + "을 선택하셨습니다.");
                     r.setBreakfast(true);
-                    System.out.println("추가 요금 : " + CustomString.putComma(hotel.getServicePrices()[0]) + "원입니다");
-                    r.setAmountPaid(r.getAmountPaid() + hotel.getServicePrices()[0]);
+                    System.out.println("추가 요금 : " + CustomString.putComma(breakfast) + "원입니다");
+                    r.setAmountPaid(r.getAmountPaid() + breakfast);
                     return;
                 case "2":
                     System.out.println(CustomString.THERAPY + "를 선택하셨습니다.");
                     r.setTherapy(true);
-                    System.out.println("추가요금 : " + CustomString.putComma(hotel.getServicePrices()[1]) + "원입니다");
-                    r.setAmountPaid(r.getAmountPaid() + hotel.getServicePrices()[1]);
+                    System.out.println("추가요금 : " + CustomString.putComma(therapy) + "원입니다");
+                    r.setAmountPaid(r.getAmountPaid() + therapy);
                     return;
                 case "3":
                     System.out.println(CustomString.BREAKFAST + "과 " + CustomString.THERAPY + "를 선택하셨습니다.");
                     r.setBreakfast(true);
                     r.setTherapy(true);
-                    System.out.println(CustomString.BREAKFAST + " 추가요금 : " + CustomString.putComma(hotel.getServicePrices()[0]) + "원입니다.");
-                    System.out.println(CustomString.THERAPY + " 추가요금 : " + CustomString.putComma(hotel.getServicePrices()[1]) + "원입니다.");
-                    r.setAmountPaid(r.getAmountPaid() + hotel.getServicePrices()[0]);
-                    r.setAmountPaid(r.getAmountPaid() + hotel.getServicePrices()[1]);
+                    System.out.println(CustomString.BREAKFAST + " 추가요금 : " + CustomString.putComma(breakfast) + "원입니다.");
+                    System.out.println(CustomString.THERAPY + " 추가요금 : " + CustomString.putComma(therapy) + "원입니다.");
+                    r.setAmountPaid(r.getAmountPaid() + breakfast);
+                    r.setAmountPaid(r.getAmountPaid() + therapy);
                     return;
                 case "4":
                     System.out.println("서비스를 선택하지 않으셨습니다.");
