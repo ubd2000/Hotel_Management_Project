@@ -388,14 +388,15 @@ public class HotelManager {
 
         System.out.println("예약을 변경합니다.");
 
-        Reservation reservationBefore = myHotel.getMembers().get(id).getReservation();
 
+        Reservation reservationBefore = myHotel.getMembers().get(id).getReservation();
         Period diffTemp = Period.between(reservationBefore.getDateCheckIn().getCheckDate(), reservationBefore.getDateCheckOut().getCheckDate());
+        long breakfastBefore = diffTemp.getDays() * myHotel.getBreakfast() * reservationBefore.getNumberPeople();
         for (int k = 0; k < myHotel.getRoomInfos().length; k++) {
         	
             if(reservationBefore.getRoom().getRoomName().equals(myHotel.getRoomInfos()[k].getRoomName())) {
             	
-            	long amountpaidchang = reservationBefore.getAmountPaid() - (myHotel.getRoomPrices()[k] * diffTemp.getDays());
+            	long amountpaidchang = reservationBefore.getAmountPaid() - (myHotel.getRoomPrices()[k] * diffTemp.getDays() - breakfastBefore);
             	System.out.println(amountpaidchang);
             	
             	reservationBefore.setAmountPaid(amountpaidchang);
@@ -525,12 +526,12 @@ public class HotelManager {
         myHotel.getMembers().get(id).getReservation().getRoom().getGuests().remove(id);
         reservationBefore.setRoom(null);
         reservationAfter.setRoom(room);
-        
+        long breakfastAfter = diff.getDays() * myHotel.getBreakfast() * reservationAfter.getNumberPeople();
         for (int k = 0; k < myHotel.getRoomInfos().length; k++) {
         	
             if(reservationAfter.getRoom().getRoomName().equals(myHotel.getRoomInfos()[k].getRoomName())) {
             	
-            	reservationAfter.setAmountPaid(reservationAfter.getAmountPaid() + (myHotel.getRoomPrices()[k] * diffTemp.getDays()));
+            	reservationAfter.setAmountPaid(reservationAfter.getAmountPaid() + (myHotel.getRoomPrices()[k] * diffTemp.getDays()) + breakfastAfter);
             }
 		}
         
