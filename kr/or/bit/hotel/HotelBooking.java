@@ -96,6 +96,12 @@ public class HotelBooking {
             }
         }
     }
+    
+    /* 
+     * 객실 정보 보기
+     * 
+     * 작성자 : 권태환
+     */
 
     private void getRoomInfo() { // 객실 정보 보기
         for (int i = 0; i < hotel.getRoomInfos().length; i++) {
@@ -113,6 +119,17 @@ public class HotelBooking {
                     + hotel.getRoomInfos()[i].getNumberBed() + "개  " + "  [주방] : " + kitchen);
         }
     }
+    
+    /* 
+     * 예약 변경
+     * 
+     * 예약변경 시 초기에 기존의 예약을 null값으로 변경
+     * 예약정보가 null이 아니면 변경이 불가능
+     * 
+     * 기존의 예약방식을 다시가져와서 예약
+     * 
+     * 작성자 : 윤종석
+     */
 
     private void reserveRoom() {
         if (memberLoggedIn.getReservation() != null) {
