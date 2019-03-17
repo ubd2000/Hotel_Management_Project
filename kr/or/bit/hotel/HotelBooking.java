@@ -114,6 +114,18 @@ public class HotelBooking {
         }
     }
 
+    /*
+     * 객실 예약 함수
+     *
+     * 객실 예약의 단계를 나눠서 별도의 함수로 작성
+     *
+     * 함수의 정보를 저장하기 위해 Reservation 변수를 전달하는 방식
+     *
+     * 과정이 완료되면 현재 로그인한 회원이 예약 정보를 받음
+     *
+     * 작성자 : 윤종석
+     */
+
     private void reserveRoom() {
         if (memberLoggedIn.getReservation() != null) {
             System.out.println("예약 추가·변경이 불가능합니다. 관리자에게 문의하세요.");
@@ -133,12 +145,19 @@ public class HotelBooking {
     }
 
     /*
-     *  변경사항
-     *  다른사람이 체크아웃하는 날에 체크인 예약할수있게 하기
+     * 날짜 선택 함수
      *
-     *  오류 수정사항 : 입력값이 숫자가 아니면 예외처리가 뜸 --- 해결완료
+     * 체크인, 체크아웃할 날짜를 선택
      *
-     *  작성자 : 정진호
+     * 오늘보다 이전 날짜, 체크아웃이 체크인보다 예전이거나 같은 날짜인 경우 등 불가능한 경우일 경우 재입력 요청
+     *
+     * 설정 완료 후 예약 정보에 날짜 삽입
+     *
+     * 작성자 : 윤종석
+     *
+     * 오류 수정사항 : 입력값이 숫자가 아니면 예외처리가 뜸 --- 해결완료
+     *
+     * 수정자 : 정진호
      */
     private void setDate(Reservation r) { // 날짜 선택
         LocalDate today = LocalDate.now();
@@ -186,6 +205,19 @@ public class HotelBooking {
 
     }
 
+    /*
+     * 객실 선택 함수
+     *
+     * 예약할 객실 선택하는 기능
+     *
+     * 다른 객실의 예약 목록을 불러와 선택한 날짜에서 가능한 객실만 불러옴
+     *
+     * 작성자 : 윤종석
+     *
+     * 수정 : 객실 번호 선택 시 정규표현식 사용
+     *
+     * 수정자 : 정진호
+     */
     public void setRoom(Reservation r) {
         Period diff = Period.between(r.getDateCheckIn().getCheckDate(), r.getDateCheckOut().getCheckDate());
         System.out.println("예약 가능 객실 번호");
@@ -272,6 +304,9 @@ public class HotelBooking {
     }
 
     /*
+     * 숙박 인원 선택
+     *
+     *
      * 변경사항 숙박일수 만큼 추가 인원비용 추가
      *
      * 작성자 : 정진호
@@ -285,7 +320,7 @@ public class HotelBooking {
         while (true) {
             System.out.println("숙박할 인원을 입력해주세요.");
             System.out.printf("선택하신 방의 기본 인원은 %d명, 최대 인원은 %d명입니다.\r\n", defaultNumberPeople, maxNumberPeople);
-            System.out.println("인원 추가 시 50,000원이 추가됩니다.");
+            System.out.println("인원 추가 시" + CustomString.putComma(Number.priceForAdditionalPerson) + "원이 추가됩니다.");
             numberPeople = sc.nextLine();
             if (!numberPeople.matches("^\\d$")) {
                 System.out.println("입력값을 확인해주세요.");
@@ -322,32 +357,33 @@ public class HotelBooking {
         long breakfast = diff.getDays() * hotel.getBreakfast() * r.getNumberPeople();
         long therapy = hotel.getTherapy() * r.getNumberPeople();
         System.out.println("부가 서비스를 선택해주세요.");
-        System.out.println("조식은 일 50,000원, 전신 테라피는 300,000원입니다.");
+        System.out.println(CustomString.BREAKFAST + "은 일" + CustomString.putComma(hotel.getServicePrices()[0]) + "원, " +
+                CustomString.THERAPY + "는 " + CustomString.putComma(hotel.getServicePrices()[1]) + "원입니다.");
 
         while (true) {
-            System.out.println("1. 조식 2. 전신 테라피 3. 둘 다 4. 선택 안 함");
+            System.out.println("1. " + CustomString.BREAKFAST + "2. " + CustomString.THERAPY + " 3. 둘 다 4. 선택 안 함");
             String service = sc.nextLine();
             switch (service) {
                 case "1":
-                    System.out.println("조식을 선택하셨습니다.");
+                    System.out.println(CustomString.BREAKFAST + "을 선택하셨습니다.");
                     r.setBreakfast(true);
-                    System.out.println("추가 요금 : " + CustomString.putComma(breakfast) + "원입니다");
-                    r.setAmountPaid(r.getAmountPaid() + breakfast);
+                    System.out.println("추가 요금 : " + CustomString.putComma(hotel.getServicePrices()[0]) + "원입니다");
+                    r.setAmountPaid(r.getAmountPaid() + hotel.getServicePrices()[0]);
                     return;
                 case "2":
-                    System.out.println("전신 테라피를 선택하셨습니다.");
+                    System.out.println(CustomString.THERAPY + "를 선택하셨습니다.");
                     r.setTherapy(true);
-                    System.out.println("추가요금 : " + CustomString.putComma(therapy) + "원입니다");
-                    r.setAmountPaid(r.getAmountPaid() + therapy);
+                    System.out.println("추가요금 : " + CustomString.putComma(hotel.getServicePrices()[1]) + "원입니다");
+                    r.setAmountPaid(r.getAmountPaid() + hotel.getServicePrices()[1]);
                     return;
                 case "3":
-                    System.out.println("조식과 전신 테라피를 선택하셨습니다.");
+                    System.out.println(CustomString.BREAKFAST + "과 " + CustomString.THERAPY + "를 선택하셨습니다.");
                     r.setBreakfast(true);
                     r.setTherapy(true);
-                    System.out.println("조식 추가요금 : " + CustomString.putComma(breakfast) + "원입니다.");
-                    System.out.println("테라피 추가요금 : " + CustomString.putComma(therapy) + "원입니다.");
-                    r.setAmountPaid(r.getAmountPaid() + breakfast);
-                    r.setAmountPaid(r.getAmountPaid() + therapy);
+                    System.out.println(CustomString.BREAKFAST + " 추가요금 : " + CustomString.putComma(hotel.getServicePrices()[0]) + "원입니다.");
+                    System.out.println(CustomString.THERAPY + " 추가요금 : " + CustomString.putComma(hotel.getServicePrices()[1]) + "원입니다.");
+                    r.setAmountPaid(r.getAmountPaid() + hotel.getServicePrices()[0]);
+                    r.setAmountPaid(r.getAmountPaid() + hotel.getServicePrices()[1]);
                     return;
                 case "4":
                     System.out.println("서비스를 선택하지 않으셨습니다.");
@@ -400,11 +436,13 @@ public class HotelBooking {
     }
 
     /*
-     * 덉빟 痍⑥냼 ⑥닔
+     * 예약 취소
      *
-     * 뚯썝덉빟諛⑹씠 媛吏怨덈뒗 덉빟뚯썝 뺣낫먯꽌 뚯썝 젣 뚯썝덉빟 곹깭 null濡꾪솚
+     * 3일 전에는 취소가 불가능하도록 설정
      *
-     * 묒꽦: ㅼ쥌
+     * 취소 시 예약한 방에서 회원 정보 삭제, 회원에서 예약 정보 삭제
+     *
+     * 작성자 : 윤종석
      */
     private void cancelReservation() { // 예약 취소
         Period diff = Period.between(hotel.getToday(), memberLoggedIn.getReservation().getDateCheckIn().getCheckDate());

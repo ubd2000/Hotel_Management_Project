@@ -256,8 +256,8 @@ public class HotelManager {
         String breakfast;
         String therapy;
 
-        breakfast = guest.getReservation().isBreakfast() ? CustomString.breakfast + " O" : CustomString.breakfast + " X";
-        therapy = guest.getReservation().isTherapy() ? CustomString.therapy + " O" : CustomString.therapy + " X";
+        breakfast = guest.getReservation().isBreakfast() ? CustomString.BREAKFAST + " O" : CustomString.BREAKFAST + " X";
+        therapy = guest.getReservation().isTherapy() ? CustomString.THERAPY + " O" : CustomString.THERAPY + " X";
 
         System.out.println("이름 : " + guest.getName() + "\n인원 수 : " + guest.getReservation().getNumberPeople()
                 + "\n부가서비스 : " + breakfast + "/" + therapy + "\n총 요금 : "
@@ -524,7 +524,7 @@ public class HotelManager {
         System.out.println("변경된 체크인 날짜 : " + myHotel.getMembers().get(id).getReservation().getDateCheckIn().getCheckDate());
         System.out.println("변경된 날짜 : " + myHotel.getMembers().get(id).getReservation().getDateCheckOut().getCheckDate());
         System.out.println("숙박일 수 :" + diff.getDays());
-        System.out.println("변경된 숙박 요금 :" + CustomString.putComma(reservationBefore.getAmountPaid()) + "원");
+        System.out.println("변경된 숙박 요금 :" + CustomString.putComma(reservationAfter.getAmountPaid()) + "원");
     }
 
     // 지훈
@@ -602,12 +602,12 @@ public class HotelManager {
     // 부가서비스 가격 설정
     private void setServicePrice() {
         int service;
-        String[] serviceNames = {CustomString.breakfast, CustomString.therapy}; // 한글로 교체 (이런거는 CustomString)
+        String[] serviceNames = {CustomString.BREAKFAST, CustomString.THERAPY}; // 한글로 교체 (이런거는 CustomString)
 
         do {
             try {
                 System.out.println("가격을 바꾸실 부가 서비스를 선택해주세요.");
-                System.out.printf("1. %s 2. %s \n", CustomString.breakfast, CustomString.therapy);
+                System.out.printf("1. %s 2. %s \n", CustomString.BREAKFAST, CustomString.THERAPY);
 
                 service = Integer.parseInt(sc.nextLine());
                 if (service >= 1 && service <= 2) {
@@ -695,7 +695,7 @@ public class HotelManager {
     }
 
     // 지훈, 세림
-    // 투숙 기록 보기 : 호텔예약전체 기록을 가져와서(어디서 가져오는진 모름) 출력한다.
+    // 투숙 기록 보기 : 호텔예약전체 기록을 가져와서 출력한다.
     /*
      * 날짜별로 체크인과 체크아웃이 저장이 된다 CheckIn20190315.info, CheckOut20190315.info 나중에 날짜를
      * 불러오면 그날 체크인한 사람과 체크아웃한 사람이 있고 이 사람이 어떻게 객실을 이용했는지 불러온다

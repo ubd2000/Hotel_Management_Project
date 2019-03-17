@@ -24,9 +24,9 @@ public abstract class Hotel implements Serializable {
 		roomInfos = new Room[] { new DeluxeRoom(), new ExecutiveRoom(), new SuiteRoom() };
 		members = new HashMap<String, Member>();
 		today = LocalDate.now();
-		breakfast = Number.breakfast;
-		therapy = Number.therapy;
-		servicePrices = new long[] { Number.breakfast, Number.therapy };
+		breakfast = Number.BREAKFAST;
+		therapy = Number.THERAPY;
+		servicePrices = new long[] { Number.BREAKFAST, Number.THERAPY};
 		setHotelRoomPrices();
 		setHotelRooms();
 		setHotelRoomNumber();
