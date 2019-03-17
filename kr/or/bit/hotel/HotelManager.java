@@ -705,7 +705,7 @@ public class HotelManager {
         }
 
         for (String key : myHotel.getMembers().keySet()) {
-            System.out.println("이름 :" + myHotel.getMembers().get(key).getName() + " 생년월일 : "
+            System.out.println("아이디 : " + myHotel.getMembers().get(key).getId() + " 이름 :" + myHotel.getMembers().get(key).getName() + " 생년월일 : "
                     + myHotel.getMembers().get(key).getBirthday() + " 전화번호 : "
                     + myHotel.getMembers().get(key).getPhoneNumber() + " VIP : "
                     + myHotel.getMembers().get(key).isVipString() + " 호텔 이용 총 금액 : "

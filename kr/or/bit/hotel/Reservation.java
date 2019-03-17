@@ -24,7 +24,7 @@ public class Reservation implements Serializable {
 
 	public String checkRecord(Member member) {
 		return "이름 : " + member.getName() + " 객실 : " + room.getRoomName() + " 객실 번호 : " + room.getRoomNumber()
-				+ " 지불 금액 : " + amountPaid + " 체크인 날짜 : " + dateCheckIn.getDateString() + " 체크아웃 날짜 : "
+				+ " 지불 금액 : " + CustomString.putComma(amountPaid) + " 체크인 날짜 : " + dateCheckIn.getDateString() + " 체크아웃 날짜 : "
 				+ dateCheckOut.getDateString();
 	}
 
