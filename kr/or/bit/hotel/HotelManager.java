@@ -542,7 +542,7 @@ public class HotelManager {
         System.out.println("변경된 방 : " + myHotel.getMembers().get(id).getReservation().getRoom().getRoomNumber() + "호");
         System.out.println("변경된 체크인 날짜 : " + myHotel.getMembers().get(id).getReservation().getDateCheckIn().getCheckDate());
         System.out.println("변경된 날짜 : " + myHotel.getMembers().get(id).getReservation().getDateCheckOut().getCheckDate());
-        System.out.println("숙박일 수 :" + diff.getDays());
+        System.out.println("숙박일 수 :" + diff.getDays() + "박 " + ((int)diff.getDays() + 1) + "일");
         System.out.println("변경된 숙박 요금 :" + CustomString.putComma(reservationBefore.getAmountPaid()) + "원");
     }
 
