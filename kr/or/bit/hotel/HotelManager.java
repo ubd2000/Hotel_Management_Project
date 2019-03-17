@@ -1,12 +1,6 @@
 package kr.or.bit.hotel;
 
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
@@ -178,7 +172,7 @@ public class HotelManager {
             System.out.println("객실 관리: 원하는 번호를 입력하세요.");
             System.out.println("1. 현재 투숙객 정보 확인");
             System.out.println("2. 부가 서비스 변경");
-            System.out.println("3. 체크인, 체크아웃 관리");
+            System.out.println("3. 체크인·체크아웃 변경");
 
             menu = sc.nextLine();
 
@@ -370,7 +364,7 @@ public class HotelManager {
      * 체크까지는 됐고
      */
     private void setCheckInOut() {
-        System.out.print("정보를 변경할 회원의 아이디를 입력하세요");
+        System.out.print("정보를 변경할 회원의 아이디를 입력하세요 : ");
         String id = sc.nextLine();
 
         if(!myHotel.getMembers().containsKey(id)) {
@@ -387,11 +381,16 @@ public class HotelManager {
         System.out.println("체크아웃 날짜 : " + myHotel.getMembers().get(id).getReservation().getDateCheckOut().getCheckDate());
 
         System.out.println("예약을 변경합니다.");
+
         Reservation reservationBefore = myHotel.getMembers().get(id).getReservation();
 
         Period diffTemp = Period.between(reservationBefore.getDateCheckIn().getCheckDate(), reservationBefore.getDateCheckOut().getCheckDate());
-        long result = myHotel.getRoomPrices()[0] * diffTemp.getDays();
-        long amountPaid = myHotel.getMembers().get(id).getReservation().getAmountPaid() - result;
+        for (int k = 0; k < myHotel.getRoomInfos().length; k++) {
+            if(reservationBefore.getRoom().getRoomName().equals(myHotel.getRoomInfos()[k].getRoomName())) {
+            	long amountPaidChange = reservationBefore.getAmountPaid() - (myHotel.getRoomPrices()[k] * diffTemp.getDays());
+            	reservationBefore.setAmountPaid(amountPaidChange);
+            }
+		}
 
         LocalDate today = LocalDate.now();
         HotelDate dateCheckIn;
@@ -478,6 +477,7 @@ public class HotelManager {
         for (int i = 0; i < roomToReserve.size(); i++) {
             System.out.println(roomToReserve.get(i).getRoomNumber() + "호 ");
         }
+
         if (roomToReserve.size() == 0) {
             System.out.println("예약 가능한 방이 없습니다.");
             System.out.println("예약을 취소합니다.");
@@ -513,9 +513,15 @@ public class HotelManager {
         }
 
         myHotel.getMembers().get(id).getReservation().getRoom().getGuests().remove(id);
-        reservationAfter.setAmountPaid(amountPaid + (myHotel.getRoomPrices()[0] * diff.getDays()));
-        room.getGuests().add(id);
         reservationAfter.setRoom(room);
+
+        for (int k = 0; k < myHotel.getRoomInfos().length; k++) {
+            if (reservationAfter.getRoom().getRoomName().equals(myHotel.getRoomInfos()[k].getRoomName())) {
+                reservationAfter.setAmountPaid(reservationAfter.getAmountPaid() + (myHotel.getRoomPrices()[k] * diffTemp.getDays()));
+            }
+        }
+
+        room.getGuests().add(id);
         myHotel.getMembers().get(id).setReservation(reservationAfter);
         saveHotel();
 
@@ -523,7 +529,7 @@ public class HotelManager {
         System.out.println("변경된 방 : " + myHotel.getMembers().get(id).getReservation().getRoom().getRoomNumber() + "호");
         System.out.println("변경된 체크인 날짜 : " + myHotel.getMembers().get(id).getReservation().getDateCheckIn().getCheckDate());
         System.out.println("변경된 날짜 : " + myHotel.getMembers().get(id).getReservation().getDateCheckOut().getCheckDate());
-        System.out.println("숙박일 수 :" + diff.getDays());
+        System.out.println("숙박일 수 :" + diff.getDays() + "박 " + (diff.getDays() + 1) + "일");
         System.out.println("변경된 숙박 요금 :" + CustomString.putComma(reservationAfter.getAmountPaid()) + "원");
     }
 
@@ -534,7 +540,7 @@ public class HotelManager {
 
         while (true) {
             System.out.println("기본 가격 설정: 원하는 번호를 입력하세요.");
-            System.out.println("1. 방 가격 설정");
+            System.out.println("1. 객실 가격 설정");
             System.out.println("2. 부가서비스 가격 설정");
 
             menu = sc.nextLine();
@@ -554,7 +560,7 @@ public class HotelManager {
     }
 
     // 지훈
-    // 방 가격 설정
+    // 객실 가격 설정
     private void setRoomPrice() {
         String room;
 
@@ -686,7 +692,7 @@ public class HotelManager {
         }
 
         for (String key : myHotel.getMembers().keySet()) {
-            System.out.println("이름 :" + myHotel.getMembers().get(key).getName() + " 생년월일 : "
+            System.out.println("아이디 : " + myHotel.getMembers().get(key).getId() + " 이름 :" + myHotel.getMembers().get(key).getName() + " 생년월일 : "
                     + myHotel.getMembers().get(key).getBirthday() + " 전화번호 : "
                     + myHotel.getMembers().get(key).getPhoneNumber() + " VIP : "
                     + myHotel.getMembers().get(key).isVipString() + " 호텔 이용 총 금액 : "
@@ -757,6 +763,7 @@ public class HotelManager {
         }
     }
 
+    //오늘 날짜의 체크아웃 된 사람들을 모두 저장.
     private void saveHotelCheckOut() {
         List<String> guests = new ArrayList<String>();
 
@@ -805,6 +812,7 @@ public class HotelManager {
         }
     }
 
+    //오늘 날짜의 체크인 된 사람들을 모두 저장.
     private void saveHotelCheckIn() {
         List<String> guests = new ArrayList<String>();
 

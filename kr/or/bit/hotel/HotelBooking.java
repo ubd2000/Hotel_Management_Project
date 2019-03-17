@@ -297,10 +297,19 @@ public class HotelBooking {
         }
 
         room.getGuests().add(memberLoggedIn.getId());
-        r.setAmountPaid(r.getAmountPaid() + (hotel.getRoomPrices()[0] * diff.getDays()));
-        System.out.println(
-                "숙박일 수 " + diff.getDays() + "박 " + diff.getDays() + 1 + "일\n숙박 요금 " + CustomString.putComma(r.getAmountPaid()) + "원입니다.");
         r.setRoom(room);
+        
+        for (int k = 0; k < hotel.getRoomInfos().length; k++) {
+        	
+            if(room.getRoomName().equals(hotel.getRoomInfos()[k].getRoomName())) {
+            	
+                r.setAmountPaid(r.getAmountPaid() + (hotel.getRoomPrices()[k] * diff.getDays()));
+            }
+		}        
+
+        System.out.println(
+                "숙박일 수 " + diff.getDays() + "박 " + ((int)diff.getDays() + 1) + "일\n숙박 요금 " + CustomString.putComma(r.getAmountPaid()) + "원입니다.");
+        
     }
 
     /*
