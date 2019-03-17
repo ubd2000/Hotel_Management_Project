@@ -409,11 +409,11 @@ public class HotelBooking {
     }
 
     /*
-     * 덉빟 痍⑥냼 ⑥닔
+     * 변경사항
      *
-     * 뚯썝덉빟諛⑹씠 媛吏怨덈뒗 덉빟뚯썝 뺣낫먯꽌 뚯썝 젣 뚯썝덉빟 곹깭 null濡꾪솚
+     * 3일전 안에 예약취소를 하면 null값 나오는 오류 수정
      *
-     * 묒꽦: ㅼ쥌
+     * 작성자 : 윤종석
      */
     private void cancelReservation() { // 예약 취소
         Period diff = Period.between(hotel.getToday(), memberLoggedIn.getReservation().getDateCheckIn().getCheckDate());
@@ -665,7 +665,8 @@ public class HotelBooking {
     /*
      * 메뉴
      *
-     * 비로그인 , 로그인 회원의 보이는 메뉴가 다르다. 회원 가입을 하면 자동 로그인이 됨으로 로그인회원 화면이 보이게 된다.
+     * 비로그인 , 로그인 회원의 보이는 메뉴가 다르다. 
+     * 회원 가입을 하면 자동 로그인이 됨으로 로그인회원 화면이 보이게 된다.
      *
      * 작성자 : 정진호
      */

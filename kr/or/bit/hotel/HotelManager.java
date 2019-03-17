@@ -36,8 +36,15 @@ public class HotelManager {
         printMenu();
     }
 
-    // 지훈, 세림
-    // 호텔 사이즈 설정
+    /*
+     * 호텔의 사이즈 설정
+     * 
+     * 컴퓨터에 Hotel 파일이 없을경우
+     * 시작할때 만들 호텔의 사이즈를 설정한다.
+     * 설정된 호텔의 사이즈는 파일로 저장되며 다음 프로그램 실행시 불려오게된다.
+     * 
+     * 작성자 : 지훈, 세림
+     */
     private void setHotel() {
         while (true) {
             System.out.println("현재 호텔에 맞는 호텔 크기를 선택해주세요.");
@@ -136,6 +143,13 @@ public class HotelManager {
         }
     }
 
+    /*
+     * 호텔관리 메뉴
+     * 
+     * 관리자는 호텔관리의 메뉴를 볼수있다.
+     * 
+     * 작성자 : 지훈
+     */
     private void printMenu() {
         while (true) {
             System.out.println("2조 호텔 관리 프로그램");
@@ -170,7 +184,12 @@ public class HotelManager {
         }
     }
 
-    // 객실관리 : 투숙객, 부가서비스, 체크인아웃을 관리하는 메뉴를 보여준다.
+    /*
+     *  객실관리 
+     *   투숙객, 부가서비스, 체크인아웃을 관리하는 메뉴를 보여준다.
+     *   
+     *   작성자 : 지훈, 세림
+     */
     private void roomManage() {
         String menu;
 
@@ -200,12 +219,14 @@ public class HotelManager {
     }
 
     /*
-     * 1. ID를 가져와서
-     * 2. ID를 통해서 회원정보로 간다음에
-     * 3. 회원 정보에서 예약정보를 가져오고
-     * 4. 체크인 날짜 <= 오늘 날짜 <= 체크아웃 날짜 이런 사람을 찾아서
-     * 5. 이사람 정보만 보여주게
-     * 6. 없으면 투숙객 없음
+     * 투숙객 정보확인
+     *  ID를 통해서 회원정보로 간다음에
+     * 회원 정보에서 예약정보를 가져오고
+     * 체크인 날짜 <= 오늘 날짜 <= 체크아웃 날짜 이런 사람을 찾아서
+     * 해당 사람의 정보만 보여준다.
+     * 없으면 투숙객 없음
+     * 
+     * 작성자 : 
      */
     private void getGuest() {
         Member guest = null;
@@ -364,10 +385,12 @@ public class HotelManager {
         }
     }
 
-    // 체크인아웃 설정
-    /*
-     * HotelBooking에서 예약하는 거랑 거의 같게 하면 될건데 대신 처음에 어떤 회원으로 예약할지 받게(로그인처럼) - 비밀번호
-     * 체크까지는 됐고
+    /* 체크인아웃 설정
+     * 
+     * 관리자는 예약자의 아이디를 입력해,
+     * 해당 아이디의 체크인 아웃을 변경할수있다.
+     * 
+     * 작성자 : 
      */
     private void setCheckInOut() {
         System.out.print("정보를 변경할 회원의 아이디를 입력하세요 : ");
@@ -547,8 +570,14 @@ public class HotelManager {
         System.out.println("변경된 숙박 요금 :" + CustomString.putComma(reservationBefore.getAmountPaid()) + "원");
     }
 
-    // 지훈
-    // 기본가격 설정 : 방 가격 설정, 부가서비스 메뉴를 보여준다.
+   /*
+    * 기본가격 설정 
+    * 
+    *  관리자에게 
+    *  방 가격 설정, 부가서비스 메뉴를 보여준다.
+    *  
+    *  작성자 : 지훈
+    */
     private void setPrice() {
         String menu;
 
@@ -573,8 +602,15 @@ public class HotelManager {
         }
     }
 
-    // 지훈
-    // 객실 가격 설정
+    /*
+     * 객실 가격설정
+     * 
+     * 관리자는 객실가격설정을 통해
+     * 객실의 기본가격을 설정할수있다.
+     * 
+     * 작성자 : 지훈
+     * 
+     */
     private void setRoomPrice() {
         String room;
 
@@ -618,8 +654,13 @@ public class HotelManager {
         System.out.println();
     }
 
-    // 지훈
-    // 부가서비스 가격 설정
+    /*
+     * 부가서비스 가격 설정
+     * 
+     * 관리자는 부가서비스의 기본 가격을 설정할수있다.
+     * 
+     * 작성자 : 지훈
+     */
     private void setServicePrice() {
         int service;
         String[] serviceNames = {CustomString.breakfast, CustomString.therapy}; // 한글로 교체 (이런거는 CustomString)
@@ -661,7 +702,14 @@ public class HotelManager {
         }
     }
 
-    // 정보 보기 : 매출확인
+    /*
+     * 정보보기 
+     * 
+     * 관리자는 매출확인 , 회원정보 확인, 투숙정보 확인을 할수있다.
+     * 
+     * 작성자 : 세림 , 지훈
+     * 
+     */
     private void getInfo() {
         String menu;
 
@@ -690,15 +738,27 @@ public class HotelManager {
         }
     }
 
-    // 매출 보기
+   /*
+    * 매출 확인
+    * 
+    * 관리자에게 하루의 호텔 매출의 총액을 보여준다.
+    * 
+    * 작성자 : 세림
+    */
     private void getSales() {
         System.out.println("현재 호텔 매출 - " + myHotel.getSales() + "원입니다.");
     }
 
-    // 작성 : 우세림
-    // 회원 정보 보기
-    // 수정 : 윤종석
-
+    /*
+     * 회원 정보 보기
+     * 
+     * 관리자는 회원의 정보를 확인할수있다.
+     * 
+     * 작성자 : 우세림
+     * 
+     * 수정자 : 윤종석
+     * 
+     */
     private void getMemberInfo() {
         if (myHotel.getMembers().size() == 0) {
             System.out.println("가입된 회원이 없습니다.");
@@ -714,11 +774,15 @@ public class HotelManager {
         }
     }
 
-    // 지훈, 세림
-    // 투숙 기록 보기 : 호텔예약전체 기록을 가져와서(어디서 가져오는진 모름) 출력한다.
     /*
-     * 날짜별로 체크인과 체크아웃이 저장이 된다 CheckIn20190315.info, CheckOut20190315.info 나중에 날짜를
-     * 불러오면 그날 체크인한 사람과 체크아웃한 사람이 있고 이 사람이 어떻게 객실을 이용했는지 불러온다
+     * 투숙 기록 보기
+     * 
+     * 날짜별로 체크인과 체크아웃이 저장이 된다 
+     * CheckIn20190315.info, CheckOut20190315.info 나중에 날짜를
+     * 불러오면 그날 체크인한 사람과 체크아웃한 사람이 있고 
+     * 이 사람이 어떻게 객실을 이용했는지 불러온다
+     *
+     * 작성자 : 지훈 , 세림
      */
     private void getRecord() {
         System.out.println("체크인 체크아웃 기록을 확인할 날짜를 선택하세요.");
@@ -777,7 +841,13 @@ public class HotelManager {
         }
     }
     
-    //오늘 날짜의 체크아웃 된 사람들을 모두 저장.
+    /*
+     * 체크아웃 저장
+     * 
+     * 오늘 날짜의 체크아웃된 사람들을 모두 저장을 한다.
+     * 
+     * 작성자 : 지훈 , 세림
+     */
     private void saveHotelCheckOut() {
         List<String> guests = new ArrayList<String>();
 
@@ -826,7 +896,13 @@ public class HotelManager {
         }
     }
     
-    //오늘 날짜의 체크인 된 사람들을 모두 저장.
+    /*
+     * 체크인 저장하기
+     * 
+     * 오늘 날짜의 체크인 된 모든 사람들을 저장한다.
+     * 
+     * 작성자 : 지훈 , 세림
+     */
     private void saveHotelCheckIn() {
         List<String> guests = new ArrayList<String>();
 
